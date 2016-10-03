@@ -50,7 +50,7 @@ public class RegistrationController{
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Вы уже авторизированы");
         }
         accountService.addUser(login, password, email);
-        return ResponseEntity.ok(new SuccessResponse("Пользователь успешно создан"));
+        return ResponseEntity.ok(new SuccessResponse("Пользователь успешно создан!"));
     }
 
     @RequestMapping(path = "/hello", method = RequestMethod.GET)
