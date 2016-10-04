@@ -92,11 +92,11 @@ public class RegistrationController{
         }
         if (user.getPassword().equals(password)) {
             final UserProfile existingUser = sessionService.getUser(sessionId);
-            if(existingUser!= null) {
+/*            if(existingUser!= null) {
                 if (login.equals(existingUser.getLogin())) {
                     sessionService.removeUser(sessionId);
                 }
-            }
+            }*/
             sessionService.addSession(sessionId, user);
             return ResponseEntity.ok(new SuccessResponse("ses_ok"));
         }
