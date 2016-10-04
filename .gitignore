@@ -20,21 +20,12 @@
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
-# Mongo Explorer plugin:
-.idea/mongoSettings.xml
-
-## File-based project format:
-*.iws
-
 # IntelliJ
 /out/
 /target/
 
 ### Java ###
 *.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
 *.jar

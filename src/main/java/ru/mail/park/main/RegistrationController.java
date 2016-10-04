@@ -29,7 +29,7 @@ public class RegistrationController{
     }
 
     @RequestMapping(path = "/user", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody RegistrationRequest body,
+    public ResponseEntity registration(@RequestBody RegistrationRequest body,
                                 HttpSession httpSession) {
         final String sessionId = httpSession.getId();
 
@@ -39,18 +39,18 @@ public class RegistrationController{
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)
                 || StringUtils.isEmpty(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Один из параметров пуст");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("reg_1");
         }
         final UserProfile existingUser = accountService.getUser(login);
         if (existingUser != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Такой пользователь уже существует");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("reg_2");
         }
         final UserProfile existingSession = sessionService.getUser(sessionId);
         if(existingSession!=null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Вы уже авторизированы");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("reg_3");
         }
         accountService.addUser(login, password, email);
-        return ResponseEntity.ok(new SuccessResponse("Пользователь успешно создан!"));
+        return ResponseEntity.ok(new SuccessResponse("reg_ok"));
     }
 
     @RequestMapping(path = "/hello", method = RequestMethod.GET)
@@ -59,9 +59,8 @@ public class RegistrationController{
         final UserProfile user = sessionService.getUser(sessionId);
         if(user!=null) {
             return ResponseEntity.ok(new SuccessResponse("Вы авторизованы. Ваш Id - " +  user.getId()));
-        } else {
-            return ResponseEntity.ok(new SuccessResponse("Вы не авторизованы"));
         }
+        return ResponseEntity.ok(new SuccessResponse("Вы не авторизованы"));
     }
 
     @RequestMapping(path = "/exit", method = RequestMethod.GET)
@@ -70,9 +69,8 @@ public class RegistrationController{
         final UserProfile user = sessionService.removeUser(sessionId);
         if(user != null) {
             return ResponseEntity.ok(new SuccessResponse("Вы больше не авторизованы"));
-        } else {
-            return ResponseEntity.ok(new SuccessResponse("Вы не были авторизованы"));
         }
+        return ResponseEntity.ok(new SuccessResponse("Вы не были авторизованы"));
     }
 
     @RequestMapping(path = "/session", method = RequestMethod.POST)
@@ -86,11 +84,11 @@ public class RegistrationController{
 
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Некорректный запрос");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ses_1");
         }
         final UserProfile user = accountService.getUser(login);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Такого пользователя не существует");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ses_2");
         }
         if (user.getPassword().equals(password)) {
             final UserProfile existingUser = sessionService.getUser(sessionId);
@@ -100,9 +98,9 @@ public class RegistrationController{
                 }
             }
             sessionService.addSession(sessionId, user);
-            return ResponseEntity.ok(new SuccessResponse("Вы успешно авторизованы"));
+            return ResponseEntity.ok(new SuccessResponse("ses_ok"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Что-то пошло не так");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ses_3");
     }
 
     private static final class RegistrationRequest {

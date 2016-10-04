@@ -6,11 +6,11 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by Solovyev on 17/09/16.
  */
 public class UserProfile {
+    private static final AtomicLong IDGENERATOR = new AtomicLong(0);
     private String login;
     private String email;
     private String password;
     private long id;
-    private static final AtomicLong IDGENERATOR = new AtomicLong(0);
 
     public UserProfile(String login, String email, String password) {
         this.id = IDGENERATOR.getAndIncrement();

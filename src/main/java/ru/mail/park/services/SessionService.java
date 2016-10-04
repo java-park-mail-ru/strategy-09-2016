@@ -6,10 +6,6 @@ import ru.mail.park.model.UserProfile;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * ДЗ: реализовать класс, который по соответствующему id сессии будет отдавать пользователей(т.е. реализовать авторизацию по сессии)
- *
- */
 @Service
 public class SessionService {
     private Map<String, UserProfile> sessionIdTologin = new HashMap<>();
