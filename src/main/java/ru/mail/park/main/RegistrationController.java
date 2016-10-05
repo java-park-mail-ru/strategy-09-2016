@@ -39,18 +39,18 @@ public class RegistrationController{
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)
                 || StringUtils.isEmpty(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("reg_1");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Null field");
         }
         final UserProfile existingUser = accountService.getUser(login);
         if (existingUser != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("reg_2");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User exist");
         }
         final UserProfile existingSession = sessionService.getUser(sessionId);
         if(existingSession!=null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("reg_3");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorized");
         }
         accountService.addUser(login, password, email);
-        return ResponseEntity.ok(new SuccessResponse("reg_ok"));
+        return ResponseEntity.ok(new SuccessResponse("User created"));
     }
 
     @RequestMapping(path = "/hello", method = RequestMethod.GET)
@@ -84,23 +84,17 @@ public class RegistrationController{
 
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ses_1");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Null field");
         }
         final UserProfile user = accountService.getUser(login);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ses_2");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Doesn't exist");
         }
         if (user.getPassword().equals(password)) {
-            final UserProfile existingUser = sessionService.getUser(sessionId);
-/*            if(existingUser!= null) {
-                if (login.equals(existingUser.getLogin())) {
-                    sessionService.removeUser(sessionId);
-                }
-            }*/
             sessionService.addSession(sessionId, user);
-            return ResponseEntity.ok(new SuccessResponse("ses_ok"));
+            return ResponseEntity.ok(new SuccessResponse("Successfully authorized"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ses_3");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Another errors");
     }
 
     private static final class RegistrationRequest {
