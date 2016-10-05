@@ -39,18 +39,18 @@ public class RegistrationController{
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)
                 || StringUtils.isEmpty(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Null field");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("null_field");
         }
         final UserProfile existingUser = accountService.getUser(login);
         if (existingUser != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user_exist");
         }
         final UserProfile existingSession = sessionService.getUser(sessionId);
         if(existingSession!=null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authorized");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("already_authorized");
         }
         accountService.addUser(login, password, email);
-        return ResponseEntity.ok(new SuccessResponse("User created"));
+        return ResponseEntity.ok(new SuccessResponse("user_created"));
     }
 
     @RequestMapping(path = "/hello", method = RequestMethod.GET)
@@ -84,17 +84,17 @@ public class RegistrationController{
 
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Null field");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("null_field");
         }
         final UserProfile user = accountService.getUser(login);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Doesn't exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("that_user_doesnt_exist");
         }
         if (user.getPassword().equals(password)) {
             sessionService.addSession(sessionId, user);
-            return ResponseEntity.ok(new SuccessResponse("Successfully authorized"));
+            return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Another errors");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("another_errors");
     }
 
     private static final class RegistrationRequest {
