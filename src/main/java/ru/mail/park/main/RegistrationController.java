@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import ru.mail.park.model.UserProfile;
 import ru.mail.park.services.AccountService;
 import ru.mail.park.services.SessionService;
@@ -39,28 +42,28 @@ public class RegistrationController{
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)
                 || StringUtils.isEmpty(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("null_field");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
         }
         final UserProfile existingUser = accountService.getUser(login);
         if (existingUser != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user_exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("user_exist"));
         }
         final UserProfile existingSession = sessionService.getUser(sessionId);
         if(existingSession!=null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("already_authorized");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse("already_authorized"));
         }
         accountService.addUser(login, password, email);
         return ResponseEntity.ok(new SuccessResponse("user_created"));
     }
 
-    @RequestMapping(path = "/hello", method = RequestMethod.GET)
-    public ResponseEntity hello(HttpSession httpSession) {
+    @RequestMapping(path = "/isAuthorized", method = RequestMethod.GET)
+    public ResponseEntity isAuthorized(HttpSession httpSession) {
         final String sessionId = httpSession.getId();
         final UserProfile user = sessionService.getUser(sessionId);
         if(user!=null) {
-            return ResponseEntity.ok(new SuccessResponse("Вы авторизованы. Ваш Id - " +  user.getId()));
+            return ResponseEntity.ok(new AuthorizationResponce(true, user.getLogin()));
         }
-        return ResponseEntity.ok(new SuccessResponse("Вы не авторизованы"));
+        return ResponseEntity.ok(new AuthorizationResponce(false, "null"));
     }
 
     @RequestMapping(path = "/exit", method = RequestMethod.GET)
@@ -84,17 +87,17 @@ public class RegistrationController{
 
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("null_field");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
         }
         final UserProfile user = accountService.getUser(login);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("that_user_doesnt_exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("that_user_doesnt_exist"));
         }
         if (user.getPassword().equals(password)) {
             sessionService.addSession(sessionId, user);
             return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("another_errors");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("wrong_login_password"));
     }
 
     private static final class RegistrationRequest {
@@ -155,6 +158,37 @@ public class RegistrationController{
         @SuppressWarnings("unused")
         public String getResponce() {
             return responce;
+        }
+    }
+
+    private static final class BadResponse {
+        private String errorCode;
+
+        private BadResponse(String responce) {
+            this.errorCode = responce;
+        }
+
+        @SuppressWarnings("unused")
+        public String getErrorCode() {
+            return errorCode;
+        }
+    }
+
+    private static final class AuthorizationResponce {
+        private Boolean isAuthorized;
+        private String login;
+
+        public AuthorizationResponce(Boolean status, String login) {
+            this.isAuthorized = status;
+            this.login = login;
+        }
+        @JsonProperty("isAuthorized")
+        public Boolean getIsAuthorized() {
+            return this.isAuthorized;
+        }
+        @JsonProperty("login")
+        public String getLogin() {
+            return this.login;
         }
     }
 

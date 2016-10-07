@@ -19,5 +19,4 @@ public class SessionService {
     }
 
     public UserProfile removeUser(String sessionId) { return sessionIdTologin.remove(sessionId); }
-    //To be done
 }
