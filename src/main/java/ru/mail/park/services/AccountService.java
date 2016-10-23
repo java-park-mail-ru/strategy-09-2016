@@ -1,22 +1,42 @@
 package ru.mail.park.services;
 
-import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import ru.mail.park.entities.UserProfileEntity;
 import ru.mail.park.model.UserProfile;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class AccountService {
-    private Map<String, UserProfile> userNameToUser = new HashMap<>();
 
-    
-    public UserProfile addUser(String login, String password, String email) {
-        final UserProfile userProfile = new UserProfile(login, email, password);
-        userNameToUser.put(login, userProfile);
-        return userProfile;
+    @PersistenceContext
+    private EntityManager em;
+
+    public void addUser(UserProfile userProfile) {
+        UserProfileEntity user = new UserProfileEntity(userProfile);
+        em.persist(user);
     }
-    public UserProfile getUser(String login) {
-        return userNameToUser.get(login);
+
+    public List<UserProfile> getUser(String login) {
+        return em.createQuery("select g from users g where login = " + login, UserProfileEntity.class)
+                .getResultList() //даже если я знаю, что получу одного юзера
+                .stream() //то с точки зрения синтаксиса выборка возвращает список
+                .map(UserProfileEntity::toDto) //из одного элемента
+                .collect(Collectors.toList());
+    }
+
+    public List<UserProfile> getBests() {
+        return em.createQuery("select g from users g order by rating asc limit 10", UserProfileEntity.class)
+                .getResultList() //даже если я знаю, что получу одного юзера
+                .stream() //то с точки зрения синтаксиса выборка возвращает список
+                .map(UserProfileEntity::toDto) //из одного элемента
+                .collect(Collectors.toList());
     }
 }

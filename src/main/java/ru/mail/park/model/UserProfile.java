@@ -1,22 +1,42 @@
 package ru.mail.park.model;
 
-import java.util.concurrent.atomic.AtomicLong;
+import ru.mail.park.entities.UserProfileEntity;
+
+import java.util.Random;
 
 /**
  * Created by Solovyev on 17/09/16.
  */
 public class UserProfile {
-    private static final AtomicLong IDGENERATOR = new AtomicLong(0);
-    private String login;
     private String email;
+    private String login;
     private String password;
-    private long id;
+    private Integer rating;
 
     public UserProfile(String login, String email, String password) {
-        this.id = IDGENERATOR.getAndIncrement();
         this.login = login;
         this.email = email;
         this.password = password;
+        this.rating = new Random().nextInt(100);
+    }
+
+    public UserProfile(String email, long id, String login, String password, Integer rating) {
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.rating = rating;
+    }
+
+    public UserProfile(UserProfileEntity user){
+        this.email = user.getEmail();
+        this.login = user.getLogin();
+        this.password = user.getPassword();
+        this.rating = user.getRating();
+    }
+
+
+    public String getEmail() {
+        return email;
     }
 
     public String getLogin() {
@@ -27,5 +47,7 @@ public class UserProfile {
         return password;
     }
 
-    public long getId() { return id; }
+    public Integer getRating() {
+        return rating;
+    }
 }

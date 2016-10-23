@@ -2,19 +2,18 @@ package ru.mail.park.main;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.mail.park.model.UserProfile;
 import ru.mail.park.services.AccountService;
 import ru.mail.park.services.SessionService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by Solovyev on 06/09/16.
@@ -44,15 +43,15 @@ public class RegistrationController{
                 || StringUtils.isEmpty(email)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
         }
-        final UserProfile existingUser = accountService.getUser(login);
-        if (existingUser != null) {
+        final List<UserProfile> existingUsers = accountService.getUser(login);
+        if (existingUsers.size() != 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("user_exist"));
         }
         final UserProfile existingSession = sessionService.getUser(sessionId);
         if(existingSession!=null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse("already_authorized"));
         }
-        accountService.addUser(login, password, email);
+        accountService.addUser(new UserProfile(login, password, email));
         return ResponseEntity.ok(new SuccessResponse("user_created"));
     }
 
@@ -64,6 +63,22 @@ public class RegistrationController{
             return ResponseEntity.ok(new AuthorizationResponce(true, user.getLogin()));
         }
         return ResponseEntity.ok(new AuthorizationResponce(false, "null"));
+    }
+
+    @RequestMapping(path = "/rating", method = RequestMethod.GET)
+    public ResponseEntity bestRating() {
+        final List<UserProfile> users = accountService.getBests();
+        if(users.size()!=0) {
+            ObjectMapper mapper = new ObjectMapper();
+            try{
+                return ResponseEntity.ok(new AuthorizationResponce(true, mapper.writeValueAsString(users)));
+            } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+                e.printStackTrace();
+                return ResponseEntity.ok(new AuthorizationResponce(false, "something_go_wrong"));
+            }
+        } else {
+        return ResponseEntity.ok(new AuthorizationResponce(false, "no_users_in_database"));
+        }
     }
 
     @RequestMapping(path = "/exit", method = RequestMethod.GET)
@@ -89,13 +104,18 @@ public class RegistrationController{
                 || StringUtils.isEmpty(password)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
         }
-        final UserProfile user = accountService.getUser(login);
-        if (user == null) {
+        final List<UserProfile> users = accountService.getUser(login);
+        if (users.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("that_user_doesnt_exist"));
         }
-        if (user.getPassword().equals(password)) {
-            sessionService.addSession(sessionId, user);
-            return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
+        if(users.size() == 1) {
+            UserProfile user = users.get(0);
+            if (user.getPassword().equals(password)) {
+                sessionService.addSession(sessionId, user);
+                return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("database_error"));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("wrong_login_password"));
     }
