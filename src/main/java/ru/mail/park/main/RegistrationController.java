@@ -13,6 +13,7 @@ import ru.mail.park.services.AccountService;
 import ru.mail.park.services.SessionService;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -43,16 +44,23 @@ public class RegistrationController{
                 || StringUtils.isEmpty(email)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
         }
-        final List<UserProfile> existingUsers = accountService.getUser(login);
-        if (existingUsers.size() != 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("user_exist"));
+
+        try {
+            final List<UserProfile> existingUsers = accountService.getUser(login);
+            if (existingUsers.size() != 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("user_exist"));
+            }
+            final UserProfile existingSession = sessionService.getUser(sessionId);
+            if(existingSession!=null) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse("already_authorized"));
+            }
+            accountService.addUser(new UserProfile(email, login, password));
+            return ResponseEntity.ok(new SuccessResponse("user_created"));
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok("something_go_wrong_with_database");
         }
-        final UserProfile existingSession = sessionService.getUser(sessionId);
-        if(existingSession!=null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse("already_authorized"));
-        }
-        accountService.addUser(new UserProfile(email, login, password));
-        return ResponseEntity.ok(new SuccessResponse("user_created"));
+
     }
 
     @RequestMapping(path = "/isAuthorized", method = RequestMethod.GET)
@@ -65,20 +73,26 @@ public class RegistrationController{
         return ResponseEntity.ok(new AuthorizationResponce(false, "null"));
     }
 
+
     @RequestMapping(path = "/rating", method = RequestMethod.GET)
     public ResponseEntity bestRating() {
-        final List<UserProfile> users = accountService.getBests();
-        if(users.size()!=0) {
-            ObjectMapper mapper = new ObjectMapper();
-            try{
-                System.out.println(users.get(0).getEmail());
-                return ResponseEntity.ok(mapper.writeValueAsString(users));
-            } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
-                e.printStackTrace();
-                return ResponseEntity.ok("something_go_wrong");
+        try {
+            final List<UserProfile> users = accountService.getBests();
+            if(users.size()!=0) {
+                ObjectMapper mapper = new ObjectMapper();
+                try{
+                    System.out.println(users.get(0).getEmail());
+                    return ResponseEntity.ok(mapper.writeValueAsString(users));
+                } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+                    e.printStackTrace();
+                    return ResponseEntity.ok("something_go_wrong");
+                }
+            } else {
+            return ResponseEntity.ok("no_users_in_database");
             }
-        } else {
-        return ResponseEntity.ok("no_users_in_database");
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok("something_go_wrong_with_database");
         }
     }
 
@@ -105,20 +119,25 @@ public class RegistrationController{
                 || StringUtils.isEmpty(password)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
         }
-        final List<UserProfile> users = accountService.getUser(login);
-        if (users.size() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("that_user_doesnt_exist"));
-        }
-        if(users.size() == 1) {
-            UserProfile user = users.get(0);
-            if (user.getPassword().equals(password)) {
-                sessionService.addSession(sessionId, user);
-                return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
+        try{
+            final List<UserProfile> users = accountService.getUser(login);
+            if (users.size() == 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("that_user_doesnt_exist"));
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("database_error"));
+            if(users.size() == 1) {
+                UserProfile user = users.get(0);
+                if (user.getPassword().equals(password)) {
+                    sessionService.addSession(sessionId, user);
+                    return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("database_error"));
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("wrong_login_password"));
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok("something_go_wrong_with_database");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("wrong_login_password"));
     }
 
     private static final class RegistrationRequest {
