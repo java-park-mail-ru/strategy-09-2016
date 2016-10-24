@@ -51,7 +51,7 @@ public class RegistrationController{
         if(existingSession!=null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse("already_authorized"));
         }
-        accountService.addUser(new UserProfile(login, password, email));
+        accountService.addUser(new UserProfile(email, login, password));
         return ResponseEntity.ok(new SuccessResponse("user_created"));
     }
 
@@ -71,13 +71,14 @@ public class RegistrationController{
         if(users.size()!=0) {
             ObjectMapper mapper = new ObjectMapper();
             try{
-                return ResponseEntity.ok(new AuthorizationResponce(true, mapper.writeValueAsString(users)));
+                System.out.println(users.get(0).getEmail());
+                return ResponseEntity.ok(mapper.writeValueAsString(users));
             } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
                 e.printStackTrace();
-                return ResponseEntity.ok(new AuthorizationResponce(false, "something_go_wrong"));
+                return ResponseEntity.ok("something_go_wrong");
             }
         } else {
-        return ResponseEntity.ok(new AuthorizationResponce(false, "no_users_in_database"));
+        return ResponseEntity.ok("no_users_in_database");
         }
     }
 

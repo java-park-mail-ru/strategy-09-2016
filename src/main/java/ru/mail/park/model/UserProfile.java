@@ -13,14 +13,14 @@ public class UserProfile {
     private String password;
     private Integer rating;
 
-    public UserProfile(String login, String email, String password) {
+    public UserProfile(String email, String login, String password) {
         this.login = login;
         this.email = email;
         this.password = password;
         this.rating = new Random().nextInt(100);
     }
 
-    public UserProfile(String email, long id, String login, String password, Integer rating) {
+    public UserProfile(String email, String login, String password, Integer rating) {
         this.email = email;
         this.login = login;
         this.password = password;

@@ -29,6 +29,8 @@ public class UserProfileEntity {
     @Column(name = "rating")
     private Integer rating;
 
+    UserProfileEntity(){}
+
     public UserProfileEntity(UserProfile user) {
         this.email = user.getEmail();
         this.login = user.getLogin();
@@ -77,7 +79,7 @@ public class UserProfileEntity {
     }
 
     public UserProfile toDto() {
-        return new UserProfile(email, id, login, password, rating);
+        return new UserProfile(email, login, password, rating);
     }
 
 }
