@@ -25,7 +25,7 @@ public class AccountService {
     }
 
     public List<UserProfile> getUser(String login) {
-        return em.createQuery("select g from users g where login = " + login, UserProfileEntity.class)
+        return em.createQuery("select g from UserProfileEntity g where login =\'" + login + "\'", UserProfileEntity.class)
                 .getResultList() //даже если я знаю, что получу одного юзера
                 .stream() //то с точки зрения синтаксиса выборка возвращает список
                 .map(UserProfileEntity::toDto) //из одного элемента
@@ -33,7 +33,7 @@ public class AccountService {
     }
 
     public List<UserProfile> getBests() {
-        return em.createQuery("select g from users g order by rating asc limit 10", UserProfileEntity.class)
+        return em.createQuery("select g from UserProfileEntity g LIMIT 10 order by rating asc", UserProfileEntity.class)
                 .getResultList() //даже если я знаю, что получу одного юзера
                 .stream() //то с точки зрения синтаксиса выборка возвращает список
                 .map(UserProfileEntity::toDto) //из одного элемента
