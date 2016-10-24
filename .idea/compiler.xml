@@ -22,11 +22,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="javaNew" />
+        <module name="java-heroku-postgres" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="javaNew" target="1.8" />
+      <module name="java-heroku-postgres" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

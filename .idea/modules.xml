@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/javaNew.iml" filepath="$PROJECT_DIR$/javaNew.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java-heroku-postgres.iml" filepath="$PROJECT_DIR$/java-heroku-postgres.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java-heroku-postgres.iml" filepath="$PROJECT_DIR$/java-heroku-postgres.iml" />
     </modules>
   </component>
 </project>
