@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ru.mail.park</groupId>
-	<artifactId>java-project</artifactId>
+	<artifactId>MathCore-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>java-project</name>
+	<name>MathCore-backend</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

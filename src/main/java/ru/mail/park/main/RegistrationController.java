@@ -2,12 +2,14 @@ package ru.mail.park.main;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import ru.mail.park.model.UserProfile;
 import ru.mail.park.services.AccountService;
 import ru.mail.park.services.SessionService;
@@ -75,24 +77,24 @@ public class RegistrationController{
 
 
     @RequestMapping(path = "/rating", method = RequestMethod.GET)
-    public ResponseEntity bestRating() {
+    public List<UserProfile> bestRating() {
         try {
             final List<UserProfile> users = accountService.getBests();
             if(users.size()!=0) {
-                ObjectMapper mapper = new ObjectMapper();
-                try{
-                    System.out.println(users.get(0).getEmail());
-                    return ResponseEntity.ok(mapper.writeValueAsString(users));
-                } catch(com.fasterxml.jackson.core.JsonProcessingException e) {
-                    e.printStackTrace();
-                    return ResponseEntity.ok("something_go_wrong");
-                }
+                //ObjectMapper mapper = new ObjectMapper();
+                //try{
+                    //System.out.println(users.get(0).getEmail());
+                    return users;//ResponseEntity.ok(users);
+                //} catch(com.fasterxml.jackson.core.JsonProcessingException e) {
+                 //   e.printStackTrace();
+                   // return ResponseEntity.ok("something_go_wrong");
+               // }
             } else {
-            return ResponseEntity.ok("no_users_in_database");
+            return null;//ResponseEntity.ok("no_users_in_database");
             }
         } catch(SQLException e) {
             e.printStackTrace();
-            return ResponseEntity.ok("something_go_wrong_with_database");
+            return null;//ResponseEntity.ok("something_go_wrong_with_database");
         }
     }
 
