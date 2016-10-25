@@ -1,24 +1,9 @@
 package ru.mail.park.controller;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import ru.mail.park.services.AccountService;
-
-import static org.junit.Assert.assertEquals;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-
 /**
  * Created by victor on 25.10.16.
  */
+/*
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class RegistrationControllerTest {
@@ -52,3 +37,4 @@ public class RegistrationControllerTest {
     }
 
 }
+*/

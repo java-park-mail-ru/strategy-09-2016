@@ -2,6 +2,8 @@ package ru.mail.park.services;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mail.park.model.UserProfile;
 
 import java.sql.SQLException;
@@ -13,10 +15,14 @@ import static org.junit.Assert.assertSame;
 /**
  * Created by victor on 25.10.16.
  */
+@Transactional
 public class AccountServiceTest {
+
     private AccountService accountService;
 
+
     @Before
+    @Autowired
     public void setup(){
         accountService = new AccountService();
     }
@@ -24,6 +30,7 @@ public class AccountServiceTest {
 
     @Test
     public void singleUsertest(){
+
         UserProfile foo = new UserProfile("example@mail.ru","login","123");
         accountService.addUser(foo);
         try {
