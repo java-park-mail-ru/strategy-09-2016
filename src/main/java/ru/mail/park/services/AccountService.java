@@ -18,9 +18,6 @@ public class AccountService {
     @PersistenceContext
     private EntityManager em;
 
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
 
     public void addUser(UserProfile userProfile) {
         UserProfileEntity user = new UserProfileEntity(userProfile);

@@ -59,7 +59,6 @@ public class RegistrationController{
             accountService.addUser(new UserProfile(email, login, password));
             return ResponseEntity.ok(new SuccessResponse("user_created"));
         } catch(SQLException e) {
-            e.printStackTrace();
             return ResponseEntity.ok("something_go_wrong_with_database");
         }
 
@@ -86,7 +85,6 @@ public class RegistrationController{
                     //System.out.println(users.get(0).getEmail());
                     return users;//ResponseEntity.ok(users);
                 //} catch(com.fasterxml.jackson.core.JsonProcessingException e) {
-                 //   e.printStackTrace();
                    // return ResponseEntity.ok("something_go_wrong");
                // }
             } else {
@@ -137,7 +135,6 @@ public class RegistrationController{
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("wrong_login_password"));
         } catch(SQLException e) {
-            e.printStackTrace();
             return ResponseEntity.ok("something_go_wrong_with_database");
         }
     }
