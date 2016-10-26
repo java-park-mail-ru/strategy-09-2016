@@ -1,19 +1,16 @@
 package ru.mail.park.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
 import ru.mail.park.model.UserProfile;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by victor on 25.10.16.
@@ -26,10 +23,8 @@ public class AccountServiceTest {
 	@Autowired
     private AccountService accountService;
 
-
     @Test
     public void singleUsertest() throws Exception{
-
         UserProfile foo = new UserProfile("example@mail.ru","login","123");
         accountService.addUser(foo);
         UserProfile fromDb = accountService.getUser(foo.getLogin());
@@ -39,6 +34,7 @@ public class AccountServiceTest {
         assertEquals(foo.getPassword(), fromDb.getPassword());
         assertEquals(foo.getRating(), fromDb.getRating());
     }
+
     @Test
     public void ratingListTest() throws Exception {
         UserProfile foo = new UserProfile("example@mail.ru","login","123");

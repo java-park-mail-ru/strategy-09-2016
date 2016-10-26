@@ -6,13 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.mail.park.exeption.CustomExeption;
 import ru.mail.park.model.UserProfile;
 import ru.mail.park.services.AccountService;
-import ru.mail.park.services.SessionService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -24,118 +21,98 @@ import java.util.List;
 @RestController
 public class RegistrationController{
     private final AccountService accountService;
-    private final SessionService sessionService;
 
     @Autowired
-    public RegistrationController(AccountService accountService, SessionService sessionService) {
+    public RegistrationController(AccountService accountService) {
         this.accountService = accountService;
-        this.sessionService = sessionService;
     }
 
-    @RequestMapping(path = "/user", method = RequestMethod.POST)
+    @RequestMapping(path = "/user/", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationRequest body,
-                                HttpSession httpSession) {
-        final String sessionId = httpSession.getId();
-
+                                HttpSession httpSession) throws CustomExeption {
         final String login = body.getLogin();
         final String password = body.getPassword();
         final String email = body.getEmail();
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)
                 || StringUtils.isEmpty(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
+            throw new CustomExeption("R01","null_field");
         }
         final UserProfile existingUser = accountService.getUser(login);
         if (existingUser != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("user_exist"));
+            throw new CustomExeption("R02","user_already_exist");
         }
-        final UserProfile existingSession = sessionService.getUser(sessionId);
-        if(existingSession!=null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse("already_authorized"));
+        if(httpSession.getAttribute("userLogin")!=null) {
+            throw new CustomExeption("R03","already_authorised");
         }
         accountService.addUser(new UserProfile(email, login, password));
         return ResponseEntity.ok(new SuccessResponse("user_created"));
-
-
     }
 
-    @RequestMapping(path = "/isAuthorized", method = RequestMethod.GET)
-    public AuthorizationResponce isAuthorized(HttpSession httpSession) {
-        final String sessionId = httpSession.getId();
-        final UserProfile user = sessionService.getUser(sessionId);
-        if(user!=null) {
-            return (new AuthorizationResponce(true, user.getLogin()));
-        }
-        return (new AuthorizationResponce(false, "null"));
-    }
-
-
-    @RequestMapping(path = "/rating", method = RequestMethod.GET)
+    @RequestMapping(path = "/rating/", method = RequestMethod.GET)
     public SuccessResponseRating bestRating() {
-
-            final List<UserProfile> users = accountService.getBests();
-            if(users.size()!=0) {
-                return new SuccessResponseRating(users);//ResponseEntity.ok(users);
-            } else {
-            return new SuccessResponseRating("no_one_in_database");//ResponseEntity.ok("no_users_in_database");
-            }
+        final List<UserProfile> users = accountService.getBests();
+        if(users.size()!=0) {
+            return new SuccessResponseRating(users);//ResponseEntity.ok(users);
+        } else {
+        return new SuccessResponseRating("no_one_in_database");//ResponseEntity.ok("no_users_in_database");
+        }
     }
 
-    @RequestMapping(path = "/exit", method = RequestMethod.GET)
+    @RequestMapping(path = "/isAuthorised/", method = RequestMethod.GET)
+    public ResponseEntity isAuth(HttpSession httpSession) {
+        if(httpSession.getAttribute("userLogin")!=null) {
+            final UserProfile user = accountService.getUser(httpSession.getAttribute("userLogin").toString());
+            System.out.println(user.getId());
+            return ResponseEntity.ok(new AuthorizationResponce(true, user.getLogin()));
+        }
+        return ResponseEntity.ok(new AuthorizationResponce(false, null));
+    }
+
+    @RequestMapping(path = "/exit/", method = RequestMethod.GET)
     public ResponseEntity exit(HttpSession httpSession) {
-        final String sessionId = httpSession.getId();
-        final UserProfile user = sessionService.removeUser(sessionId);
-        if(user != null) {
-            return ResponseEntity.ok(new SuccessResponse("Вы больше не авторизованы"));
-        }
-        return ResponseEntity.ok(new SuccessResponse("Вы не были авторизованы"));
+        httpSession.setAttribute("userLogin",null);
+        return ResponseEntity.ok(new SuccessResponse("session_set_null"));
     }
 
-    @RequestMapping(path = "/sessiontest", method = RequestMethod.POST)
-    public ResponseEntity authSessionNewTest(HttpSession httpSession) {
-
-        if(httpSession.getAttribute("userId")!=null) {
-            System.out.println(httpSession.getAttribute("userId"));
-            return ResponseEntity.ok(new SuccessResponse(httpSession.getAttribute("userId").toString()));
-        }
-        return ResponseEntity.ok(httpSession.getAttribute("userId"));
-    }
-
-    @RequestMapping(path = "/exittest", method = RequestMethod.POST)
-    public ResponseEntity exitSessionNewTest(HttpSession httpSession) {
-        httpSession.setAttribute("userId",null);
-        return ResponseEntity.ok(new SuccessResponse("!!!"));
-    }
-
-    @RequestMapping(path = "/session", method = RequestMethod.POST)
+    @RequestMapping(path = "/session/", method = RequestMethod.POST)
     public ResponseEntity auth(@RequestBody AuthorisationRequest body,
-                               HttpSession httpSession) {
-
-        final String sessionId = httpSession.getId();
+                               HttpSession httpSession) throws CustomExeption {
         final String login = body.getLogin();
         final String password = body.getPassword();
-
         if (StringUtils.isEmpty(login)
                 || StringUtils.isEmpty(password)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
+            throw new CustomExeption("S01","null_field");
         }
         final UserProfile user = accountService.getUser(login);
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("that_user_doesnt_exist"));
+            throw new CustomExeption("S02","wrong_login_password");
         }
         if (user.getPassword().equals(password)) {
-            httpSession.setAttribute("userId",user.getId());
-            sessionService.addSession(sessionId, user);
+            httpSession.setAttribute("userLogin",user.getLogin()); //такое чувство, что вывод врет и по факту айдишники нумеруются с единицы
             return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("wrong_login_password"));
+        throw new CustomExeption("S02","wrong_login_password");
+    }
+
+    @ExceptionHandler(CustomExeption.class)
+    private ResponseEntity handleCustomExeption(CustomExeption customExeption){
+        if(customExeption.getErrorCode().equals("R03")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse(customExeption.getErrorMessage()));
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse(customExeption.getErrorMessage()));
+        }
+    }
+
+    @ExceptionHandler(Exception.class)
+    private ResponseEntity handleAllExeption(){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("ooops, something go wrong way"));
     }
 
     private static final class RegistrationRequest {
         private String login;
         private String password;
         private String email;
-
         @JsonCreator
         private RegistrationRequest(@JsonProperty("login") String login,
                                     @JsonProperty("password") String password,
@@ -161,7 +138,6 @@ public class RegistrationController{
     private static final class AuthorisationRequest {
         private String login;
         private String password;
-
         @JsonCreator
         private AuthorisationRequest(@JsonProperty("login") String login,
                                     @JsonProperty("password") String password) {
@@ -181,20 +157,20 @@ public class RegistrationController{
 
     private static final class SuccessResponseRating{
         private List<UserProfile> body;
-        private String errorMessage;
+        private String errorCode;
 
         private SuccessResponseRating(List<UserProfile> body) { this.body = body; }
 
-        private SuccessResponseRating(String errorMessage) { this.errorMessage = errorMessage; }
+        private SuccessResponseRating(String errorMessage) { this.errorCode = errorMessage; }
 
         @JsonProperty("body")
         public List<UserProfile> getBody() {
             return body;
         }
 
-        @JsonProperty("errorMessage")
+        @JsonProperty("errorCode")
         public String getErrorMessage() {
-            return errorMessage;
+            return errorCode;
         }
     }
 
