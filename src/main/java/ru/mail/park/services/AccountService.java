@@ -23,7 +23,7 @@ public class AccountService {
 		em.persist(user);
 	}
 
-	public UserProfile getUser(String login) throws SQLException {
+	public UserProfile getUser(String login){
 		List<UserProfileEntity> resultList = em.createQuery(
 				"select g from UserProfileEntity g where login = \'" + login + "\'", UserProfileEntity.class)
 				.getResultList();
@@ -34,7 +34,7 @@ public class AccountService {
 		}
 	}
 
-	public List<UserProfile> getBests() throws SQLException {
+	public List<UserProfile> getBests() {
 		return em.createQuery("select g from UserProfileEntity g order by rating desc", UserProfileEntity.class)
 				.setMaxResults(10)
 				.getResultList() // даже если я знаю, что получу одного юзера

@@ -9,6 +9,7 @@ import java.util.Random;
  */
 public class UserProfile {
     private String email;
+    private long id;
     private String login;
     private String password;
     private Integer rating;
@@ -16,6 +17,7 @@ public class UserProfile {
     public UserProfile(String email, String login, String password) {
         this.login = login;
         this.email = email;
+        this.id = -1;
         this.password = password;
         this.rating = new Random().nextInt(100);
     }
@@ -28,12 +30,17 @@ public class UserProfile {
     }
 
     public UserProfile(UserProfileEntity user){
+        this.id = user.getId();
         this.email = user.getEmail();
         this.login = user.getLogin();
         this.password = user.getPassword();
         this.rating = user.getRating();
     }
 
+
+    public long getId() {
+        return id;
+    }
 
     public String getEmail() {
         return email;
