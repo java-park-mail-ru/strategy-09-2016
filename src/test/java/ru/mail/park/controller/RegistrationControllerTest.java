@@ -1,40 +1,39 @@
 package ru.mail.park.controller;
 
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
 /**
  * Created by victor on 25.10.16.
  */
-/*
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+
+@SpringBootTest
 @RunWith(SpringRunner.class)
+@AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 public class RegistrationControllerTest {
-    private AccountService accountService;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @Test
-    public void testMe() {
-        HttpEntity requestEntity = new HttpEntity("{\"login\":\"user2\",\"email\": \"example2@mail.ru\"," +
-                "\"password\":\"123\"}");
-        String test = null;
-        ResponseEntity<RegistrationResponse> meResp = restTemplate.postForEntity("/user",requestEntity,RegistrationResponse.class,test);
-        assertEquals(HttpStatus.OK, meResp.getStatusCode());
-        RegistrationResponse response = meResp.getBody();
-        assertEquals("user_created", response.getResponse());
-    }
-
-    private static final class RegistrationResponse {
-        private String response;
-
-        @JsonCreator
-        private RegistrationResponse(@JsonProperty("response") String response) {
-            this.response = response;
-        }
-
-        public String getResponse() {
-            return response;
-        }
-    }
+	@Test
+	public void testMe() throws Exception {
+		mockMvc.perform(post("/user")
+				.content("{\"login\":\"user2\",\"email\": \"example2@mail.ru\",\"password\":\"123\"}")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("responce", is("user_created")));
+	}
 
 }
-*/
