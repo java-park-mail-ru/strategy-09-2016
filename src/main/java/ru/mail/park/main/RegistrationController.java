@@ -55,7 +55,7 @@ public class RegistrationController{
         if(users.size()!=0) {
             return new SuccessResponseRating(users);//ResponseEntity.ok(users);
         } else {
-        return new SuccessResponseRating("no_one_in_database");//ResponseEntity.ok("no_users_in_database");
+            throw new CustomExeption("Ra01","no_one_in_database");
         }
     }
 

@@ -66,7 +66,7 @@ public class RegistrationControllerTest {
 	@Test
 	public void ratingOfNoone() throws Exception {
 		mockMvc.perform(get("/rating/"))
-				.andExpect(status().isOk())
+				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("errorCode", is("no_one_in_database")));
 	}
 
