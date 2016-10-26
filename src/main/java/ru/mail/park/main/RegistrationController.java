@@ -98,9 +98,10 @@ public class RegistrationController{
     @ExceptionHandler(CustomExeption.class)
     private ResponseEntity handleCustomExeption(CustomExeption customExeption){
         if(customExeption.getErrorCode().equals("R03")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse(customExeption.getErrorMessage()));
-        } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BadResponse(customExeption.getErrorMessage()));
+
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse(customExeption.getErrorMessage()));
         }
     }
 
