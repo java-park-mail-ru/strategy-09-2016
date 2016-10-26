@@ -15,29 +15,32 @@ import java.util.stream.Collectors;
 @Transactional
 public class AccountService {
 
-    @PersistenceContext
-    private EntityManager em;
+	@PersistenceContext
+	private EntityManager em;
 
+	public void addUser(UserProfile userProfile) {
+		UserProfileEntity user = new UserProfileEntity(userProfile);
+		em.persist(user);
+	}
 
-    public void addUser(UserProfile userProfile) {
-        UserProfileEntity user = new UserProfileEntity(userProfile);
-        em.persist(user);
-    }
+	public UserProfile getUser(String login) throws SQLException {
+		List<UserProfileEntity> resultList = em.createQuery(
+				"select g from UserProfileEntity g where login = \'" + login + "\'", UserProfileEntity.class)
+				.getResultList();
+		if (resultList.isEmpty()) {
+			return null;
+		} else {
+			return resultList.get(0).toDto();
+		}
+	}
 
-    public List<UserProfile> getUser(String login) throws SQLException {
-        return em.createQuery("select g from UserProfileEntity g where login = \'" + login + "\'", UserProfileEntity.class)
-                .getResultList() //даже если я знаю, что получу одного юзера
-                .stream() //то с точки зрения синтаксиса выборка возвращает список
-                .map(UserProfileEntity::toDto) //из одного элемента
-                .collect(Collectors.toList());
-    }
-
-    public List<UserProfile> getBests() throws SQLException {
-        return em.createQuery("select g from UserProfileEntity g order by rating desc", UserProfileEntity.class)
-                .setMaxResults(10)
-                .getResultList() //даже если я знаю, что получу одного юзера
-                .stream() //то с точки зрения синтаксиса выборка возвращает список
-                .map(UserProfileEntity::toDto) //из одного элемента
-                .collect(Collectors.toList());
-    }
+	public List<UserProfile> getBests() throws SQLException {
+		return em.createQuery("select g from UserProfileEntity g order by rating desc", UserProfileEntity.class)
+				.setMaxResults(10)
+				.getResultList() // даже если я знаю, что получу одного юзера
+				.stream() // то с точки зрения синтаксиса выборка возвращает
+							// список
+				.map(UserProfileEntity::toDto) // из одного элемента
+				.collect(Collectors.toList());
+	}
 }

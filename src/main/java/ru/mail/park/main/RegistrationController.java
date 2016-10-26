@@ -48,8 +48,8 @@ public class RegistrationController{
         }
 
         try {
-            final List<UserProfile> existingUsers = accountService.getUser(login);
-            if (existingUsers.size() != 0) {
+            final UserProfile existingUser = accountService.getUser(login);
+            if (existingUser != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("user_exist"));
             }
             final UserProfile existingSession = sessionService.getUser(sessionId);
@@ -120,18 +120,13 @@ public class RegistrationController{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("null_field"));
         }
         try{
-            final List<UserProfile> users = accountService.getUser(login);
-            if (users.size() == 0) {
+            final UserProfile user = accountService.getUser(login);
+            if (user == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("that_user_doesnt_exist"));
             }
-            if(users.size() == 1) {
-                UserProfile user = users.get(0);
-                if (user.getPassword().equals(password)) {
-                    sessionService.addSession(sessionId, user);
-                    return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("database_error"));
+            if (user.getPassword().equals(password)) {
+                sessionService.addSession(sessionId, user);
+                return ResponseEntity.ok(new SuccessResponse("successfully_authorized"));
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse("wrong_login_password"));
         } catch(SQLException e) {
