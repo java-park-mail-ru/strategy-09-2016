@@ -5,8 +5,8 @@ import ru.mail.park.model.UserProfile;
 
 import java.util.List;
 
-public class SuccessResponseRating{
-    private List<UserProfile> body;
+public final class SuccessResponseRating{
+    final private List<UserProfile> body;
 
     public SuccessResponseRating(List<UserProfile> body) { this.body = body; }
 

@@ -27,7 +27,7 @@ public class GlobalControllerExceptionHandler {
     }
 
     private static final class BadResponse {
-        private String errorCode;
+        final private String errorCode;
 
         private BadResponse(String responce) {
             this.errorCode = responce;

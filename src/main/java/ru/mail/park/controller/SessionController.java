@@ -62,8 +62,8 @@ public class SessionController {
     }
 
     private static final class AuthorisationRequest {
-        private String login;
-        private String password;
+        private final String login;
+        private final String password;
         @JsonCreator
         private AuthorisationRequest(@JsonProperty("login") String login,
                                      @JsonProperty("password") String password) {

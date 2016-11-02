@@ -46,9 +46,9 @@ public class RegistrationController{
     }
 
     private static final class RegistrationRequest {
-        private String login;
-        private String password;
-        private String email;
+        private final String login;
+        private final String password;
+        private final String email;
         @JsonCreator
         private RegistrationRequest(@JsonProperty("login") String login,
                                     @JsonProperty("password") String password,

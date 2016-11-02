@@ -1,7 +1,7 @@
 package ru.mail.park.controller.response;
 
-public class SuccessResponse {
-    private String response;
+public final class SuccessResponse {
+    final private String response;
 
     public SuccessResponse(String response) {
         this.response = response;
