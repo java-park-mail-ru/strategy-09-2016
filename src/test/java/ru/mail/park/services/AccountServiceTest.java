@@ -12,9 +12,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by victor on 25.10.16.
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional

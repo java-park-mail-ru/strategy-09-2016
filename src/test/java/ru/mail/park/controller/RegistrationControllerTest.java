@@ -12,15 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-/**
- * Created by victor on 25.10.16.
- */
 
 @Transactional
 @SpringBootTest
@@ -31,24 +26,24 @@ public class RegistrationControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
+    private void createUserTest(String login, String email) throws Exception {
+        mockMvc.perform(post("/user/")
+                .content("{\"login\":\""+login+"\",\"email\": \""+email+"\",\"password\":\"123\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("response", is("user_created")));
+    }
+
 	@Test
 	public void createUser() throws Exception {
-		mockMvc.perform(post("/user/")
-				.content("{\"login\":\"user2\",\"email\": \"example2@mail.ru\",\"password\":\"123\"}")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("responce", is("user_created")));
+        createUserTest("user","email@mail.ru");
 	}
 
 	@Test
 	public void createExistingUser() throws Exception {
-		mockMvc.perform(post("/user/")
-				.content("{\"login\":\"user2\",\"email\": \"example2@mail.ru\",\"password\":\"123\"}")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("responce", is("user_created")));
-		mockMvc.perform(post("/user/")
-				.content("{\"login\":\"user2\",\"email\": \"example2@mail.ru\",\"password\":\"123\"}")
+        createUserTest("user","email@mail.ru");
+        mockMvc.perform(post("/user/")
+				.content("{\"login\":\"user\",\"email\": \"email@mail.ru\",\"password\":\"123\"}")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("errorCode", is("user_already_exist")));
@@ -72,19 +67,10 @@ public class RegistrationControllerTest {
 
 	@Test
 	public void ratingOfOne() throws Exception {
-		mockMvc.perform(post("/user/")
-				.content("{\"login\":\"user1\",\"email\": \"example1@mail.ru\",\"password\":\"123\"}")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("responce", is("user_created")));
-		mockMvc.perform(post("/user/")
-				.content("{\"login\":\"user2\",\"email\": \"example2@mail.ru\",\"password\":\"123\"}")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("responce", is("user_created")));
+        createUserTest("user","email@mail.ru");
+        createUserTest("user1","email1@mail.ru");
 		mockMvc.perform(get("/rating/"))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("errorCode",isEmptyOrNullString()));
+				.andExpect(status().isOk());
 	}
 
 	@Test
@@ -98,25 +84,17 @@ public class RegistrationControllerTest {
 
 	@Test
 	public void sessionOfExistUser() throws Exception {
-		mockMvc.perform(post("/user/")
-				.content("{\"login\":\"user1\",\"email\": \"example1@mail.ru\",\"password\":\"123\"}")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("responce", is("user_created")));
+        createUserTest("user1","email1@mail.ru");
 		mockMvc.perform(post("/session/")
-				.content("{\"login\":\"user1\",\"email\": \"example1@mail.ru\",\"password\":\"123\"}")
+				.content("{\"login\":\"user1\",\"email\": \"email1@mail.ru\",\"password\":\"123\"}")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("responce", is("successfully_authorized")));
+				.andExpect(jsonPath("response", is("successfully_authorized")));
 	}
 
 	@Test
 	public void sessionOfWithNullField() throws Exception {
-		mockMvc.perform(post("/user/")
-				.content("{\"login\":\"user1\",\"email\": \"example1@mail.ru\",\"password\":\"123\"}")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("responce", is("user_created")));
+        createUserTest("user","email1@mail.ru");
 		mockMvc.perform(post("/session/")
 				.content("{\"login\":null,\"email\":null,\"password\":\"123\"}")
 				.contentType(MediaType.APPLICATION_JSON))

@@ -1,9 +1,5 @@
 package ru.mail.park.entities;
 
-/**
- * Created by victor on 23.10.16.
- */
-
 import ru.mail.park.model.UserProfile;
 
 import javax.persistence.*;

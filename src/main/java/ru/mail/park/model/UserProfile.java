@@ -4,9 +4,6 @@ import ru.mail.park.entities.UserProfileEntity;
 
 import java.util.Random;
 
-/**
- * Created by Solovyev on 17/09/16.
- */
 public class UserProfile {
     private String email;
     private long id;
