@@ -23,10 +23,6 @@ public class RatingController {
     @RequestMapping(path = "/rating/", method = RequestMethod.GET)
     public SuccessResponseRating bestRating() throws ExceptionWithErrorCode {
         final List<UserProfile> users = accountService.getBests();
-        if(users.size()!=0) {
             return new SuccessResponseRating(users);
-        } else {
-            throw new ExceptionWithErrorCode("Ra01","no_one_in_database");
-        }
     }
 }

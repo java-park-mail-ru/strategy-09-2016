@@ -25,7 +25,7 @@ public class RegistrationController{
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(path = "/user/", method = RequestMethod.POST)
     public SuccessResponse registration(@RequestBody RegistrationRequest body,
-                                HttpSession httpSession) throws ExceptionWithErrorCode {
+                                HttpSession httpSession) throws Exception {
         final String login = body.getLogin();
         final String password = body.getPassword();
         final String email = body.getEmail();
