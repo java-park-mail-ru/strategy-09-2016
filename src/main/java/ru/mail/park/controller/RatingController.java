@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mail.park.controller.response.SuccessResponseRating;
+import ru.mail.park.controller.response.RatingSuccessResponse;
 import ru.mail.park.exeption.ExceptionWithErrorCode;
 import ru.mail.park.model.UserProfile;
 import ru.mail.park.services.AccountService;
@@ -21,8 +21,9 @@ public class RatingController {
     }
 
     @RequestMapping(path = "/rating/", method = RequestMethod.GET)
-    public SuccessResponseRating bestRating() throws ExceptionWithErrorCode {
+    public RatingSuccessResponse bestRating() throws ExceptionWithErrorCode {
         final List<UserProfile> users = accountService.getBests();
-            return new SuccessResponseRating(users);
+            return new RatingSuccessResponse(users);
     }
+
 }

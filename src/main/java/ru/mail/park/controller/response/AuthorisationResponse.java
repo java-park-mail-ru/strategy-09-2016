@@ -3,8 +3,8 @@ package ru.mail.park.controller.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class AuthorisationResponse {
-    final private Boolean isAuthorized;
-    final private String login;
+    private final Boolean isAuthorized;
+    private final String login;
 
     public AuthorisationResponse(Boolean status, String login) {
         this.isAuthorized = status;
