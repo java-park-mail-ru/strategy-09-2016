@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestRunnableApplicationH2DB {
+public class TestRunnableWithH2DB {
 
 	@Test
 	public void contextLoads() {
