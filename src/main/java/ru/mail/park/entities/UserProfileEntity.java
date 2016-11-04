@@ -25,8 +25,6 @@ public class UserProfileEntity {
     @Column(name = "rating")
     private Integer rating;
 
-    UserProfileEntity(){}
-
     public UserProfileEntity(UserProfile user) {
         this.email = user.getEmail();
         this.login = user.getLogin();

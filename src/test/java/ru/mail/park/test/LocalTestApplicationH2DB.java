@@ -7,9 +7,9 @@ import ru.mail.park.Application;
 
 @SpringBootApplication
 @Import(Application.class)
-public class JavaHerokuPostgresTestApplication {
+public class LocalTestApplicationH2DB {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JavaHerokuPostgresTestApplication.class, args);
+		SpringApplication.run(LocalTestApplicationH2DB.class, args);
 	}
 }

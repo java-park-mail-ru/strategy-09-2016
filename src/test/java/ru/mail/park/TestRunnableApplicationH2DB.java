@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class JavaHerokuPostgresApplicationTests {
+public class TestRunnableApplicationH2DB {
 
 	@Test
 	public void contextLoads() {
