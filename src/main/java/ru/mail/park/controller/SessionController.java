@@ -55,7 +55,6 @@ public class SessionController {
     public AuthorisationResponse isAuth(HttpSession httpSession) {
         if(httpSession.getAttribute("userLogin")!=null) {
             final UserProfile user = accountService.getUser(httpSession.getAttribute("userLogin").toString());
-            System.out.println(user.getId());
             return new AuthorisationResponse(true, user.getLogin());
         }
         return new AuthorisationResponse(false, null);

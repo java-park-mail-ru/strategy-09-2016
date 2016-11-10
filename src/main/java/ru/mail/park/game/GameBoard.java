@@ -85,7 +85,7 @@ public class GameBoard {
         do {
             x = random.nextInt(BOARDHIGHT-2)+1;
             y = random.nextInt(BOARDWIGHT-2)+1;
-        } while(boardMap[x][y].getId()<117 && boardMap[x][y].getPiratIds().length==0);
+        } while(boardMap[x][y].getId()>=117 );
         pirats[piratId] = new Pirat(piratId, new CoordPair(x, y));
         boardMap[x][y].setPiratId(piratId);
     }

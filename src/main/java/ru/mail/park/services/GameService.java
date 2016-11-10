@@ -73,7 +73,7 @@ public class GameService {
                     }
                 }
                 //builder.append(tmpStr);
-                tmpStr = board.getCell(new CoordPair(i,j)).getView();
+                //tmpStr = board.getCell(new CoordPair(i,j)).getView();
                 while (tmpStr.length() < 4) {
                     tmpStr = " " + tmpStr;
                 }
