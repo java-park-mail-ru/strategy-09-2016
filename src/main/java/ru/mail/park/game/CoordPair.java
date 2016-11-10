@@ -7,6 +7,13 @@ public class CoordPair {
     Integer x;
     Integer y;
 
+    static CoordPair sum(CoordPair firstPair, CoordPair secondPair){
+        return new CoordPair(firstPair.getX()+ secondPair.getX(), firstPair.getY() + secondPair.getY());
+    }
+    static  Boolean equals(CoordPair firstPair, CoordPair secondPair){
+        return firstPair.getX()==secondPair.getX()&&firstPair.getY()==secondPair.getY();
+    }
+
     public CoordPair(Integer x, Integer y){
         this.x = x;
         this.y = y;
