@@ -19,18 +19,18 @@ public class GameService {
         System.out.println("WTF??");
     }
 
-    public CoordPair getShipCord(){
-        return board.getShipCord();
+    public CoordPair getShipCord(Integer playerId){
+        return board.getShipCord(playerId);
     }
 
-    public Boolean moveShip(CoordPair direction){
+    public Boolean moveShip(CoordPair direction, Integer playerId){
         ++countOfTurns;
-        return board.moveShip(direction);
+        return board.moveShip(direction, playerId);
     }
 
-    public Boolean movePirat(Integer piratId, CoordPair targetCell){
-        move = new Movement(piratId,getPiratCord(piratId),targetCell);
-        Integer result = board.movePirat(move); //отдавать один индекс вместо двух
+    public Boolean movePirat(Integer piratId, CoordPair targetCell, Integer playerId){
+        move = new Movement(piratId, getPiratCord(piratId, playerId), targetCell);
+        Integer result = board.movePirat(move, playerId); //отдавать один индекс вместо двух
         if(result>-1){
             move = null;
             ++countOfTurns;
@@ -41,16 +41,16 @@ public class GameService {
         }
     }
 
-    public CoordPair[] getCellNeighborsWithPirat(Integer piratId ){
-        return board.getCellNeighborsByPirat(piratId);
+    public CoordPair[] getCellNeighborsWithPirat(Integer piratId, Integer playerId ){
+        return board.getCellNeighborsByPirat(piratId, playerId);
     }
 
-    public Boolean isCellPlacedNearPirat(Integer piratId, CoordPair targetCell){
-        return board.isCellPlacedNearPirat(piratId, targetCell);
+    public Boolean isCellPlacedNearPirat(Integer piratId, CoordPair targetCell, Integer playerId){
+        return board.isCellPlacedNearPirat(piratId, targetCell, playerId);
     }
 
-    public CoordPair getPiratCord(Integer piratId){
-       return board.getPiratCord(piratId);
+    public CoordPair getPiratCord(Integer piratId, Integer playerId){
+       return board.getPiratCord(piratId, playerId);
     }
 
     public Integer getMoveStatus(){
@@ -62,6 +62,9 @@ public class GameService {
         builder.append("<pre>");
         for (int i = 0; i < 13; ++i) {
             for (int j = 0; j < 13; ++j) {
+                builder.append("<span id=\"");
+                builder.append(13*i+j);
+                builder.append("\">");
                 String tmpStr = "";
                 if(board.getCell(new CoordPair(i,j)).getUnderShip()) {
                     tmpStr = " S ";
@@ -69,7 +72,11 @@ public class GameService {
                     if (board.isPirat(new CoordPair(i, j)) < 0) {
                         tmpStr = Integer.toString(board.getBoardMapId(i, j));
                     } else {
-                        tmpStr = " (*)";
+                        if( board.isPirat(new CoordPair(i, j)) > 2 ) {
+                            tmpStr = " (0)";
+                        } else {
+                            tmpStr = " (1)";
+                        }
                     }
                 }
                 //builder.append(tmpStr);
@@ -79,6 +86,7 @@ public class GameService {
                 }
                 builder.append(tmpStr);
                 builder.append(" ");
+                builder.append("</span>");
             }
             builder.append("<br>");
         }

@@ -24,7 +24,7 @@ public class AccountServiceTest {
     public void singleUsertest() throws Exception{
         UserProfile foo = new UserProfile("example@mail.ru","login","123");
         accountService.addUser(foo);
-        UserProfile fromDb = accountService.getUser(foo.getLogin());
+        UserProfile fromDb = accountService.getUserByLogin(foo.getLogin());
         assertNotNull(fromDb);
         assertEquals(foo.getEmail(), fromDb.getEmail());
         assertEquals(foo.getLogin(), fromDb.getLogin());

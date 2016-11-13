@@ -29,6 +29,7 @@ public class GameController {
     @RequestMapping(path = "/test/move", method = RequestMethod.POST)
     public ResponseEntity move(@RequestBody MoveRequest moveRequest) {
         StringBuilder builder = new StringBuilder();
+        Integer playerId = moveRequest.getPlayerId();
         if(moveRequest.getStatus()==null||moveRequest.getStatus()==0){
             builder.append("Выберите пирата:");
             for(int i = 0; i < 3; ++i) {
@@ -36,16 +37,16 @@ public class GameController {
                 builder.append("Пират ");
                 builder.append(i);
                 builder.append(" в клетке с координатами X: ");
-                builder.append(gameService.getPiratCord(i).getX());
+                builder.append(gameService.getPiratCord(i,playerId).getX());
                 builder.append(" и  Y:");
-                builder.append(gameService.getPiratCord(i).getY());
+                builder.append(gameService.getPiratCord(i, playerId).getY());
             }
             builder.append("\n");
             builder.append("Корабль находится");
             builder.append(" в клетке с координатами X: ");
-            builder.append(gameService.getShipCord().getX());
+            builder.append(gameService.getShipCord(playerId).getX());
             builder.append(" и  Y:");
-            builder.append(gameService.getShipCord().getY());
+            builder.append(gameService.getShipCord(playerId).getY());
         }
         if(moveRequest.getStatus()==1){
             moveRequest.getShipChoosen();
@@ -53,24 +54,24 @@ public class GameController {
             builder.append("Вы выбрали пирата ");
             builder.append(piratId);
             builder.append(", теперь выберите клетку для хода:");
-            for(int i = 0; i < gameService.getCellNeighborsWithPirat(piratId).length; ++i){
-                if(gameService.getCellNeighborsWithPirat(piratId)[i].getX()!=-1) {
+            for(int i = 0; i < gameService.getCellNeighborsWithPirat(piratId, playerId).length; ++i){
+                if(gameService.getCellNeighborsWithPirat(piratId, playerId)[i].getX()!=-1) {
                     builder.append("\n");
                     builder.append(i);
                     builder.append(": Клетка с координатами X: ");
-                    builder.append(gameService.getCellNeighborsWithPirat(piratId)[i].getX());
+                    builder.append(gameService.getCellNeighborsWithPirat(piratId, playerId)[i].getX());
                     builder.append(" и  Y:");
-                    builder.append(gameService.getCellNeighborsWithPirat(piratId)[i].getY());
+                    builder.append(gameService.getCellNeighborsWithPirat(piratId, playerId)[i].getY());
                 }
             }
         }
         if(moveRequest.getStatus()==2){
             Integer piratId = moveRequest.getPiratId();
             CoordPair targetCell = moveRequest.getTargetCell();
-            if(!gameService.isCellPlacedNearPirat(piratId,targetCell)){
+            if(!gameService.isCellPlacedNearPirat(piratId,targetCell, playerId)){
                 return ResponseEntity.ok("Выбрана неправильна клетка");
             }
-            if(gameService.movePirat(piratId,targetCell)) {
+            if(gameService.movePirat(piratId,targetCell, playerId)) {
                 builder.append("Пират ");
                 builder.append(piratId);
                 builder.append(" передвинут в клетку с координатами X: ");
@@ -86,7 +87,7 @@ public class GameController {
         }
         if(moveRequest.getStatus()==3){//мы решили двигать корабль
             CoordPair choosenDirection= moveRequest.getShipMoveDirection();
-            if(gameService.moveShip(choosenDirection)){
+            if(gameService.moveShip(choosenDirection, playerId)){
                 builder.append("Корабль успешно передвинут");
             } else {
                 builder.append("Корабль не смог передвинуться в выбранную клетку");
@@ -102,6 +103,7 @@ public class GameController {
         private final Integer piratId;
         private final Boolean isShipChoosen;
         private final CoordPair shipMoveDirection;
+        private final Integer playerId;
 
         @JsonCreator
         private MoveRequest(@JsonProperty("status") Integer status,
@@ -110,12 +112,18 @@ public class GameController {
                                       @JsonProperty("piratId") Integer piratId,
                             @JsonProperty("isShipChoosen") Boolean isShipChoosen,
                             @JsonProperty("shipMoveX") Integer shipMoveX,
-                            @JsonProperty("shipMoveY") Integer shipMoveY){
+                            @JsonProperty("shipMoveY") Integer shipMoveY,
+                            @JsonProperty("playerId") Integer playerId){
+            this.playerId = playerId;
             this.isShipChoosen = isShipChoosen;
             this.status = status;
             this.targetCell = new CoordPair(x,y);
             this.piratId = piratId;
             this.shipMoveDirection = new CoordPair(shipMoveX, shipMoveY);
+        }
+
+        public Integer getPlayerId() {
+            return playerId;
         }
 
         public CoordPair getShipMoveDirection() {

@@ -32,6 +32,10 @@ public class UserProfileEntity {
         this.rating = user.getRating();
     }
 
+    public UserProfileEntity(){
+
+    }
+
     public long getId() {
         return id;
     }
@@ -73,7 +77,7 @@ public class UserProfileEntity {
     }
 
     public UserProfile toDto() {
-        return new UserProfile(email, login, password, rating);
+        return new UserProfile(this);
     }
 
 }

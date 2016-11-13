@@ -31,7 +31,7 @@ public class SessionController {
         return new SuccessResponse("session_set_null");
     }
 
-    @RequestMapping(path = "/session/", method = RequestMethod.POST)
+    @RequestMapping(path = "/session/", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public SuccessResponse auth(@RequestBody AuthorisationRequest body,
                                HttpSession httpSession) throws ExceptionWithErrorCode {
         final String login = body.getLogin();
@@ -40,12 +40,16 @@ public class SessionController {
                 || StringUtils.isEmpty(password)) {
             throw new ExceptionWithErrorCode("S01","null_field");
         }
-        final UserProfile user = accountService.getUser(login);
+        final UserProfile user = accountService.getUserByLogin(login);
         if (user == null) {
             throw new ExceptionWithErrorCode("S02","wrong_login_password");
         }
         if (user.getPassword().equals(password)) {
-            httpSession.setAttribute("userLogin",user.getLogin()); //такое чувство, что вывод врет и по факту айдишники нумеруются с единицы
+            System.out.println(user.getId());
+            UserProfile testUser = accountService.getUserById(user.getId());
+            if(testUser!=null)
+            System.out.println(testUser.getId());
+            httpSession.setAttribute("userId",user.getId()); //такое чувство, что вывод врет и по факту айдишники нумеруются с единицы
             return new SuccessResponse("successfully_authorized");
         }
         throw new ExceptionWithErrorCode("S02","wrong_login_password");
@@ -54,7 +58,7 @@ public class SessionController {
     @RequestMapping(path = "/isAuthorised/", method = RequestMethod.GET)
     public AuthorisationResponse isAuth(HttpSession httpSession) {
         if(httpSession.getAttribute("userLogin")!=null) {
-            final UserProfile user = accountService.getUser(httpSession.getAttribute("userLogin").toString());
+            final UserProfile user = accountService.getUserById((Long)httpSession.getAttribute("userId"));
             return new AuthorisationResponse(true, user.getLogin());
         }
         return new AuthorisationResponse(false, null);
