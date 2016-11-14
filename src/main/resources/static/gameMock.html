@@ -10,8 +10,20 @@
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websockets rely on Javascript being
     enabled. Please enable
     Javascript and reload this page!</h2></noscript>
+<div id="gameBoard"></div>
+<button id="MyButton">Встать в очередь!</button>
+<div id="controllBlock" style="visibility: hidden ">
+<h1>Передвинуть пирата?</h1>>
+    <input type="text" placeholder="Enter pirat id" id="piratId"/>
+    <input type="text" placeholder="Enter target cell X" id="targetCellX"/>
+    <input type="text" placeholder="Enter target cell Y" id="targetCellY"/>
+    <input type="submit" id="piratMoveSubmit" value="Сходить" />
 
-<button id="MyButton">MyButton</button>
+<h1>Передвинуть корабль?</h1>>
+    <input type="text" placeholder="Enter shipDirection X" id="shipDirectionX"/>
+    <input type="text" placeholder="Enter shipDirection Y" id="shipDirectionY"/>
+    <input type="submit" id="shipMoveSubmit" value="Сходить" />
+</div>
 <script src="js/messaging.js">
 
 </script>

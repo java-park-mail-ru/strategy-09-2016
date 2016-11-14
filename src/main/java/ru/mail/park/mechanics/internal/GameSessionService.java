@@ -24,13 +24,8 @@ public class GameSessionService {
     private final Set<GameSession> gameSessions = new LinkedHashSet<>();
     @NotNull
     private final RemotePointService remotePointService;
-    @NotNull
-    private final GameInitService gameInitService
-            ;
-    public GameSessionService(@NotNull RemotePointService remotePointService,
-                              @NotNull GameInitService gameInitService) {
+    public GameSessionService(@NotNull RemotePointService remotePointService) {
         this.remotePointService = remotePointService;
-        this.gameInitService = gameInitService;
     }
 
     public Set<GameSession> getSessions() {
@@ -62,7 +57,6 @@ public class GameSessionService {
         usersMap.put(gameSession.getFirst().getUserProfile().getId(), gameSession);
         usersMap.put(gameSession.getSecond().getUserProfile().getId(), gameSession);
         //начинаеми игру
-        gameInitService.initGameFor(gameSession);
         return gameSession;
     }
 

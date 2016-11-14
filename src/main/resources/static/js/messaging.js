@@ -8,7 +8,7 @@ var MessagingTools = function (Game) {
     getPingMessage.content="{}";
 
     var joinGameMessage = {}
-    joinGameMessage.type = "ru.mail.park.websocket.TestMessage$Request";
+    joinGameMessage.type = "ru.mail.park.mechanics.requests.JoinGame$Request";
     joinGameMessage.content="{}";
 
     this.sendMyTestMessage = function() {
@@ -28,5 +28,19 @@ var MessagingTools = function (Game) {
         clientSnapMessage.type = "ru.mail.park.mechanics.base.ClientSnap";
         clientSnapMessage.content = JSON.stringify(snap);
         Game.socket.send(JSON.stringify(clientSnapMessage));
+    }
+
+    this.sendPiratMove = function(piratMove){
+        var clientPiratMoveMessage = {};
+        clientPiratMoveMessage.type = "ru.mail.park.mechanics.requests.PiratMoveRequest";
+        clientPiratMoveMessage.content = JSON.stringify(piratMove);
+        Game.socket.send(JSON.stringify(clientPiratMoveMessage));
+    }
+
+    this.sendShipMove = function(shipMove){
+        var clientShipMoveMessage = {};
+        clientShipMoveMessage.type = "ru.mail.park.mechanics.requests.ShipMoveRequest";
+        clientShipMoveMessage.content = JSON.stringify(shipMove);
+        Game.socket.send(JSON.stringify(clientShipMoveMessage));
     }
 };

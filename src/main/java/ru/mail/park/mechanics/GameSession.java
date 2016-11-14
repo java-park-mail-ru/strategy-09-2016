@@ -26,11 +26,11 @@ public class GameSession {
     }
 
     @NotNull
-    public GameUser getEnemy(@NotNull UserProfile user) {
-        if (user == first.getUserProfile()) {
+    public GameUser getEnemy(@NotNull Long playerId) {
+        if (playerId == first.getUserProfile().getId()) {
             return second;
         }
-        if (user == second.getUserProfile()) {
+        if (playerId == second.getUserProfile().getId()) {
             return first;
         }
         throw new IllegalArgumentException("Requested enemy for game but user not participant");

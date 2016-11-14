@@ -2,6 +2,7 @@ package ru.mail.park.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 import ru.mail.park.exeption.HandleException;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.IOException;
 /**
  * Created by Solovyev on 06/04/16.
  */
+@Component
 public abstract class MessageHandler<T> {
     @NotNull
     private final Class<T> clazz;

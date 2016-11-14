@@ -21,17 +21,20 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @NotNull
     private final MessageHandlerContainer messageHandlerContainer;
-
     @NotNull
     private final AccountService accountService;
+    @NotNull
+    private final RemotePointService remotePointService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
     public GameSocketHandler(@NotNull AccountService accountService,
-                             @NotNull MessageHandlerContainer messageHandlerContainer) {
+                             @NotNull MessageHandlerContainer messageHandlerContainer,
+                             @NotNull RemotePointService remotePointService) {
         this.accountService = accountService;
         this.messageHandlerContainer = messageHandlerContainer;
+        this.remotePointService = remotePointService;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Long userId = (Long) webSocketSession.getAttributes().get("userId");
         System.out.println(userId);
         System.out.println("Connected!!");
+        remotePointService.registerUser(userId, webSocketSession);
     }
 
     @Override

@@ -1,39 +1,75 @@
-package ru.mail.park.services;
+package ru.mail.park.mechanics;
 
-import org.springframework.stereotype.Service;
+import org.jetbrains.annotations.NotNull;
 import ru.mail.park.game.CoordPair;
 import ru.mail.park.game.GameBoard;
 import ru.mail.park.game.Movement;
 
-@Service
-public class GameService {
+/**
+ * Created by victor on 14.11.16.
+ */
+public class GameContent {
+    private Long firstPlayerId;
+    private Long secondPlayerId;
     private GameBoard board;
     private Movement move;
     private Integer countOfTurns;
+    private Long activePlayerId;
 
-    public GameService(){
-        board = new GameBoard();
-        move = new Movement();
-        countOfTurns = 0;
+    public GameContent(Long firstPlayerId, Long secondPlayerId){
+        this.firstPlayerId = firstPlayerId;
+        this.activePlayerId = firstPlayerId;
+        this.secondPlayerId = secondPlayerId;
+        this.board = new GameBoard();
+        this.move = new Movement();
+        this.countOfTurns = 0;
+    }
+
+    private Integer gameUserIdToGameUserId(@NotNull Long userId){
+        if(firstPlayerId.equals(userId)){
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    private void changeActivePlayer(){
+        if(activePlayerId.equals(firstPlayerId)){
+            activePlayerId = secondPlayerId;
+        } else {
+            activePlayerId = firstPlayerId;
+        }
     }
 
     public CoordPair getShipCord(Integer playerId){
         return board.getShipCord(playerId);
     }
 
-    public Boolean moveShip(CoordPair direction, Integer playerId){
+    public Boolean moveShip(CoordPair direction, Long playerId){
+        Integer playerGameId = gameUserIdToGameUserId(playerId);
         ++countOfTurns;
-        return board.moveShip(direction, playerId);
+        changeActivePlayer();
+        return board.moveShip(direction, playerGameId);
     }
 
-    public Boolean movePirat(Integer piratId, CoordPair targetCell, Integer playerId){
-        move = new Movement(piratId, getPiratCord(piratId, playerId), targetCell);
-        Integer result = board.movePirat(move, playerId); //отдавать один индекс вместо двух
+    public Boolean movePirat(Integer piratId, CoordPair targetCell, Long playerId){
+        //и сдесь же мы должны тормозить игрока, если сейчас не его ход
+        if(activePlayerId!=playerId){
+            System.out.println("Какой-то подозрительный юзер. Пытается ходить не в свой ход");
+            return false;
+        }
+        Integer playerGameId = gameUserIdToGameUserId(playerId);
+        System.out.println("Пытаемся совершить ход");
+        System.out.println("piratId="+ piratId + " targetX="+targetCell.getX()+" targetCellY="+targetCell.getY());
+        System.out.println(getPiratCord(piratId, playerGameId).getX()+"   " + getPiratCord(piratId, playerGameId).getY());
+        move = new Movement(piratId, getPiratCord(piratId, playerGameId), targetCell);
+        Integer result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
         if(result>-1){
             move = null;
             ++countOfTurns;
             return true;
         } else {
+            changeActivePlayer();
             move = null;
             return false;
         }
@@ -48,7 +84,7 @@ public class GameService {
     }
 
     public CoordPair getPiratCord(Integer piratId, Integer playerId){
-       return board.getPiratCord(piratId, playerId);
+        return board.getPiratCord(piratId, playerId);
     }
 
     public Integer getMoveStatus(){
@@ -71,7 +107,7 @@ public class GameService {
                         tmpStr = Integer.toString(board.getBoardMapId(i, j));
                     } else {
                         if( board.isPirat(new CoordPair(i, j)) > 2 ) {
-                            tmpStr = " (0)";
+                            tmpStr = " (2)";
                         } else {
                             tmpStr = " (1)";
                         }
