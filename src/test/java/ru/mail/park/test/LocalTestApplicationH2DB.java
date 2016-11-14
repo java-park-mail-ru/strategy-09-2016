@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @SpringBootApplication
 @Import(Application.class)
 public class LocalTestApplicationH2DB {
-	public static final long IDLE_TIMEOUT_MS = TimeUnit.MINUTES.toMillis(1);
+	public static final long IDLE_TIMEOUT_MS = TimeUnit.MINUTES.toMillis(100);
 	public static final int BUFFER_SIZE_BYTES = 8192;
 
 	public static void main(String[] args) {
