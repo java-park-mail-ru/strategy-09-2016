@@ -54,8 +54,9 @@ public class GameContent {
 
     public Boolean movePirat(Integer piratId, CoordPair targetCell, Long playerId){
         //и сдесь же мы должны тормозить игрока, если сейчас не его ход
-        if(activePlayerId!=playerId){
+        if(activePlayerId!=(playerId)){
             System.out.println("Какой-то подозрительный юзер. Пытается ходить не в свой ход");
+            System.out.println(playerId + " " + firstPlayerId + " " + secondPlayerId + " " + activePlayerId);
             return false;
         }
         Integer playerGameId = gameUserIdToGameUserId(playerId);
@@ -67,9 +68,9 @@ public class GameContent {
         if(result>-1){
             move = null;
             ++countOfTurns;
+            changeActivePlayer();
             return true;
         } else {
-            changeActivePlayer();
             move = null;
             return false;
         }

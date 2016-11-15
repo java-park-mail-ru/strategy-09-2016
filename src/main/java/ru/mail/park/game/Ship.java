@@ -3,7 +3,7 @@ package ru.mail.park.game;
 public class Ship extends AbstractCell{
     private CoordPair location;
     private CoordPair[] avaliableDirection = new CoordPair[2];
-    private static final Integer NUMNEIGHBORS = 3;
+    private static final Integer NUMNEIGHBORS = 1;
 
     public Ship(Integer id, CoordPair location, CoordPair orientation) {
         super.id = id;
@@ -36,31 +36,31 @@ public class Ship extends AbstractCell{
 
     public void resetNeighbors(){
         if(location.getX()==0){
-            neighbors[0] = new CoordPair(location.getX()+1,location.getY()-1);
+            neighbors[0] = new CoordPair(location.getX()+1,location.getY()); /*
             neighbors[1] = new CoordPair(location.getX()+1,location.getY());
             neighbors[2] = new CoordPair(location.getX()+1,location.getY()+1);
-            cornerCaseCut(location.getY());
+            cornerCaseCut(location.getY()); */
             return;
         }
         if(location.getX()==12){
-            neighbors[0] = new CoordPair(location.getX()-1,location.getY()-1);
+            neighbors[0] = new CoordPair(location.getX()-1,location.getY()); /*
             neighbors[1] = new CoordPair(location.getX()-1,location.getY());
             neighbors[2] = new CoordPair(location.getX()-1,location.getY()+1);
-            cornerCaseCut(location.getY());
+            cornerCaseCut(location.getY()); */
             return;
         }
         if(location.getY()==0){
-            neighbors[0] = new CoordPair(location.getX()-1,location.getY()+1);
+            neighbors[0] = new CoordPair(location.getX(),location.getY()+1); /*
             neighbors[1] = new CoordPair(location.getX(),location.getY()+1);
             neighbors[2] = new CoordPair(location.getX()+1,location.getY()+1);
-            cornerCaseCut(location.getX());
+            cornerCaseCut(location.getX()); */
             return;
         }
         if(location.getY()==12){
-            neighbors[0] = new CoordPair(location.getX()-1,location.getY()-1);
+            neighbors[0] = new CoordPair(location.getX(),location.getY()-1); /*
             neighbors[1] = new CoordPair(location.getX(),location.getY()-1);
             neighbors[2] = new CoordPair(location.getX()+1,location.getY()-1);
-            cornerCaseCut(location.getX());
+            cornerCaseCut(location.getX()); */
             return;
         }
         return;

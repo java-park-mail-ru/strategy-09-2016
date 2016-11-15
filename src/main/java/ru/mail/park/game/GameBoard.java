@@ -162,8 +162,10 @@ public class GameBoard {
         private Boolean moveShip(CoordPair direction){
             for(CoordPair tempPair:ship.getAvaliableDirection()){
                 if(CoordPair.equals(tempPair,direction)){ // такое направление вообще возможно
-                    if(boardMap[CoordPair.sum(ship.getLocation(),direction).getX()]
-                            [CoordPair.sum(ship.getLocation(),direction).getY()].getId()>0){ //и мы не попали на угол
+                    //if(boardMap[CoordPair.sum(ship.getLocation(),direction).getX()]
+                      //      [CoordPair.sum(ship.getLocation(),direction).getY()].getId()>0){ //и мы не попали на угол
+                    if(boardMap[CoordPair.sum(ship.neighbors[0],direction).getX()]
+                            [CoordPair.sum(ship.neighbors[0],direction).getY()].getId()<NUMBEFOFCELL){
                         for(Integer piratId:boardMap[ship.getLocation().getX()][ship.getLocation().getY()].getPiratIds()) { //айди всех пиратов на корабле
                             pirats[piratId].setLocation(CoordPair.sum(ship.getLocation(),direction));
                             boardMap[CoordPair.sum(ship.getLocation(),direction).getX()]
@@ -186,9 +188,9 @@ public class GameBoard {
                 final Integer starterY = piratMove.getStartCell().getY();
                 final Integer targetX = piratMove.getTargetCell().getX();
                 final Integer targetY = piratMove.getTargetCell().getY();
-                if(boardMap[targetX][targetY].isUnderShip && (Math.abs(starterX-targetX)+Math.abs(starterY-targetY))>1){
-                    return -1; //мы пытаемся взойти на корабль с диагональной клетки
-                } //и тут, по идее, появится еще миллион правил и проверок?
+               // if(boardMap[targetX][targetY].isUnderShip && (Math.abs(starterX-targetX)+Math.abs(starterY-targetY))>1){
+                 //   return -1; //мы пытаемся взойти на корабль с диагональной клетки
+               // } //и тут, по идее, появится еще миллион правил и проверок?
                 //миллион - это сколько? Форт с пиратом, да неизвестные клетки с монетой, а что еще?
                 if(boardMap[starterX][starterY].piratLeave(piratMove.getPiratId())){
                     //пират успешно покинул клетку
