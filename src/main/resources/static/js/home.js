@@ -1,27 +1,4 @@
 $(document).ready(function () {
-    var socket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/game");
-    socket.onopen = function () {
-        // Socket open.. start the game loop.
-        console.log('Info: WebSocket connection opened.');
-        console.log('Info: Waiting for another player...');
-    };
-    socket.onclose = function () {
-        console.log('Info: WebSocket closed.');
-    };
-    Game.socket.onmessage = function (event) {
-        var content = {};
-        var responseContent = {};
-        var response = {};
-        var message = JSON.parse(event.data);
-
-
-        if (message.type === "ru.mail.park.websocket.MessageToClient$Request") {
-            content = JSON.parse(message.content);
-            responseContent.myMessage = content.myMessage;
-            console.log(responseContent.myMessage);
-            return;
-        }
-    };
     $("#form").submit(function(ev){
         var login = $("#login").val();
         var password = $("#password").val();
