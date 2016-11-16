@@ -6,8 +6,6 @@ import ru.mail.park.game.CoordPair;
 import ru.mail.park.game.GameBoard;
 import ru.mail.park.game.Movement;
 
-import java.util.Arrays;
-
 /**
  * Created by victor on 14.11.16.
  */
@@ -110,14 +108,15 @@ public class GameContent {
                 builder.append(",");
             }
         }
+        /*
         builder.setLength(builder.length()-1);
         try {
             return mapper.writeValueAsString(Arrays.toString(map));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return " ? ";
-        //return builder.toString();
+        return " ? "; */
+        return builder.toString();
     }
 
     public Integer getCountOfTurns() {
