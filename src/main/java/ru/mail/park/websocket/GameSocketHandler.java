@@ -42,6 +42,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Long userId = (Long) webSocketSession.getAttributes().get("userId");
         System.out.println(userId);
         System.out.println("Connected!!");
+
         remotePointService.registerUser(userId, webSocketSession);
     }
 

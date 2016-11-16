@@ -76,7 +76,8 @@ public class GameProgressService {
                 sendUserNewBoard(playerId);
                 return;
             } else {
-                testMessage.setMyMessage("Капитан, корабль не может туда плыть");
+                testMessage.setMyMessage("Капитан, корабль не может туда плыть. Сейчас его координаты: ");
+                System.out.println(usersToGamesMap.get(playerId).getShipCord(playerId));
             }
         } else {
             testMessage.setMyMessage("Этот игрок вообще не участвует в играх");

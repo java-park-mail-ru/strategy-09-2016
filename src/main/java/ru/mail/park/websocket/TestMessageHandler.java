@@ -28,5 +28,6 @@ public class TestMessageHandler extends MessageHandler<TestMessage.Request> {
     @Override
     public void handle(@NotNull TestMessage.Request message, @NotNull Long userId) throws HandleException {
         System.out.println("I handle your message. What's next?");
+
     }
 }

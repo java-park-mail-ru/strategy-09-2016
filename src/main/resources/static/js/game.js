@@ -6,7 +6,7 @@ Game.initialize = function () {
     Game.connect();
 };
 Game.connect = (function () {
-    Game.socket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/game");
+    Game.socket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/game");
 
     document.getElementById("MyButton").onclick = function() {
         document.getElementById("MyButton").style.visibility='hidden';

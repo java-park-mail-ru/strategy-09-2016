@@ -41,15 +41,19 @@ public class GameContent {
         }
     }
 
-    public CoordPair getShipCord(Integer playerId){
-        return board.getShipCord(playerId);
+    public CoordPair getShipCord(Long playerId){
+        Integer playerInGameId = gameUserIdToGameUserId(playerId);
+        return board.getShipCord(playerInGameId);
     }
 
     public Boolean moveShip(CoordPair direction, Long playerId){
-        Integer playerGameId = gameUserIdToGameUserId(playerId);
-        ++countOfTurns;
-        changeActivePlayer();
-        return board.moveShip(direction, playerGameId);
+        final Integer playerGameId = gameUserIdToGameUserId(playerId);
+        final Boolean shipMove = board.moveShip(direction, playerGameId);
+        if(shipMove) {
+            ++countOfTurns;
+            changeActivePlayer();
+        }
+        return shipMove;
     }
 
     public Boolean movePirat(Integer piratId, CoordPair targetCell, Long playerId){
@@ -94,38 +98,13 @@ public class GameContent {
 
     public String getMap(){
         StringBuilder builder = new StringBuilder();
-        builder.append("<pre>");
         for (int i = 0; i < 13; ++i) {
             for (int j = 0; j < 13; ++j) {
-                builder.append("<span id=\"");
-                builder.append(13*i+j);
-                builder.append("\">");
-                String tmpStr = "";
-                if(board.getCell(new CoordPair(i,j)).getUnderShip()) {
-                    tmpStr = " S ";
-                } else {
-                    if (board.isPirat(new CoordPair(i, j)) < 0) {
-                        tmpStr = Integer.toString(board.getBoardMapId(i, j));
-                    } else {
-                        if( board.isPirat(new CoordPair(i, j)) > 2 ) {
-                            tmpStr = " (2)";
-                        } else {
-                            tmpStr = " (1)";
-                        }
-                    }
-                }
-                //builder.append(tmpStr);
-                //tmpStr = board.getCell(new CoordPair(i,j)).getView();
-                while (tmpStr.length() < 4) {
-                    tmpStr = " " + tmpStr;
-                }
-                builder.append(tmpStr);
-                builder.append(" ");
-                builder.append("</span>");
+                builder.append(Integer.toString(board.getBoardMapId(i, j)));
+                builder.append(",");
             }
-            builder.append("<br>");
         }
-        builder.append("</pre>");
+        builder.setLength(builder.length()-1);
         return builder.toString();
     }
 

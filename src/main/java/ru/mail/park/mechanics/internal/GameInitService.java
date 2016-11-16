@@ -71,7 +71,7 @@ public class GameInitService {
         } else {
             request.setActive(false);
         }
-        request.setEnemyNick("asdsad");
+        request.setEnemyNick(gameSession.getEnemy(player.getId()).getUserProfile().getLogin());
         return  request;
     }
 

@@ -91,6 +91,8 @@ public class GameBoard {
         return boardMap[x][y].getId();
     }
 
+
+
     public Integer isPirat(CoordPair cord) { //эта штука говорит, есть ли пират в выбранной клетке
         for(GamePlayer player : players) {
             if(player!=null)
