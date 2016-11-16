@@ -1,7 +1,6 @@
 package ru.mail.park.game;
 
 import java.util.Collections;
-import java.util.Random;
 import java.util.Vector;
 
 public class GameBoard {
@@ -91,7 +90,9 @@ public class GameBoard {
         return boardMap[x][y].getId();
     }
 
-
+    public CoordPair[] getCellNeighbors(CoordPair cellCord){
+        return boardMap[cellCord.getX()][cellCord.getY()].getNeighbors();
+    }
 
     public Integer isPirat(CoordPair cord) { //эта штука говорит, есть ли пират в выбранной клетке
         for(GamePlayer player : players) {
@@ -123,7 +124,7 @@ public class GameBoard {
         private GamePlayer(Integer playerId){
             this.playerId = playerId;
             for(Integer i = 0; i < 3; ++i){
-                generatePirat(i);
+                generatePirat(i, playerId);
             }
             if(playerId==0){
                 setShip(0,new CoordPair(0,6), new CoordPair(0,1));
@@ -145,16 +146,14 @@ public class GameBoard {
             boardMap[location.getX()][location.getY()].setUnderShip(true);
         }
 
-        private void generatePirat(Integer piratId){
-            final Random random = new Random();
-            Integer x;
-            Integer y;
-            do {
-                x = random.nextInt(BOARDHIGHT-2)+1;
-                y = random.nextInt(BOARDWIGHT -2)+1;
-            } while(boardMap[x][y].getId()>=NUMBEFOFCELL );
-            pirats[piratId] = new Pirat(piratId, new CoordPair(x, y));
-            boardMap[x][y].setPiratId(piratId);
+        private void generatePirat(Integer piratId, Integer playerId){
+            if(playerId==0){
+                pirats[piratId] = new Pirat(piratId, new CoordPair(0, 6));
+                boardMap[0][6].setPiratId(piratId);
+            } else {
+                pirats[piratId] = new Pirat(piratId, new CoordPair(ISLAND_HIGHT+1, 6));
+                boardMap[ISLAND_HIGHT+1][6].setPiratId(piratId);
+            }
         }
 
         private CoordPair getPiratCord(Integer piratId){
