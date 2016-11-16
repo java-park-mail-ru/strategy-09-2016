@@ -42,7 +42,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Long userId = (Long) webSocketSession.getAttributes().get("userId");
         System.out.println(userId);
         System.out.println("Connected!!");
-        if(userId!=null){
+        if(userId==null){
             MessageToClient.Request testMessage = new MessageToClient.Request();
             testMessage.setMyMessage("Cookie files is missing =(");
             try {
