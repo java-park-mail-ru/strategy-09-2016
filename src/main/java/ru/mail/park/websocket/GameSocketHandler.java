@@ -42,6 +42,17 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Long userId = (Long) webSocketSession.getAttributes().get("userId");
         System.out.println(userId);
         System.out.println("Connected!!");
+        if(userId!=null){
+            MessageToClient.Request testMessage = new MessageToClient.Request();
+            testMessage.setMyMessage("Cookie files is missing =(");
+            try {
+                final Message responseMessage = new Message(MessageToClient.Request.class.getName(),
+                        objectMapper.writeValueAsString(testMessage));
+                webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(responseMessage)));
+            } catch( Exception e){
+                e.printStackTrace();
+            }
+        }
 
         remotePointService.registerUser(userId, webSocketSession);
     }

@@ -1,9 +1,12 @@
 package ru.mail.park.mechanics;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import ru.mail.park.game.CoordPair;
 import ru.mail.park.game.GameBoard;
 import ru.mail.park.game.Movement;
+
+import java.util.Arrays;
 
 /**
  * Created by victor on 14.11.16.
@@ -15,6 +18,7 @@ public class GameContent {
     private Movement move;
     private Integer countOfTurns;
     private Long activePlayerId;
+    private ObjectMapper mapper = new ObjectMapper();
 
     public GameContent(Long firstPlayerId, Long secondPlayerId){
         this.firstPlayerId = firstPlayerId;
@@ -97,15 +101,23 @@ public class GameContent {
     }
 
     public String getMap(){
+        Integer[] map = new Integer[169];
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 13; ++i) {
             for (int j = 0; j < 13; ++j) {
+                map[13*i+j] = board.getBoardMapId(i, j);
                 builder.append(Integer.toString(board.getBoardMapId(i, j)));
                 builder.append(",");
             }
         }
         builder.setLength(builder.length()-1);
-        return builder.toString();
+        try {
+            return mapper.writeValueAsString(Arrays.toString(map));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return " ? ";
+        //return builder.toString();
     }
 
     public Integer getCountOfTurns() {
