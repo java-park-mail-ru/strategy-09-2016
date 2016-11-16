@@ -43,8 +43,9 @@ public class GameContent {
         }
     }
 
-    public CoordPair[] getNeighbors(CoordPair cellCord){
-        return board.getCellNeighbors(cellCord);
+    public CoordPair[] getNeighbors(CoordPair cellCord, Long playerId){
+        Integer playerIdInGame = gameUserIdToGameUserId(playerId);
+        return board.getCellNeighbors(cellCord, playerIdInGame);
     }
 
     public CoordPair getShipCord(Long playerId){

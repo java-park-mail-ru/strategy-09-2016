@@ -71,9 +71,10 @@ public class GameProgressService {
     }
 
     public void sendNeighbord(Integer cellIndex, Long playerId){
+
         Integer x = cellIndex/13;
         Integer y = cellIndex%13;
-        CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(new CoordPair(x,y));
+        CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(new CoordPair(x,y), playerId);
         StringBuilder builder = new StringBuilder();
         for(CoordPair cell:neighbors){
             builder.append(13*cell.getX()+cell.getY());

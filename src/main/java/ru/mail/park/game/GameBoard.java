@@ -90,8 +90,12 @@ public class GameBoard {
         return boardMap[x][y].getId();
     }
 
-    public CoordPair[] getCellNeighbors(CoordPair cellCord){
-        return boardMap[cellCord.getX()][cellCord.getY()].getNeighbors();
+    public CoordPair[] getCellNeighbors(CoordPair cellCord, Integer playerId){
+        if(boardMap[cellCord.getX()][cellCord.getY()].isUnderShip){
+            return players[playerId].ship.getNeighbors();
+        } else {
+            return boardMap[cellCord.getX()][cellCord.getY()].getNeighbors();
+        }
     }
 
     public Integer isPirat(CoordPair cord) { //эта штука говорит, есть ли пират в выбранной клетке
