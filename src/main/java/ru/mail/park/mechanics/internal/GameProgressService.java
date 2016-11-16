@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.mail.park.game.CoordPair;
 import ru.mail.park.mechanics.GameContent;
 import ru.mail.park.mechanics.requests.BoardMapAfterTurn;
-import ru.mail.park.mechanics.requests.NeightborsMessage;
+import ru.mail.park.mechanics.requests.NeighborsMessage;
 import ru.mail.park.websocket.Message;
 import ru.mail.park.websocket.MessageToClient;
 import ru.mail.park.websocket.RemotePointService;
@@ -80,10 +80,10 @@ public class GameProgressService {
             builder.append(13*cell.getX()+cell.getY());
             builder.append(",");
         }
-        NeightborsMessage.Request messageWithNeighbors = new NeightborsMessage.Request();
+        NeighborsMessage.Request messageWithNeighbors = new NeighborsMessage.Request();
         messageWithNeighbors.setNeighbors(builder.toString());
         try{
-            final Message responseMessage = new Message(NeightborsMessage.class.getName(),
+            final Message responseMessage = new Message(NeighborsMessage.class.getName(),
                     objectMapper.writeValueAsString(messageWithNeighbors));
             remotePointService.sendMessageToUser(playerId,responseMessage);
         } catch( Exception e){

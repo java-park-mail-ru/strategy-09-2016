@@ -3,7 +3,7 @@ package ru.mail.park.mechanics.requests;
 /**
  * Created by victor on 17.11.16.
  */
-public class NeightborsMessage {
+public class NeighborsMessage {
     public static class Request{
         private String neighbors;
 
