@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import ru.mail.park.game.CoordPair;
 import ru.mail.park.mechanics.GameContent;
-import ru.mail.park.mechanics.requests.BoardMapAfterTurn;
 import ru.mail.park.mechanics.requests.NeighborsMessage;
 import ru.mail.park.mechanics.requests.PiratMoveMessage;
 import ru.mail.park.websocket.Message;
@@ -124,8 +123,8 @@ public class GameProgressService {
         newTurnMessage.setPlayerId(usersToGamesMap.get(playerId).gameUserIdToGameUserId(playerId));
         newTurnMessage.setPiratId(piratId);
         newTurnMessage.setNewCellIndexOfPirat(indexOfTargetCell);
-
         try {
+            System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто ходил");
             final Message responseMessageToActivePLayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(playerId,responseMessageToActivePLayer);
@@ -133,8 +132,9 @@ public class GameProgressService {
             e.printStackTrace();
         }
         try {
+            System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто будет ходить");
             newTurnMessage.setActive(true);
-            final Message responseMessageToPassivePlayer = new Message(BoardMapAfterTurn.Request.class.getName(),
+            final Message responseMessageToPassivePlayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(
                     gameSessionService.getSessionForUser(playerId).getEnemy(playerId).getUserProfile().getId(),

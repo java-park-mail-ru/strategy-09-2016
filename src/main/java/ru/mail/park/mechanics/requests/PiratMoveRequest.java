@@ -13,7 +13,7 @@ public class PiratMoveRequest {
 
     @JsonCreator
     public PiratMoveRequest(@JsonProperty("piratId") Integer piratId,
-                            @JsonProperty("targetCellX") Integer targetCellIndex){
+                            @JsonProperty("targetCellIndex") Integer targetCellIndex){
         this.piratId = piratId;
         this.targetCellX = targetCellIndex%13;
         this.targetCellY = targetCellIndex / 13;
