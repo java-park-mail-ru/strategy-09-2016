@@ -72,18 +72,20 @@ public class GameProgressService {
 
     public void sendNeighbord(Integer cellIndex, Long playerId){
 
-        Integer x = cellIndex/13;
-        Integer y = cellIndex%13;
+        Integer x = cellIndex%13;
+        Integer y = cellIndex/13;
+        System.out.println("Мы получаем соседей клетки с координатами" + x + " " + y);
         CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(new CoordPair(x,y), playerId);
         StringBuilder builder = new StringBuilder();
         for(CoordPair cell:neighbors){
-            builder.append(13*cell.getX()+cell.getY());
+            builder.append(13*cell.getY()+cell.getX());
             builder.append(",");
         }
+        builder.setLength(builder.length()-1);
         NeighborsMessage.Request messageWithNeighbors = new NeighborsMessage.Request();
         messageWithNeighbors.setNeighbors(builder.toString());
         try{
-            final Message responseMessage = new Message(NeighborsMessage.class.getName(),
+            final Message responseMessage = new Message(NeighborsMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(messageWithNeighbors));
             remotePointService.sendMessageToUser(playerId,responseMessage);
         } catch( Exception e){

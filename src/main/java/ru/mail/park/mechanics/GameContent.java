@@ -113,6 +113,7 @@ public class GameContent {
                 builder.append(",");
             }
         }
+        builder.setLength(builder.length()-1);
         /*
         builder.setLength(builder.length()-1);
         try {

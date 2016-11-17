@@ -61,6 +61,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws AuthenticationException {
         final Long userId = (Long) session.getAttributes().get("userId");
         System.out.println("some message recieved");
+        System.out.println(userId);
         if(userId!=null) {
             final UserProfile user = accountService.getUserById(userId);
             handleMessage(user, message);
@@ -78,7 +79,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @SuppressWarnings("OverlyBroadCatchBlock")
     private void handleMessage(UserProfile userProfile, TextMessage text) {
-
+        System.out.println(text.getPayload());
         final Message message;
         try {
             message = objectMapper.readValue(text.getPayload(), Message.class);
@@ -87,7 +88,12 @@ public class GameSocketHandler extends TextWebSocketHandler {
             return;
         }
         try {
-            //noinspection ConstantConditions
+            System.out.println("Приняли сообщение " + message.getType() );
+            if(message.getContent()!=null){
+                System.out.println(message.getContent());
+            } else {
+                System.out.println("Отсутсвует контент");
+            }
             messageHandlerContainer.handle(message, userProfile.getId());
         } catch (HandleException e) {
             LOGGER.error("Can't handle message of type " + message.getType() + " with content: " + message.getContent(), e);
