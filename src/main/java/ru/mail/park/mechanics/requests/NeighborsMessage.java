@@ -1,10 +1,7 @@
 package ru.mail.park.mechanics.requests;
 
-/**
- * Created by victor on 17.11.16.
- */
-public class NeighborsMessage {
-    public static class Request{
+public class NeighborsMessage { // не уверен в названии
+    public static class Request{ //так-то это скорее response, чем request
         private String neighbors;
 
         public String getNeighbors() {

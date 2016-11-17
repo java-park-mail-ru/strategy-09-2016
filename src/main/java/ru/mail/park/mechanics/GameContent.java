@@ -27,7 +27,7 @@ public class GameContent {
         this.countOfTurns = 0;
     }
 
-    private Integer gameUserIdToGameUserId(@NotNull Long userId){
+    public Integer gameUserIdToGameUserId(@NotNull Long userId){
         if(firstPlayerId.equals(userId)){
             return 0;
         } else {

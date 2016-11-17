@@ -57,7 +57,7 @@ public class SessionController {
 
     @RequestMapping(path = "/isAuthorised/", method = RequestMethod.GET)
     public AuthorisationResponse isAuth(HttpSession httpSession) {
-        if(httpSession.getAttribute("userLogin")!=null) {
+        if(httpSession.getAttribute("userId")!=null) {
             final UserProfile user = accountService.getUserById((Long)httpSession.getAttribute("userId"));
             return new AuthorisationResponse(true, user.getLogin());
         }

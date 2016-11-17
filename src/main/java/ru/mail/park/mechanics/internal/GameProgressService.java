@@ -7,6 +7,7 @@ import ru.mail.park.game.CoordPair;
 import ru.mail.park.mechanics.GameContent;
 import ru.mail.park.mechanics.requests.BoardMapAfterTurn;
 import ru.mail.park.mechanics.requests.NeighborsMessage;
+import ru.mail.park.mechanics.requests.PiratMoveMessage;
 import ru.mail.park.websocket.Message;
 import ru.mail.park.websocket.MessageToClient;
 import ru.mail.park.websocket.RemotePointService;
@@ -50,12 +51,13 @@ public class GameProgressService {
 
     public void movePirat(Integer piratId, CoordPair targetCell, Long playerId){
         MessageToClient.Request testMessage = new MessageToClient.Request();
+
         if(usersToGamesMap.containsKey(playerId)){
             Boolean result = usersToGamesMap.get(playerId).movePirat(piratId, targetCell, playerId);
             if(!result){
                 testMessage.setMyMessage("Такой ход невозможен. Скорее всего, вы ошиблись в выборе клетки");
             } else {
-                sendUserNewBoard(playerId);
+                sendUserNewBoard(playerId, piratId, 13*targetCell.getY()+targetCell.getX());
                 return;
             }
         } else {
@@ -94,7 +96,7 @@ public class GameProgressService {
     }
 
     public void moveShip(CoordPair direction, Long playerId){
-        MessageToClient.Request testMessage = new MessageToClient.Request();
+     /*   MessageToClient.Request testMessage = new MessageToClient.Request();
         if(usersToGamesMap.containsKey(playerId)){
             if(usersToGamesMap.get(playerId).moveShip(direction, playerId)){
                 sendUserNewBoard(playerId);
@@ -113,24 +115,27 @@ public class GameProgressService {
         } catch( Exception e){
             e.printStackTrace();
         }
-
+*/
     }
 
-    private void sendUserNewBoard(Long playerId){
-        BoardMapAfterTurn.Request boardChanged = new BoardMapAfterTurn.Request();
-        boardChanged.setGameBoard(usersToGamesMap.get(playerId).getMap());
-        boardChanged.setActive(false);
+    private void sendUserNewBoard(Long playerId, Integer piratId, Integer indexOfTargetCell){
+        PiratMoveMessage.Request newTurnMessage = new PiratMoveMessage.Request();
+        newTurnMessage.setActive(false);
+        newTurnMessage.setPlayerId(usersToGamesMap.get(playerId).gameUserIdToGameUserId(playerId));
+        newTurnMessage.setPiratId(piratId);
+        newTurnMessage.setNewCellIndexOfPirat(indexOfTargetCell);
+
         try {
-            final Message responseMessageToActivePLayer = new Message(BoardMapAfterTurn.Request.class.getName(),
-                    objectMapper.writeValueAsString(boardChanged));
+            final Message responseMessageToActivePLayer = new Message(PiratMoveMessage.Request.class.getName(),
+                    objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(playerId,responseMessageToActivePLayer);
         } catch( Exception e){
             e.printStackTrace();
         }
         try {
-            boardChanged.setActive(true);
+            newTurnMessage.setActive(true);
             final Message responseMessageToPassivePlayer = new Message(BoardMapAfterTurn.Request.class.getName(),
-                    objectMapper.writeValueAsString(boardChanged));
+                    objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(
                     gameSessionService.getSessionForUser(playerId).getEnemy(playerId).getUserProfile().getId(),
                     responseMessageToPassivePlayer);
