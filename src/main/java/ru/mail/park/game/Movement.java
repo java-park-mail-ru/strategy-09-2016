@@ -1,8 +1,5 @@
 package ru.mail.park.game;
 
-/**
- * Created by victor on 05.11.16.
- */
 public class Movement {
     private Integer status;
     private Integer piratId;

@@ -2,24 +2,16 @@ package ru.mail.park.websocket;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by Solovyev on 06/04/16.
- */
 @SuppressWarnings("NullableProblems")
-public class
-Message {
-    @NotNull
-    private String type;
-    @NotNull
-    private String content;
-    //Here could be your versioning system
-    //private int version = VERSION;
+public class Message { //
+    private @NotNull String type;
 
-    @NotNull
-    public String getType() {
+    private @NotNull String content;
+
+    public @NotNull String getType() {
         return type;
     }
-    @NotNull
+
     public String getContent() {
         return content;
     }

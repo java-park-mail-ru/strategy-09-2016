@@ -1,12 +1,9 @@
 package ru.mail.park.game;
 
 public class CoastCell extends AbstractCell {
-    private final static Integer NUMNEIGHBORS = 2;
-
-    public CoastCell(Integer id) {
-        super.id = id;
-        super.isUnderShip = false;
-    }
+    private static final Integer NUMNEIGHBORS = 2;
+    // вроде как и магические числа, но делать их константами, принадлежащими клетке тоже странно
+    // это параметры игровой доски
 
     public CoastCell(Integer id, CoordPair thisCellCord) {
         super.id = id;
@@ -16,9 +13,10 @@ public class CoastCell extends AbstractCell {
         setNeighbors(thisCellCord);
     }
 
-    public void setNeighbors(CoordPair MyCord) {
-        Integer thisCellX = MyCord.getX();
-        Integer thisCellY = MyCord.getY();
+    @Override
+    public void setNeighbors(CoordPair myCord) {
+        final Integer thisCellX = myCord.getX();
+        final Integer thisCellY = myCord.getY();
         if(thisCellX==0){ //северный берег
             northCoastCase(thisCellX, thisCellY);
             return;
@@ -57,14 +55,12 @@ public class CoastCell extends AbstractCell {
             neighbors[1] = tempPair;
             return;
         }
-        if(thisCellX==1&&thisCellY==11){ //юго-западный угол
+        if(thisCellX==1&&thisCellY==11) { //юго-западный угол
             tempPair = new CoordPair(thisCellX + 1, thisCellY + 1);
             neighbors[0] = tempPair;
             tempPair = new CoordPair(thisCellX - 1, thisCellY - 1);
             neighbors[1] = tempPair;
-            return;
         }
-        return;
     }
 
     private void northCoastCase(Integer thisCellX, Integer thisCellY){

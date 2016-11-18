@@ -1,9 +1,6 @@
 package ru.mail.park.websocket;
 
-/**
- * Created by victor on 12.11.16.
- */
-public class TestMessage {
+public class TestMessage { //отладочное сообщение, которое получено от юзера
     public static class Request {
     }
 }

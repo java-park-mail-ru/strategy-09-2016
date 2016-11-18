@@ -1,9 +1,6 @@
 package ru.mail.park.websocket;
 
-/**
- * Created by victor on 13.11.16.
- */
-public class MessageToClient {
+public class MessageToClient { // отладочное сообщение для юзера
     public static final class Request {
         private String myMessage;
 

@@ -12,10 +12,10 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class GetNeighborsHandler extends MessageHandler<GetNeighbors> {
-    @NotNull
-    private GameProgressService gameProgressService;
-    @NotNull
-    private MessageHandlerContainer messageHandlerContainer;
+
+    private @NotNull GameProgressService gameProgressService;
+
+    private @NotNull MessageHandlerContainer messageHandlerContainer;
 
     public GetNeighborsHandler(@NotNull MessageHandlerContainer messageHandlerContainer,
                                @NotNull GameProgressService gameProgressService) {

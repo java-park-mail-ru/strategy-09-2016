@@ -1,10 +1,7 @@
 package ru.mail.park.game;
 
-/**
- * Created by victor on 07.11.16.
- */
-public class ArrowCell extends AbstractCell {
-    private final static Integer NUMNEIGHBORS = 1;
+public class ArrowCell extends AbstractCell { //класс клетки со стрелкой
+    private final static Integer NUMNEIGHBORS = 1; // пока не доделанный
     private final CoordPair directionOfArrow;
 
     public ArrowCell(Integer id, CoordPair direction){

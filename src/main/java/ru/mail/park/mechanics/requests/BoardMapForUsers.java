@@ -1,19 +1,16 @@
 package ru.mail.park.mechanics.requests;
 
-/**
- * Created by victor on 14.11.16.
- */
-public class BoardMapForUsers {
+public class BoardMapForUsers { //сообщение юзеру о начале игры со всей необходимой информацией для начала этой игры
     public static final class Request {
         private String gameBoard;
 
         private String enemyNick;
 
-        private Boolean isActive; //звучит странно, но ладно
+        private Boolean isActive;
 
         public String getGameBoard() {
             return gameBoard;
-        }
+        } //вроде и светятся неактивными, но все равно используются
 
         public void setGameBoard(String gameBoard) {
             this.gameBoard = gameBoard;

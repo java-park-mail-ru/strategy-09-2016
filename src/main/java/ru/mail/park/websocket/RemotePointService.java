@@ -13,11 +13,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by Solovyev on 02/11/2016.
- */
 @Service
-public class RemotePointService {
+public class RemotePointService { //сервис, работающий с сокетами
     private Map<Long, WebSocketSession> sessions = new ConcurrentHashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
 

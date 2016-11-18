@@ -15,55 +15,22 @@ public class Ship extends AbstractCell{
         resetNeighbors();
     }
 
-    private void cornerCaseCut(Integer importantCord){
-        switch(importantCord){
-            case 1:
-                neighbors[0] = new CoordPair(-1,-1);
-                neighbors[1] = new CoordPair(-1,-1);
-                break;
-            case 2:
-                neighbors[0] = new CoordPair(-1,-1);
-                break;
-            case 10:
-                neighbors[2] = new CoordPair(-1,-1);
-                break;
-            case 11:
-                neighbors[1] = new CoordPair(-1,-1);
-                neighbors[2] = new CoordPair(-1,-1);
-                break;
-        }
-    }
-
     public void resetNeighbors(){
         if(location.getX()==0){
-            neighbors[0] = new CoordPair(location.getX()+1,location.getY()); /*
-            neighbors[1] = new CoordPair(location.getX()+1,location.getY());
-            neighbors[2] = new CoordPair(location.getX()+1,location.getY()+1);
-            cornerCaseCut(location.getY()); */
+            neighbors[0] = new CoordPair(location.getX()+1,location.getY());
             return;
         }
         if(location.getX()==12){
-            neighbors[0] = new CoordPair(location.getX()-1,location.getY()); /*
-            neighbors[1] = new CoordPair(location.getX()-1,location.getY());
-            neighbors[2] = new CoordPair(location.getX()-1,location.getY()+1);
-            cornerCaseCut(location.getY()); */
+            neighbors[0] = new CoordPair(location.getX()-1,location.getY());
             return;
         }
         if(location.getY()==0){
-            neighbors[0] = new CoordPair(location.getX(),location.getY()+1); /*
-            neighbors[1] = new CoordPair(location.getX(),location.getY()+1);
-            neighbors[2] = new CoordPair(location.getX()+1,location.getY()+1);
-            cornerCaseCut(location.getX()); */
+            neighbors[0] = new CoordPair(location.getX(),location.getY()+1);
             return;
         }
         if(location.getY()==12){
-            neighbors[0] = new CoordPair(location.getX(),location.getY()-1); /*
-            neighbors[1] = new CoordPair(location.getX(),location.getY()-1);
-            neighbors[2] = new CoordPair(location.getX()+1,location.getY()-1);
-            cornerCaseCut(location.getX()); */
-            return;
+            neighbors[0] = new CoordPair(location.getX(),location.getY()-1);
         }
-        return;
     }
 
 

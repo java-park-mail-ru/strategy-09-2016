@@ -11,15 +11,12 @@ import ru.mail.park.websocket.MessageHandlerContainer;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by victor on 14.11.16.
- */
 @Component
-public class ShipMoveHandler extends MessageHandler<ShipMoveRequest> {
-    @NotNull
-    private GameProgressService gameProgressService;
-    @NotNull
-    private MessageHandlerContainer messageHandlerContainer;
+public class ShipMoveHandler extends MessageHandler<ShipMoveRequest> { //движение кобрабля в игре пока не используется
+
+    private @NotNull GameProgressService gameProgressService;
+
+    private @NotNull MessageHandlerContainer messageHandlerContainer;
 
     public ShipMoveHandler(@NotNull GameProgressService gameProgressService,
                            @NotNull MessageHandlerContainer messageHandlerContainer) {
@@ -36,8 +33,6 @@ public class ShipMoveHandler extends MessageHandler<ShipMoveRequest> {
     @Override
     public void handle(@NotNull ShipMoveRequest message, @NotNull Long forUser) throws HandleException {
         //тут тоже надо пнуть прогресс-гейм-сервис, чтобы передвинул корабль и отослал игрокам новое поле
-        System.out.println("Поднять якорь!");
-        System.out.println(forUser); //forUser - id юзера, который отправил сообщение
         gameProgressService.moveShip(new CoordPair(message.getDirectionX(), message.getDirectionY()), forUser);
 
     }

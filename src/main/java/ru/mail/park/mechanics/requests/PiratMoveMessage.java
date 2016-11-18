@@ -1,9 +1,6 @@
 package ru.mail.park.mechanics.requests;
 
-/**
- * Created by victor on 17.11.16.
- */
-public class PiratMoveMessage {
+public class PiratMoveMessage { //сообщение для пользователя о том, что какой-то пират был передвинут
     public static final class Request {
         private Integer playerId;
 
@@ -11,7 +8,7 @@ public class PiratMoveMessage {
 
         private Integer newCellIndexOfPirat;
 
-        private Boolean isActive; //звучит странно, но ладно
+        private Boolean isActive;
 
         public Boolean getActive() {
             return isActive;

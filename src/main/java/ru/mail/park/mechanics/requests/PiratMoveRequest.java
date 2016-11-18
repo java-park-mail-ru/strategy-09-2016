@@ -3,9 +3,6 @@ package ru.mail.park.mechanics.requests;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by victor on 14.11.16.
- */
 public class PiratMoveRequest {
     private Integer piratId;
     private Integer targetCellX;
@@ -15,8 +12,8 @@ public class PiratMoveRequest {
     public PiratMoveRequest(@JsonProperty("piratId") Integer piratId,
                             @JsonProperty("targetCellIndex") Integer targetCellIndex){
         this.piratId = piratId;
-        this.targetCellX = targetCellIndex%13;
-        this.targetCellY = targetCellIndex / 13;
+        this.targetCellX = targetCellIndex%13; //потому что к нам пришел индекс клетки с фронта
+        this.targetCellY = targetCellIndex / 13; // а мы работаем в двумерных координатах
     }
 
     public Integer getPiratId() {

@@ -7,13 +7,10 @@ import ru.mail.park.exeption.HandleException;
 
 import java.io.IOException;
 
-/**
- * Created by Solovyev on 06/04/16.
- */
 @Component
 public abstract class MessageHandler<T> {
-    @NotNull
-    private final Class<T> clazz;
+
+    private final @NotNull Class<T> clazz;
 
     public MessageHandler(@NotNull Class<T> clazz) {
         this.clazz = clazz;

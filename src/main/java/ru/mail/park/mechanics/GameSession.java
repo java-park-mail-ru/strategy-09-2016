@@ -6,18 +6,14 @@ import ru.mail.park.model.UserProfile;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-
-/**
- * @author k.solovyev
- */
 public class GameSession {
     private static final AtomicLong ID_GENERATOR = new AtomicLong(0);
-    @NotNull
-    private final Long sessionId;
-    @NotNull
-    private final GameUser first;
-    @NotNull
-    private final GameUser second;
+
+    private final @NotNull Long sessionId;
+
+    private final @NotNull GameUser first; //есть сомнения, что нам нужен сам GameUser в его нынешнем виде
+
+    private final @NotNull GameUser second; //скорее всего в него стоило бы вытащить только логин и айдишник
 
     public GameSession(@NotNull UserProfile user1, @NotNull UserProfile user2) {
         this.sessionId = ID_GENERATOR.getAndIncrement();
@@ -25,8 +21,8 @@ public class GameSession {
         this.second =  new GameUser(user2,1);
     }
 
-    @NotNull
-    public GameUser getEnemy(@NotNull Long playerId) {
+
+    public @NotNull GameUser getEnemy(@NotNull Long playerId) {
         if (playerId == first.getUserProfile().getId()) {
             return second;
         }
@@ -36,8 +32,8 @@ public class GameSession {
         throw new IllegalArgumentException("Requested enemy for game but user not participant");
     }
 
-    @NotNull
-    public GameUser getSelf(@NotNull Long userId) {
+
+    public @NotNull GameUser getSelf(@NotNull Long userId) {
         if (first.getUserProfile().getId()==userId) {
             return first;
         }
@@ -47,13 +43,11 @@ public class GameSession {
         throw new IllegalArgumentException("Request self for game but user not participate it");
     }
 
-    @NotNull
-    public GameUser getFirst() {
+    public @NotNull GameUser getFirst() {
         return first;
     }
 
-    @NotNull
-    public GameUser getSecond() {
+    public @NotNull GameUser getSecond() {
         return second;
     }
 
@@ -62,7 +56,7 @@ public class GameSession {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GameSession that = (GameSession) o;
+        final GameSession that = (GameSession) o;
 
         return sessionId.equals(that.sessionId);
 

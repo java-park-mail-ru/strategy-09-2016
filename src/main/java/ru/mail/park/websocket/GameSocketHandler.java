@@ -19,12 +19,11 @@ import java.io.IOException;
 public class GameSocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSocketHandler.class);
 
-    @NotNull
-    private final MessageHandlerContainer messageHandlerContainer;
-    @NotNull
-    private final AccountService accountService;
-    @NotNull
-    private final RemotePointService remotePointService;
+    private final @NotNull MessageHandlerContainer messageHandlerContainer;
+
+    private final @NotNull AccountService accountService;
+
+    private final @NotNull RemotePointService remotePointService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -40,20 +39,18 @@ public class GameSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws AuthenticationException {
         final Long userId = (Long) webSocketSession.getAttributes().get("userId");
-        System.out.println(userId);
-        System.out.println("Connected!!");
         if(userId==null){
-            MessageToClient.Request testMessage = new MessageToClient.Request();
+            final MessageToClient.Request testMessage = new MessageToClient.Request();
             testMessage.setMyMessage("Cookie files is missing =(");
             try {
                 final Message responseMessage = new Message(MessageToClient.Request.class.getName(),
                         objectMapper.writeValueAsString(testMessage));
                 webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(responseMessage)));
+                return;
             } catch( Exception e){
                 e.printStackTrace();
             }
         }
-
         remotePointService.registerUser(userId, webSocketSession);
     }
 
@@ -65,7 +62,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         if(userId!=null) {
             final UserProfile user = accountService.getUserById(userId);
             handleMessage(user, message);
-            MessageToClient.Request testMessage = new MessageToClient.Request();
+            final MessageToClient.Request testMessage = new MessageToClient.Request();
             testMessage.setMyMessage("Hello!!!");
             try {
                 final Message responseMessage = new Message(MessageToClient.Request.class.getName(),
@@ -88,12 +85,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
             return;
         }
         try {
-            System.out.println("Приняли сообщение " + message.getType() );
-            if(message.getContent()!=null){
-                System.out.println(message.getContent());
-            } else {
-                System.out.println("Отсутсвует контент");
-            }
             messageHandlerContainer.handle(message, userProfile.getId());
         } catch (HandleException e) {
             LOGGER.error("Can't handle message of type " + message.getType() + " with content: " + message.getContent(), e);
@@ -112,7 +103,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Long userId = (Long) webSocketSession.getAttributes().get("userId");
         if (userId == null) {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + closeStatus + ')');
-            return;
         }
     }
 

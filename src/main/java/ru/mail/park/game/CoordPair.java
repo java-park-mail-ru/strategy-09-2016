@@ -1,17 +1,14 @@
 package ru.mail.park.game;
 
-/**
- * Created by victor on 03.11.16.
- */
 public class CoordPair {
-    Integer x;
-    Integer y;
+    private Integer x;
+    private Integer y;
 
     static CoordPair sum(CoordPair firstPair, CoordPair secondPair){
-        return new CoordPair(firstPair.getX()+ secondPair.getX(), firstPair.getY() + secondPair.getY());
+        return new CoordPair(firstPair.x+ secondPair.x, firstPair.y + secondPair.y);
     }
     static  Boolean equals(CoordPair firstPair, CoordPair secondPair){
-        return firstPair.getX()==secondPair.getX()&&firstPair.getY()==secondPair.getY();
+        return firstPair.x==secondPair.x&&firstPair.y==secondPair.y;
     }
 
     public CoordPair(Integer x, Integer y){

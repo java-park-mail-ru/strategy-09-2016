@@ -9,14 +9,10 @@ import ru.mail.park.exeption.HandleException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Solovyev on 06/04/16.
- */
 @Service
-public class GameMessageHandlerContainer implements MessageHandlerContainer {
+public class GameMessageHandlerContainer implements MessageHandlerContainer { //класс, принимающий отладочные сообщения
     @SuppressWarnings("ConstantConditions")
-    @NotNull
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameMessageHandlerContainer.class);
+    private static final @NotNull Logger LOGGER = LoggerFactory.getLogger(GameMessageHandlerContainer.class);
     final Map<Class<?>, MessageHandler<?>> handlerMap = new HashMap<>();
 
     @Override

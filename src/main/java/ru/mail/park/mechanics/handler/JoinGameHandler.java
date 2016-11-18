@@ -10,15 +10,12 @@ import ru.mail.park.websocket.MessageHandlerContainer;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by Solovyev on 03/11/2016.
- */
 @Component
 public class JoinGameHandler extends MessageHandler<JoinGame.Request> {
-    @NotNull
-    private GameMechanics gameMechanics;
-    @NotNull
-    private MessageHandlerContainer messageHandlerContainer;
+
+    private @NotNull GameMechanics gameMechanics;
+
+    private @NotNull MessageHandlerContainer messageHandlerContainer;
 
     public JoinGameHandler(@NotNull GameMechanics gameMechanics, @NotNull MessageHandlerContainer messageHandlerContainer) {
         super(JoinGame.Request.class);
