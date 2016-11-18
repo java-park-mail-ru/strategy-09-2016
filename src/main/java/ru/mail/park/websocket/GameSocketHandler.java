@@ -57,8 +57,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws AuthenticationException {
         final Long userId = (Long) session.getAttributes().get("userId");
-        System.out.println("some message recieved");
-        System.out.println(userId);
         if(userId!=null) {
             final UserProfile user = accountService.getUserById(userId);
             handleMessage(user, message);
@@ -76,7 +74,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @SuppressWarnings("OverlyBroadCatchBlock")
     private void handleMessage(UserProfile userProfile, TextMessage text) {
-        System.out.println(text.getPayload());
         final Message message;
         try {
             message = objectMapper.readValue(text.getPayload(), Message.class);
@@ -99,7 +96,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
-        System.out.println("diconnected!!");
         final Long userId = (Long) webSocketSession.getAttributes().get("userId");
         if (userId == null) {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + closeStatus + ')');

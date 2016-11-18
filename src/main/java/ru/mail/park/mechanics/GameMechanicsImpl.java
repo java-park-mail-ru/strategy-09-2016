@@ -44,7 +44,6 @@ public class GameMechanicsImpl implements GameMechanics {
             return;
         }
         waiters.add(userId);
-        System.out.println("Эгегей, кто-то встал в очередь");
         tryStartGame();
     }
 
@@ -52,14 +51,14 @@ public class GameMechanicsImpl implements GameMechanics {
         final Set<UserProfile> matchedPlayers = new LinkedHashSet<>();
         while(waiters.size()>=1){ //пока в списке желающих сыграть больше 1 человека
             final Long candidateId = waiters.poll(); //достаем желающего из очереди
-            System.out.println("Проверяем, можно ли создать игру ");
+            //System.out.println("Проверяем, можно ли создать игру ");
             if (!insureCandidate(candidateId)) { //если он еще может игрыть
                 continue;
             }
             matchedPlayers.add(accountService.getUserById(candidateId)); //добавляем его в набор игроков на следующую игру
             if(matchedPlayers.size() == 2) { //если таких набралось двое, то у них начинается игра
                 final Iterator<UserProfile> iterator = matchedPlayers.iterator();
-                System.out.println("У нас есть два игрока. Хммм. ");
+                //System.out.println("У нас есть два игрока. Хммм. ");
                 final GameSession session = gameSessionService.startGame(iterator.next(), iterator.next());
                 gameInitService.initGameFor(session);
                 matchedPlayers.clear();

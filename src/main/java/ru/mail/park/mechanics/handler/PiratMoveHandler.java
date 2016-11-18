@@ -27,7 +27,6 @@ public class PiratMoveHandler extends MessageHandler<PiratMoveRequest> {
 
     @PostConstruct
     private void init() {
-        System.out.println(PiratMoveRequest.class);
         messageHandlerContainer.registerHandler(PiratMoveRequest.class, this);
     }
 

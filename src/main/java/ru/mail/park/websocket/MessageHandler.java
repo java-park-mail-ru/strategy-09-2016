@@ -20,7 +20,6 @@ public abstract class MessageHandler<T> {
     public void handleMessage(@NotNull Message message, @NotNull Long userId) throws HandleException {
         try {
             final Object data = new ObjectMapper().readValue(message.getContent(), clazz);
-            System.out.println(message.getType());
             handle(clazz.cast(data), userId);
         } catch (IOException | ClassCastException ex) {
             throw new HandleException("Can't read incoming message of type " + message.getType() + " with content: " + message.getContent(), ex);

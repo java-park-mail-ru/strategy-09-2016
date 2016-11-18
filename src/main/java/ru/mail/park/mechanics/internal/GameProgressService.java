@@ -105,7 +105,7 @@ public class GameProgressService {
                 return;
             } else {
                 testMessage.setMyMessage("Капитан, корабль не может туда плыть. Сейчас его координаты: ");
-                System.out.println(usersToGamesMap.get(playerId).getShipCord(playerId));
+                //System.out.println(usersToGamesMap.get(playerId).getShipCord(playerId));
             }
         } else {
             testMessage.setMyMessage("Этот игрок вообще не участвует в играх");

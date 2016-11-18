@@ -26,14 +26,12 @@ public class GetNeighborsHandler extends MessageHandler<GetNeighbors> {
 
     @PostConstruct
     private void init() {
-        System.out.println(GetNeighbors.class);
         messageHandlerContainer.registerHandler(GetNeighbors.class, this);
     }
 
     @Override
     public void handle(@NotNull GetNeighbors message, @NotNull Long forUser) throws HandleException {
-        System.out.println("Пытаемся получить соседей");
-        System.out.println(forUser); //forUser - id юзера, который отправил сообщение
+        //System.out.println("Пытаемся получить соседей");//forUser - id юзера, который отправил сообщение
         gameProgressService.sendNeighbord(message.getCellIndex(), forUser);
     }
 

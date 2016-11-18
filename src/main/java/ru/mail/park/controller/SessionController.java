@@ -45,10 +45,8 @@ public class SessionController {
             throw new ExceptionWithErrorCode("S02","wrong_login_password");
         }
         if (user.getPassword().equals(password)) {
-            System.out.println(user.getId());
             UserProfile testUser = accountService.getUserById(user.getId());
             if(testUser!=null)
-            System.out.println(testUser.getId());
             httpSession.setAttribute("userId",user.getId()); //такое чувство, что вывод врет и по факту айдишники нумеруются с единицы
             return new SuccessResponse("successfully_authorized");
         }
