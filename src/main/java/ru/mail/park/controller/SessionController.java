@@ -27,7 +27,7 @@ public class SessionController {
 
     @RequestMapping(path = "/exit/", method = RequestMethod.GET)
     public SuccessResponse exit(HttpSession httpSession) {
-        httpSession.setAttribute("userLogin",null);
+        httpSession.setAttribute("userId",null);
         return new SuccessResponse("session_set_null");
     }
 
