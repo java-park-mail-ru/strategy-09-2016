@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.mail.park.exeption.ExceptionWithErrorCode;
 
 @ControllerAdvice
-class GlobalControllerExceptionHandler {
+class ControllerExceptionHandler {
 
     @ExceptionHandler(ExceptionWithErrorCode.class)
     private ResponseEntity handleExeptionWithErrorCode(ExceptionWithErrorCode exceptionWithErrorCode){
@@ -18,12 +18,7 @@ class GlobalControllerExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BadResponse(exceptionWithErrorCode.getErrorMessage()));
         }
     }
-/*
-    @ExceptionHandler(Exception.class)
-    private ResponseEntity handleAllExeption(){
-        return ResponseEntity.ok(new BadResponse("ooops, something go wrong way"));
-    }
-*/
+
     private static final class BadResponse {
         private final String errorMessage;
 

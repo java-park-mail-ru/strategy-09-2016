@@ -2,10 +2,7 @@ package ru.mail.park.game;
 
 import org.eclipse.jetty.util.ArrayUtil;
 
-/**
- * Created by victor on 03.11.16.
- */
-abstract public class AbstractCell {
+public abstract class AbstractCell {
     protected Integer id;
     protected CoordPair cord;
     protected CoordPair[] neighbors;
@@ -17,7 +14,7 @@ abstract public class AbstractCell {
         return id;
     }
 
-    public void setNeighbors(CoordPair MyCord) {
+    public void setNeighbors(CoordPair myCord) {
     }
 
     public CoordPair[] getNeighbors(){
@@ -25,9 +22,9 @@ abstract public class AbstractCell {
     }
 
     public Boolean isNeighbors(CoordPair testCell){
-        for(int i = 0; i < neighbors.length; ++i){
-            if(neighbors[i]!=null)
-            if(neighbors[i].getX()==testCell.getX()&&neighbors[i].getY()==testCell.getY())
+        for(CoordPair neighbor : neighbors){
+            if(neighbor!=null)
+            if(neighbor.getX()==testCell.getX()&&neighbor.getY()==testCell.getY())
                 return true;
         }
         return false;
@@ -46,7 +43,6 @@ abstract public class AbstractCell {
             }
         }
         return false;
-        //this.piratIds.
     }
 
     public Boolean getUnderShip() {

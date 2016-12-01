@@ -34,7 +34,7 @@ public class BoardCell extends AbstractCell {
 
     @Override
     public String getView(){
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         if(piratIds.length==0) {
             builder.append(id);
         } else {

@@ -23,7 +23,29 @@ public class AccountService {
 		em.persist(user);
 	}
 
-	public UserProfile getUser(String login){
+	public UserProfile getUserById(Long userId){
+		List<UserProfileEntity> resultList = em.createQuery(
+				"select g from UserProfileEntity g where id = " + userId, UserProfileEntity.class)
+				.getResultList();
+		if (resultList.isEmpty()) {
+			return null;
+		} else {
+			return resultList.get(0).toDto();
+		}
+	}
+
+    public UserProfile getUserByEmail(String email){
+        List<UserProfileEntity> resultList = em.createQuery(
+                "select g from UserProfileEntity g where email = \'" + email + "\'", UserProfileEntity.class)
+                .getResultList();
+        if (resultList.isEmpty()) {
+            return null;
+        } else {
+            return resultList.get(0).toDto();
+        }
+    }
+
+	public UserProfile getUserByLogin(String login){
 		List<UserProfileEntity> resultList = em.createQuery(
 				"select g from UserProfileEntity g where login = \'" + login + "\'", UserProfileEntity.class)
 				.getResultList();

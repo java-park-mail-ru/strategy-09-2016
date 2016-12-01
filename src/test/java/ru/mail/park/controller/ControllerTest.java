@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
-public class RegistrationControllerTest {
+public class ControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
