@@ -1,4 +1,4 @@
-package ru.mail.park.game;
+package ru.mail.park.mechanics.game;
 
 public class ArrowCell extends AbstractCell { //класс клетки со стрелкой
     private final static Integer NUMNEIGHBORS = 1; // пока не доделанный

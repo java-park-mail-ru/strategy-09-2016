@@ -3,7 +3,7 @@ package ru.mail.park.mechanics.handler;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import ru.mail.park.exeption.HandleException;
-import ru.mail.park.game.CoordPair;
+import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.internal.GameProgressService;
 import ru.mail.park.mechanics.requests.PiratMoveRequest;
 import ru.mail.park.websocket.MessageHandler;

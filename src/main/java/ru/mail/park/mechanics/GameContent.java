@@ -1,9 +1,9 @@
 package ru.mail.park.mechanics;
 
 import org.jetbrains.annotations.NotNull;
-import ru.mail.park.game.CoordPair;
-import ru.mail.park.game.GameBoard;
-import ru.mail.park.game.Movement;
+import ru.mail.park.mechanics.game.CoordPair;
+import ru.mail.park.mechanics.game.GameBoard;
+import ru.mail.park.mechanics.game.Movement;
 
 public class GameContent { //класс, управляющий одной отдельно взятой игрой
     private Long firstPlayerId;
@@ -60,7 +60,7 @@ public class GameContent { //класс, управляющий одной от�
 
     public Boolean movePirat(Integer piratId, CoordPair targetCell, Long playerId){
         //и сдесь же мы должны тормозить игрока, если сейчас не его ход
-        if(activePlayerId!=(playerId)){
+        if(!activePlayerId.equals(playerId)){
             //System.out.println("Какой-то подозрительный юзер. Пытается ходить не в свой ход");
             //System.out.println(playerId + " " + firstPlayerId + " " + secondPlayerId + " " + activePlayerId);
             return false;

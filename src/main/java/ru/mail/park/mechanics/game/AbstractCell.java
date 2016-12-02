@@ -1,4 +1,4 @@
-package ru.mail.park.game;
+package ru.mail.park.mechanics.game;
 
 import org.eclipse.jetty.util.ArrayUtil;
 

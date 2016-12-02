@@ -1,4 +1,4 @@
-package ru.mail.park.game;
+package ru.mail.park.mechanics.game;
 
 public class CoastCell extends AbstractCell {
     private static final Integer NUMNEIGHBORS = 2;

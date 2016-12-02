@@ -1,9 +1,9 @@
 package ru.mail.park.services;
 
 import org.springframework.stereotype.Service;
-import ru.mail.park.game.CoordPair;
-import ru.mail.park.game.GameBoard;
-import ru.mail.park.game.Movement;
+import ru.mail.park.mechanics.game.CoordPair;
+import ru.mail.park.mechanics.game.GameBoard;
+import ru.mail.park.mechanics.game.Movement;
 
 @Service
 public class GameService {

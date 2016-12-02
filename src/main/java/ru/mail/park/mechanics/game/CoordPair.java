@@ -1,4 +1,4 @@
-package ru.mail.park.game;
+package ru.mail.park.mechanics.game;
 
 public class CoordPair {
     private Integer x;
