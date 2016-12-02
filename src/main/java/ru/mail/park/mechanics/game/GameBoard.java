@@ -152,7 +152,7 @@ public class GameBoard {
 
         private void generatePirat(Integer piratId, Integer playerId){
             if(playerId==0){
-                pirats[piratId] = new Pirat(piratId, new CoordPair(0, 6));
+                pirats[piratId] = new Pirat(piratId, new CoordPair(0, 6)); //переделать
                 boardMap[0][6].setPiratId(piratId);
             } else {
                 pirats[piratId] = new Pirat(piratId, new CoordPair(ISLAND_HIGHT+1, 6));
@@ -161,7 +161,7 @@ public class GameBoard {
         }
 
         private CoordPair getPiratCord(Integer piratId){
-            return pirats[piratId].getLocation();
+            return pirats[piratId].getLocation(); //сделать поправку на то, что айдишники должны быть уникальны
         }
 
         private Boolean moveShip(CoordPair direction){
