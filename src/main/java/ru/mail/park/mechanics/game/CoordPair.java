@@ -8,7 +8,7 @@ public class CoordPair {
         return new CoordPair(firstPair.x+ secondPair.x, firstPair.y + secondPair.y);
     }
     static  Boolean equals(CoordPair firstPair, CoordPair secondPair){
-        return firstPair.x==secondPair.x&&firstPair.y==secondPair.y;
+        return firstPair.x.equals(secondPair.x)&&firstPair.y.equals(secondPair.y);
     }
 
     public CoordPair(Integer x, Integer y){

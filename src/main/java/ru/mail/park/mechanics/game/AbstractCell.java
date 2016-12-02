@@ -24,7 +24,7 @@ public abstract class AbstractCell {
     public Boolean isNeighbors(CoordPair testCell){
         for(CoordPair neighbor : neighbors){
             if(neighbor!=null)
-            if(neighbor.getX()==testCell.getX()&&neighbor.getY()==testCell.getY())
+            if(neighbor.getX().equals(testCell.getX())&&neighbor.getY().equals(testCell.getY()))
                 return true;
         }
         return false;

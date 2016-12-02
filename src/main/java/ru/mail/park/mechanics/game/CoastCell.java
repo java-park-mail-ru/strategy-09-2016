@@ -17,45 +17,45 @@ public class CoastCell extends AbstractCell {
     public void setNeighbors(CoordPair myCord) {
         final Integer thisCellX = myCord.getX();
         final Integer thisCellY = myCord.getY();
-        if(thisCellX==0){ //северный берег
+        if(thisCellX.equals(0)){ //северный берег
             northCoastCase(thisCellX, thisCellY);
             return;
         }
-        if(thisCellY==12){ //восточный берег
+        if(thisCellY.equals(12)){ //восточный берег
             eastCoastCase(thisCellX, thisCellY);
             return;
         }
-        if(thisCellX==12){ //южный берег
+        if(thisCellX.equals(12)){ //южный берег
             southCoastCase(thisCellX, thisCellY);
             return;
         }
-        if(thisCellY==0){ //западный берег
+        if(thisCellY.equals(0)){ //западный берег
             westCoastCase(thisCellX, thisCellY);
             return;
         }
         CoordPair tempPair;
-        if(thisCellX==1&&thisCellY==1){ //северо-западный угол
+        if(thisCellX.equals(1)&&thisCellY.equals(1)){ //северо-западный угол
             tempPair = new CoordPair(thisCellX + 1, thisCellY - 1);
             neighbors[0] = tempPair;
             tempPair = new CoordPair(thisCellX - 1, thisCellY + 1);
             neighbors[1] = tempPair;
             return;
         }
-        if(thisCellX==11&&thisCellY==1){ //северо-восточный угол
+        if(thisCellX.equals(11)&&thisCellY.equals(1)){ //северо-восточный угол
             tempPair = new CoordPair(thisCellX - 1, thisCellY - 1);
             neighbors[0] = tempPair;
             tempPair = new CoordPair(thisCellX + 1, thisCellY + 1);
             neighbors[1] = tempPair;
             return;
         }
-        if(thisCellX==11&&thisCellY==11){ //юго-восточный угол
+        if(thisCellX.equals(11)&&thisCellY.equals(11)){ //юго-восточный угол
             tempPair = new CoordPair(thisCellX + 1, thisCellY - 1);
             neighbors[0] = tempPair;
             tempPair = new CoordPair(thisCellX - 1, thisCellY + 1);
             neighbors[1] = tempPair;
             return;
         }
-        if(thisCellX==1&&thisCellY==11) { //юго-западный угол
+        if(thisCellX.equals(1)&&thisCellY.equals(11)) { //юго-западный угол
             tempPair = new CoordPair(thisCellX + 1, thisCellY + 1);
             neighbors[0] = tempPair;
             tempPair = new CoordPair(thisCellX - 1, thisCellY - 1);

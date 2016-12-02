@@ -23,10 +23,10 @@ public class GameSession {
 
 
     public @NotNull GameUser getEnemy(@NotNull Long playerId) {
-        if (playerId == first.getUserProfile().getId()) {
+        if (playerId.equals(first.getUserProfile().getId())) {
             return second;
         }
-        if (playerId == second.getUserProfile().getId()) {
+        if (playerId.equals(second.getUserProfile().getId())) {
             return first;
         }
         throw new IllegalArgumentException("Requested enemy for game but user not participant");
@@ -34,10 +34,10 @@ public class GameSession {
 
 
     public @NotNull GameUser getSelf(@NotNull Long userId) {
-        if (first.getUserProfile().getId()==userId) {
+        if (userId.equals(first.getUserProfile().getId())) {
             return first;
         }
-        if (second.getUserProfile().getId()==userId) {
+        if (userId.equals(second.getUserProfile().getId())) {
             return second;
         }
         throw new IllegalArgumentException("Request self for game but user not participate it");

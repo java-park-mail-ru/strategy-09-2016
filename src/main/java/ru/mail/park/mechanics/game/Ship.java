@@ -16,19 +16,19 @@ public class Ship extends AbstractCell{
     }
 
     public void resetNeighbors(){
-        if(location.getX()==0){
+        if(location.getX().equals(0)){
             neighbors[0] = new CoordPair(location.getX()+1,location.getY());
             return;
         }
-        if(location.getX()==12){
+        if(location.getX().equals(12)){
             neighbors[0] = new CoordPair(location.getX()-1,location.getY());
             return;
         }
-        if(location.getY()==0){
+        if(location.getY().equals(0)){
             neighbors[0] = new CoordPair(location.getX(),location.getY()+1);
             return;
         }
-        if(location.getY()==12){
+        if(location.getY().equals(12)){
             neighbors[0] = new CoordPair(location.getX(),location.getY()-1);
         }
     }

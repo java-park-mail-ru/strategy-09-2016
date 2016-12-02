@@ -130,7 +130,7 @@ public class GameBoard {
             for(Integer i = 0; i < 3; ++i){
                 generatePirat(i, playerId);
             }
-            if(playerId==0){
+            if(playerId.equals(0)){
                 setShip(0,new CoordPair(0,6), new CoordPair(0,1));
             } else {
                 setShip(1,new CoordPair(ISLAND_HIGHT+1,6), new CoordPair(0,1));
@@ -151,7 +151,7 @@ public class GameBoard {
         }
 
         private void generatePirat(Integer piratId, Integer playerId){
-            if(playerId==0){
+            if(playerId.equals(0)){
                 pirats[piratId] = new Pirat(piratId, new CoordPair(0, 6)); //переделать
                 boardMap[0][6].setPiratId(piratId);
             } else {
