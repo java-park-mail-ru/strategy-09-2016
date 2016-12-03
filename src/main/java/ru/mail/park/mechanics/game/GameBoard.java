@@ -132,7 +132,7 @@ public class GameBoard {
         private GamePlayer(Integer playerId){
             this.playerId = playerId;
             for(Integer i = 0; i < 3; ++i){
-                generatePirat(i, playerId);
+                generatePirat(i + 3 * playerId, playerId);
             }
             if(playerId.equals(0)){
                 setShip(0,new CoordPair(0,6), new CoordPair(0,1));
@@ -160,16 +160,16 @@ public class GameBoard {
 
         private void generatePirat(Integer piratId, Integer playerId){
             if(playerId.equals(0)){
-                pirats[piratId] = new Pirat(piratId, new CoordPair(0, 6)); //переделать
+                pirats[piratId - 3 * playerId] = new Pirat(piratId, new CoordPair(0, 6)); //переделать
                 boardMap[0][6].setPiratId(piratId);
             } else {
-                pirats[piratId] = new Pirat(piratId, new CoordPair(ISLAND_HIGHT+1, 6));
+                pirats[piratId - 3 * playerId] = new Pirat(piratId, new CoordPair(ISLAND_HIGHT+1, 6));
                 boardMap[ISLAND_HIGHT+1][6].setPiratId(piratId);
             }
         }
 
         private CoordPair getPiratCord(Integer piratId){
-            return pirats[piratId].getLocation(); //сделать поправку на то, что айдишники должны быть уникальны
+            return pirats[piratId -3 * playerId].getLocation(); //сделать поправку на то, что айдишники должны быть уникальны
         }
 
         private Boolean moveShip(CoordPair direction){
@@ -179,9 +179,9 @@ public class GameBoard {
                         if (boardMap[CoordPair.sum(ship.neighbors[0], direction).getX()]
                                 [CoordPair.sum(ship.neighbors[0], direction).getY()].getId() < NUMBEFOFCELL) { //и с этого корабля потом можно будет сойти на остров
                             for (Integer piratId : boardMap[ship.getLocation().getX()][ship.getLocation().getY()].getPiratIds()) { //айди всех пиратов на корабле
-                                pirats[piratId].setLocation(CoordPair.sum(ship.getLocation(), direction));
+                                pirats[piratId - 3 * playerId].setLocation(CoordPair.sum(ship.getLocation(), direction));
                                 boardMap[CoordPair.sum(ship.getLocation(), direction).getX()]
-                                        [CoordPair.sum(ship.getLocation(), direction).getY()].setPiratId(piratId);
+                                        [CoordPair.sum(ship.getLocation(), direction).getY()].setPiratId(piratId - 3 * playerId);
                             }
                             boardMap[ship.getLocation().getX()][ship.getLocation().getY()].setUnderShip(false);
                             ship.setLocation(direction);
@@ -205,7 +205,7 @@ public class GameBoard {
                 //миллион - это сколько? Форт с пиратом, да неизвестные клетки с монетой, а что еще?
                 if(boardMap[starterX][starterY].piratLeave(piratMove.getPiratId())){
                     //пират успешно покинул клетку
-                    pirats[piratMove.getPiratId()].setLocation(piratMove.getTargetCell()); //тут тоже что-то может пойти не так
+                    pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell()); //тут тоже что-то может пойти не так
                     //например, в клетке может оказаться крокодил
                     boardMap[targetX][targetY].setPiratId(piratMove.getPiratId());
                     return 0;

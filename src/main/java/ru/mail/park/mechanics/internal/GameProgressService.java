@@ -89,7 +89,6 @@ public class GameProgressService {
 
         if(CoordPair.equals(piratCord,usersToGamesMap.get(playerId).getShipCord(playerId))){
             final CoordPair[] shipNeighbors = usersToGamesMap.get(playerId).getShipAvailableDirection(playerId);
-            System.out.println(shipNeighbors.length);
             for(CoordPair cell:shipNeighbors){
                 builder.append(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX())); //пересчет (х,у) координат, в которых работает сервер
                 builder.append(','); // в одномерный индекс, в котором работает фронт

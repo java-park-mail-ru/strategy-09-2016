@@ -38,7 +38,7 @@ public abstract class AbstractCell {
     public Boolean piratLeave(Integer leaverPiratId){
         for(Integer piratId:piratIds){
             if(piratId.equals(leaverPiratId)) {
-                piratIds = ArrayUtil.removeFromArray(piratIds,leaverPiratId);
+                piratIds = ArrayUtil.removeFromArray(piratIds,leaverPiratId); //удялет по ключу, не по позиции
                 return true;
             }
         }

@@ -71,10 +71,12 @@ public class GameContent { //класс, управляющий одной от�
             return false;
         }
         final Integer playerGameId = gameUserIdToGameUserId(playerId);
-        //System.out.println("Пытаемся совершить ход");
-        //System.out.println("piratId="+ piratId + " targetX="+targetCell.getX()+" targetCellY="+targetCell.getY());
-        //System.out.println(getPiratCord(piratId, playerGameId).getX()+"   " + getPiratCord(piratId, playerGameId).getY());
-        move = new Movement(piratId, getPiratCord(piratId, playerGameId), targetCell);
+        final Integer piratIngameId = piratId + 3 * playerGameId;
+//        System.out.println("Пытаемся совершить ход");
+//        System.out.println("piratId="+ piratId + " targetX="+targetCell.getX()+" targetCellY="+targetCell.getY());
+//        System.out.println(getPiratCord(piratIngameId, playerGameId).getX()+"   " + getPiratCord(piratIngameId, playerGameId).getY());
+        move = new Movement(piratIngameId, getPiratCord(piratIngameId, playerGameId), targetCell);
+  //      System.out.println("ходит пират с айдишником " + (piratIngameId));
         final Integer result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
         if(result>-1){
             move = null;
