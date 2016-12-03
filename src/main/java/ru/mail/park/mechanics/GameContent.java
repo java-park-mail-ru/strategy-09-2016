@@ -43,6 +43,11 @@ public class GameContent { //класс, управляющий одной от�
         return board.getCellNeighbors(cellCord, playerIdInGame);
     }
 
+    public CoordPair[] getShipAvailableDirection(Long playerId){
+        final Integer playerIdInGame = gameUserIdToGameUserId(playerId);
+        return board.getShipAvailableDirection(playerIdInGame);
+    }
+
     public CoordPair getShipCord(Long playerId){
         final Integer playerInGameId = gameUserIdToGameUserId(playerId);
         return board.getShipCord(playerInGameId);

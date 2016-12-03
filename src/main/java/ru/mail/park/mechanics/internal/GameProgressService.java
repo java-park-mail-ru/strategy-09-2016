@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
-import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.GameContent;
+import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.requests.NeighborsMessage;
 import ru.mail.park.mechanics.requests.PiratMoveMessage;
 import ru.mail.park.websocket.Message;
@@ -79,13 +79,24 @@ public class GameProgressService {
         final Integer y = cellIndex/13;
         //System.out.println("Мы получаем соседей клетки с координатами" + x + ' ' + y);
         //мы не успели разобраться, как JSON-ить массив целых чисел
-        final CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(new CoordPair(x,y), playerId);
+        CoordPair piratCord = new CoordPair(x,y);
+        final CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(piratCord, playerId);
         final StringBuilder builder = new StringBuilder();
         for(CoordPair cell:neighbors){
             builder.append(13*cell.getY()+cell.getX()); //пересчет (х,у) координат, в которых работает сервер
             builder.append(','); // в одномерный индекс, в котором работает фронт
         }
+
+        if(CoordPair.equals(piratCord,usersToGamesMap.get(playerId).getShipCord(playerId))){
+            final CoordPair[] shipNeighbors = usersToGamesMap.get(playerId).getShipAvailableDirection(playerId);
+            System.out.println(shipNeighbors.length);
+            for(CoordPair cell:shipNeighbors){
+                builder.append(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX())); //пересчет (х,у) координат, в которых работает сервер
+                builder.append(','); // в одномерный индекс, в котором работает фронт
+            }
+        }
         builder.setLength(builder.length()-1);
+
         final NeighborsMessage.Request messageWithNeighbors = new NeighborsMessage.Request();
         messageWithNeighbors.setNeighbors(builder.toString());
         try{

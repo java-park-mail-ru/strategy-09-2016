@@ -4,10 +4,10 @@ public class CoordPair {
     private Integer x;
     private Integer y;
 
-    static CoordPair sum(CoordPair firstPair, CoordPair secondPair){
+    public static CoordPair sum(CoordPair firstPair, CoordPair secondPair){
         return new CoordPair(firstPair.x+ secondPair.x, firstPair.y + secondPair.y);
     }
-    static  Boolean equals(CoordPair firstPair, CoordPair secondPair){
+    public static Boolean equals(CoordPair firstPair, CoordPair secondPair){
         return firstPair.x.equals(secondPair.x)&&firstPair.y.equals(secondPair.y);
     }
 

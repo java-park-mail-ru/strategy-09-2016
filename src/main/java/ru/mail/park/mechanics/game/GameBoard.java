@@ -70,6 +70,10 @@ public class GameBoard {
 
     }
 
+    public CoordPair[] getShipAvailableDirection(Integer playerId){
+        return players[playerId].getShipAvailableDirection();
+    }
+
     public CoordPair getShipCord(Integer playerId){
         return players[playerId].getShipCord();
     }
@@ -135,6 +139,10 @@ public class GameBoard {
             } else {
                 setShip(1,new CoordPair(ISLAND_HIGHT+1,6), new CoordPair(0,1));
             }
+        }
+
+        private CoordPair[] getShipAvailableDirection(){
+            return ship.getAvaliableDirection();
         }
 
         private Integer getPlayerId() {
