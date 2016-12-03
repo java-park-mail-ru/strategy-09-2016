@@ -43,11 +43,13 @@ public class GameMechanicsImpl implements GameMechanics {
             //System.out.println("Такой пользователь уже есть в очереди. Второго нам не надо");
             return;
         }
+        //System.out.println("встал в очередь игрок" + userId);
         waiters.add(userId);
         tryStartGame();
     }
 
     public void tryStartGame(){
+        //System.out.println("пытаемся начать игру");
         final Set<UserProfile> matchedPlayers = new LinkedHashSet<>();
         while(waiters.size()>=1){ //пока в списке желающих сыграть больше 1 человека
             final Long candidateId = waiters.poll(); //достаем желающего из очереди
