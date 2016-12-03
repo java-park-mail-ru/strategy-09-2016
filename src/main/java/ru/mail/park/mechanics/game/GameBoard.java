@@ -175,18 +175,20 @@ public class GameBoard {
         private Boolean moveShip(CoordPair direction){
             for(CoordPair tempPair:ship.getAvaliableDirection()){
                 if(CoordPair.equals(tempPair,direction)){ // такое направление вообще возможно
-                    if(boardMap[CoordPair.sum(ship.neighbors[0],direction).getX()]
-                            [CoordPair.sum(ship.neighbors[0],direction).getY()].getId()<NUMBEFOFCELL){
-                        for(Integer piratId:boardMap[ship.getLocation().getX()][ship.getLocation().getY()].getPiratIds()) { //айди всех пиратов на корабле
-                            pirats[piratId].setLocation(CoordPair.sum(ship.getLocation(),direction));
-                            boardMap[CoordPair.sum(ship.getLocation(),direction).getX()]
-                                    [CoordPair.sum(ship.getLocation(),direction).getY()].setPiratId(piratId);
+                    if(boardMap[ship.getLocation().getX()][ship.getLocation().getY()].getPiratIds().length>0) { //на корабле есть хоть кто-то
+                        if (boardMap[CoordPair.sum(ship.neighbors[0], direction).getX()]
+                                [CoordPair.sum(ship.neighbors[0], direction).getY()].getId() < NUMBEFOFCELL) { //и с этого корабля потом можно будет сойти на остров
+                            for (Integer piratId : boardMap[ship.getLocation().getX()][ship.getLocation().getY()].getPiratIds()) { //айди всех пиратов на корабле
+                                pirats[piratId].setLocation(CoordPair.sum(ship.getLocation(), direction));
+                                boardMap[CoordPair.sum(ship.getLocation(), direction).getX()]
+                                        [CoordPair.sum(ship.getLocation(), direction).getY()].setPiratId(piratId);
+                            }
+                            boardMap[ship.getLocation().getX()][ship.getLocation().getY()].setUnderShip(false);
+                            ship.setLocation(direction);
+                            boardMap[ship.getLocation().getX()][ship.getLocation().getY()].setUnderShip(true);
+                            ship.resetNeighbors();
+                            return true;
                         }
-                        boardMap[ship.getLocation().getX()][ship.getLocation().getY()].setUnderShip(false);
-                        ship.setLocation(direction);
-                        boardMap[ship.getLocation().getX()][ship.getLocation().getY()].setUnderShip(true);
-                        ship.resetNeighbors();
-                        return true;
                     }
                 }
             }
