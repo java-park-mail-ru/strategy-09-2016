@@ -35,6 +35,17 @@ public abstract class AbstractCell {
         return 0;
     }
 
+    public Integer[] killEnemy(Integer newPiratIds) {
+        Integer[] deadPirats = new Integer[0];
+        for(Integer piratId : piratIds) {
+            //System.out.println();
+            if((piratId / 3) != (newPiratIds / 3) ){
+                deadPirats = ArrayUtil.addToArray(deadPirats, piratId, Integer.class);
+            }
+        }
+        return deadPirats;
+    }
+
     public Boolean piratLeave(Integer leaverPiratId){
         for(Integer piratId:piratIds){
             if(piratId.equals(leaverPiratId)) {

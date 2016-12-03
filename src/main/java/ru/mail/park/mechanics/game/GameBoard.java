@@ -207,6 +207,16 @@ public class GameBoard {
                     //пират успешно покинул клетку
                     pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell()); //тут тоже что-то может пойти не так
                     //например, в клетке может оказаться крокодил
+                    Integer[] deadPirats = boardMap[targetX][targetY].killEnemy(piratMove.getPiratId());
+                    //пират, входя в клетку, убивает всех врагов в ней
+                    //теперь их надо отправить на родной корабль
+                    for(Integer piratId: deadPirats) {
+                        System.out.println("Двеннадцать человек на сундук мертвеца!");
+                        Integer playerId = piratId / 3;
+                        CoordPair shipCord = players[playerId].getShipCord();
+                        boardMap[shipCord.getX()][shipCord.getY()].setPiratId(piratId);
+                    } //но эту штуку надо будет видеть еще и снаружи, то есть, скорее всего, мы будет возвращать
+                    //массив пиратов, у которых сменилась координата
                     boardMap[targetX][targetY].setPiratId(piratMove.getPiratId());
                     return 0;
                 }
