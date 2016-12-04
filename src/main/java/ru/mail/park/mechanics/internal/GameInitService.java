@@ -20,11 +20,14 @@ import java.util.Collection;
 public class GameInitService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameInitService.class);
 
-    private final @NotNull RemotePointService remotePointService;
+    @NotNull
+    private final RemotePointService remotePointService;
 
-    private final @NotNull ObjectMapper objectMapper = new ObjectMapper();
+    @NotNull
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final @NotNull GameProgressService gameProgressService;
+    @NotNull
+    private final GameProgressService gameProgressService;
 
     public GameInitService(@NotNull RemotePointService remotePointService,
                            @NotNull GameProgressService gameProgressService) {

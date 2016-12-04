@@ -22,11 +22,14 @@ import java.util.Map;
 @Service
 public class GameProgressService {
 
-    private final @NotNull Map<Long, GameContent> usersToGamesMap = new HashMap<>(); //связь юзеров и игр
+    @NotNull
+    private final Map<Long, GameContent> usersToGamesMap = new HashMap<>(); //связь юзеров и игр
 
-    private final @NotNull RemotePointService remotePointService; // сервис, рассылающие сообщения юзерам
+    @NotNull
+    private final RemotePointService remotePointService; // сервис, рассылающие сообщения юзерам
 
-    private final @NotNull GameSessionService gameSessionService; //сервис, который помнит сессий и юзеров
+    @NotNull
+    private final GameSessionService gameSessionService; //сервис, который помнит сессий и юзеров
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -42,7 +45,8 @@ public class GameProgressService {
         usersToGamesMap.put(secondPlayerId, game); // создали игру, запомнили ее связь с пользователями
     }
 
-    public @Nullable String getBoardMap(Long playerId){
+    @Nullable
+    public String getBoardMap(Long playerId){
         if(usersToGamesMap.containsKey(playerId)) {
             return usersToGamesMap.get(playerId).getMap();
         } else {
@@ -79,7 +83,7 @@ public class GameProgressService {
         final Integer y = cellIndex/13;
         //System.out.println("Мы получаем соседей клетки с координатами" + x + ' ' + y);
         //мы не успели разобраться, как JSON-ить массив целых чисел
-        CoordPair piratCord = new CoordPair(x,y);
+        final CoordPair piratCord = new CoordPair(x,y);
         final CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(piratCord, playerId);
         final StringBuilder builder = new StringBuilder();
         for(CoordPair cell:neighbors){

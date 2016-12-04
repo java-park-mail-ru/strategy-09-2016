@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import ru.mail.park.mechanics.requests.ReplyPingMessage;
 import ru.mail.park.websocket.Message;
-import ru.mail.park.websocket.MessageToClient;
 import ru.mail.park.websocket.RemotePointService;
 
 /**
@@ -13,7 +12,9 @@ import ru.mail.park.websocket.RemotePointService;
  */
 @Service
 public class PingServiceImpl implements  PingService{ //просто отвечалка на пинги от фронта, ничего содержательного
-    private @NotNull RemotePointService remotePointService;
+
+    @NotNull
+    private RemotePointService remotePointService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -26,7 +27,7 @@ public class PingServiceImpl implements  PingService{ //просто отвеч�
         final ReplyPingMessage.Request replyPingMessage = new ReplyPingMessage.Request();
         replyPingMessage.setPingMessage("Up. Got ur message");
         try {
-            final Message pingMessage = new Message(MessageToClient.Request.class.getName(),
+            final Message pingMessage = new Message(ReplyPingMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(replyPingMessage));
             remotePointService.sendMessageToUser(forUser, pingMessage);
         } catch( Exception e){

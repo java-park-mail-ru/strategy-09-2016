@@ -9,6 +9,8 @@ public abstract class AbstractCell {
     protected Integer[] piratIds = new Integer[0];
     protected Boolean isUnderShip;
     protected Boolean canBeFinal;
+    protected Integer countOfCoins; //на первый взгял - абсурд, монетки есть только в клетке с сундуком
+    //но не стоит забывать, что пираты могут выбросить монету на любой клетке поля
 
     public Integer getId() {
         return id;
@@ -40,6 +42,7 @@ public abstract class AbstractCell {
         for(Integer piratId : piratIds) {
             //System.out.println();
             if((piratId / 3) != (newPiratIds / 3) ){
+                piratIds = ArrayUtil.removeFromArray(piratIds, piratId); //в этой клетке их больше нет
                 deadPirats = ArrayUtil.addToArray(deadPirats, piratId, Integer.class);
             }
         }
