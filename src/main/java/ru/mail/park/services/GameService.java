@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.game.GameBoard;
 import ru.mail.park.mechanics.game.Movement;
+import ru.mail.park.mechanics.utils.MovementResult;
+
+import java.util.List;
 
 @Service
 public class GameService {
@@ -28,8 +31,8 @@ public class GameService {
 
     public Boolean movePirat(Integer piratId, CoordPair targetCell, Integer playerId){
         move = new Movement(piratId, getPiratCord(piratId, playerId), targetCell);
-        Integer result = board.movePirat(move, playerId); //отдавать один индекс вместо двух
-        if(result>-1){
+        List<MovementResult> result = board.movePirat(move, playerId); //отдавать один индекс вместо двух
+        if(result.get(0).getStatus()>-1){
             move = null;
             ++countOfTurns;
             return true;

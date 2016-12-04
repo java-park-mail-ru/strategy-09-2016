@@ -2,6 +2,8 @@ package ru.mail.park.mechanics.requests;
 
 public class PiratMoveMessage { //сообщение для пользователя о том, что какой-то пират был передвинут
     public static final class Request {
+        private String movements;
+
         private Integer playerId;
 
         private Integer piratId;
@@ -40,6 +42,14 @@ public class PiratMoveMessage { //сообщение для пользовате
 
         public void setNewCellIndexOfPirat(Integer newCellIndexOfPirat) {
             this.newCellIndexOfPirat = newCellIndexOfPirat;
+        }
+
+        public String getMovement() {
+            return movements;
+        }
+
+        public void setMovement(String movement) {
+            this.movements = movement;
         }
     }
 }

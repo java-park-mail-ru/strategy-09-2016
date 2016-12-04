@@ -9,6 +9,7 @@ import ru.mail.park.mechanics.GameContent;
 import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.requests.NeighborsMessage;
 import ru.mail.park.mechanics.requests.PiratMoveMessage;
+import ru.mail.park.mechanics.utils.MovementResult;
 import ru.mail.park.websocket.Message;
 import ru.mail.park.websocket.MessageToClient;
 import ru.mail.park.websocket.RemotePointService;
@@ -61,11 +62,11 @@ public class GameProgressService {
         final MessageToClient.Request testMessage = new MessageToClient.Request(); //вещь для отладки
         // если возник какой-то рассинхрон между фронтом и беком
         if(usersToGamesMap.containsKey(playerId)){
-            final Boolean result = usersToGamesMap.get(playerId).movePirat(piratId, targetCell, playerId);
-            if(!result){
+            final List<MovementResult> result = usersToGamesMap.get(playerId).movePirat(piratId, targetCell, playerId);
+            if(result==null){
                 testMessage.setMyMessage("Такой ход невозможен. Скорее всего, вы ошиблись в выборе клетки");
             } else {
-                sendUserNewBoard(playerId, piratId, 13*targetCell.getY()+targetCell.getX());
+                sendUserNewBoard(result, playerId);
                 return;
             }
         } else {
@@ -139,12 +140,13 @@ public class GameProgressService {
         }
     }
 
-    private void sendUserNewBoard(Long playerId, Integer piratId, Integer indexOfTargetCell){
+    private void sendUserNewBoard(List<MovementResult> movementResults, Long playerId){
         final PiratMoveMessage.Request newTurnMessage = new PiratMoveMessage.Request();
         newTurnMessage.setActive(false);
-        newTurnMessage.setPlayerId(usersToGamesMap.get(playerId).gameUserIdToGameUserId(playerId));
-        newTurnMessage.setPiratId(piratId);
-        newTurnMessage.setNewCellIndexOfPirat(indexOfTargetCell);
+        newTurnMessage.setMovement(new Gson().toJson(movementResults));
+//        newTurnMessage.setPlayerId(usersToGamesMap.get(playerId).gameUserIdToGameUserId(playerId));
+//        newTurnMessage.setPiratId(piratId);
+ //       newTurnMessage.setNewCellIndexOfPirat(indexOfTargetCell);
         try {
             //System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто ходил");
             final Message responseMessageToActivePLayer = new Message(PiratMoveMessage.Request.class.getName(),

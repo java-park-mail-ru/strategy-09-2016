@@ -2,9 +2,11 @@ package ru.mail.park.mechanics;
 
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.game.GameBoard;
 import ru.mail.park.mechanics.game.Movement;
+import ru.mail.park.mechanics.utils.MovementResult;
 
 import java.util.List;
 
@@ -66,12 +68,13 @@ public class GameContent { //класс, управляющий одной от�
         return shipMove;
     }
 
-    public Boolean movePirat(Integer piratId, CoordPair targetCell, Long playerId){
+    @Nullable
+    public List<MovementResult> movePirat(Integer piratId, CoordPair targetCell, Long playerId){
         //и сдесь же мы должны тормозить игрока, если сейчас не его ход
         if(!activePlayerId.equals(playerId)){
             //System.out.println("Какой-то подозрительный юзер. Пытается ходить не в свой ход");
             //System.out.println(playerId + " " + firstPlayerId + " " + secondPlayerId + " " + activePlayerId);
-            return false;
+            return null;
         }
         final Integer playerGameId = gameUserIdToGameUserId(playerId);
         final Integer piratIngameId = piratId + 3 * playerGameId;
@@ -80,15 +83,15 @@ public class GameContent { //класс, управляющий одной от�
 //        System.out.println(getPiratCord(piratIngameId, playerGameId).getX()+"   " + getPiratCord(piratIngameId, playerGameId).getY());
         move = new Movement(piratIngameId, getPiratCord(piratIngameId, playerGameId), targetCell);
   //      System.out.println("ходит пират с айдишником " + (piratIngameId));
-        final Integer result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
-        if(result>-1){
+        final List<MovementResult> result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
+        if(result.get(0).getStatus()>-1){
             move = null;
             ++countOfTurns;
             changeActivePlayer();
-            return true;
+            return result;
         } else {
             move = null;
-            return false;
+            return null;
         }
     }
 

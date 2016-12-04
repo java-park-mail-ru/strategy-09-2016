@@ -1,5 +1,7 @@
 package ru.mail.park.mechanics.game;
 
+import ru.mail.park.mechanics.utils.MovementResult;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -84,7 +86,7 @@ public class GameBoard {
         return players[playerId].moveShip(direction);
     }
 
-    public Integer movePirat(Movement move, Integer playerId){
+    public List<MovementResult> movePirat(Movement move, Integer playerId){
         return players[playerId].movePirat(move);
     }
 
@@ -207,7 +209,8 @@ public class GameBoard {
             return false;
         }
 
-        private Integer movePirat(Movement piratMove){
+        private List<MovementResult> movePirat(Movement piratMove){
+            List<MovementResult> movementResult = new ArrayList<>();
             if(isCellPlacedNearPirat(piratMove.getPiratId(),piratMove.getTargetCell())){ //начальная и конечная клетки заданны корректно
                 final Integer starterX = piratMove.getStartCell().getX();
                 final Integer starterY = piratMove.getStartCell().getY();
@@ -218,6 +221,9 @@ public class GameBoard {
                 if(boardMap[starterX][starterY].piratLeave(piratMove.getPiratId())){
                     //пират успешно покинул клетку
                     pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell()); //тут тоже что-то может пойти не так
+
+                    movementResult.add(new MovementResult(playerId,piratMove.getPiratId() - 3 * playerId,piratMove.getTargetCell()));
+                    //сам пират точно передвинулся, а вот передвинулся ли кто-то еще?
                     //например, в клетке может оказаться крокодил
                     Integer[] deadPirats = boardMap[targetX][targetY].killEnemy(piratMove.getPiratId());
                     //пират, входя в клетку, убивает всех врагов в ней
@@ -227,14 +233,17 @@ public class GameBoard {
                         Integer playerId = piratId / 3;
                         CoordPair shipCord = players[playerId].getShipCord();
                         boardMap[shipCord.getX()][shipCord.getY()].setPiratId(piratId);
+                        movementResult.add(new MovementResult(playerId,piratId-3*playerId,shipCord));
                     } //но эту штуку надо будет видеть еще и снаружи, то есть, скорее всего, мы будет возвращать
                     //массив пиратов, у которых сменилась координата
                     boardMap[targetX][targetY].setPiratId(piratMove.getPiratId());
-                    return 0;
+                    return movementResult;
                 }
-                return -1; //пирата не было в клетке или он не мог ее покинуть
+                movementResult.add(new MovementResult(-1));
+                return movementResult; //пирата не было в клетке или он не мог ее покинуть
             }
-            return -2; // клетки не являлись соседями
+            movementResult.add(new MovementResult(-2));
+            return movementResult; // клетки не являлись соседями
         }
 
         private Boolean isCellPlacedNearPirat(Integer piratId, CoordPair targetCell){
