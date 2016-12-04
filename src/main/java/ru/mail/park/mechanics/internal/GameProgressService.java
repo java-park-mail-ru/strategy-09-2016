@@ -122,8 +122,10 @@ public class GameProgressService {
         final MessageToClient.Request testMessage = new MessageToClient.Request();
         if(usersToGamesMap.containsKey(playerId)){
             if(usersToGamesMap.get(playerId).moveShip(direction, playerId)){
-                //sendUserNewBoard(playerId);то рассылаем игрока сообщение о движении корабля
-                return;
+                //sendUserNewBoard(playerId);//то рассылаем игрока сообщение о движении корабля
+                //sendUserShipMovementResult(playerId);
+                testMessage.setMyMessage("корабль передвинулся, но мы этого пока не увидим");
+                //return;
             } else {
                 testMessage.setMyMessage("Капитан, корабль не может туда плыть. Сейчас его координаты: ");
                 //System.out.println(usersToGamesMap.get(playerId).getShipCord(playerId));
