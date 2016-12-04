@@ -99,7 +99,7 @@ public class GameProgressService {
         if(CoordPair.equals(piratCord,usersToGamesMap.get(playerId).getShipCord(playerId))){
             final CoordPair[] shipNeighbors = usersToGamesMap.get(playerId).getShipAvailableDirection(playerId);
             for(CoordPair cell:shipNeighbors){
-                neighborsList.add(13*cell.getY()+cell.getX());
+                neighborsList.add(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX()));
          //       builder.append(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX())); //пересчет (х,у) координат, в которых работает сервер
          //       builder.append(','); // в одномерный индекс, в котором работает фронт
             }
