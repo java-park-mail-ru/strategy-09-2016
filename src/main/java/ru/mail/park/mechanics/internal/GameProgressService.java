@@ -1,6 +1,7 @@
 package ru.mail.park.mechanics.internal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,9 @@ import ru.mail.park.websocket.MessageToClient;
 import ru.mail.park.websocket.RemotePointService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,23 +88,26 @@ public class GameProgressService {
         //мы не успели разобраться, как JSON-ить массив целых чисел
         final CoordPair piratCord = new CoordPair(x,y);
         final CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(piratCord, playerId);
-        final StringBuilder builder = new StringBuilder();
+        //final StringBuilder builder = new StringBuilder();
+        final List<Integer> neighborsList = new ArrayList<>();
         for(CoordPair cell:neighbors){
-            builder.append(13*cell.getY()+cell.getX()); //пересчет (х,у) координат, в которых работает сервер
-            builder.append(','); // в одномерный индекс, в котором работает фронт
+            neighborsList.add(13*cell.getY()+cell.getX());
+        //    builder.append(13*cell.getY()+cell.getX()); //пересчет (х,у) координат, в которых работает сервер
+        //    builder.append(','); // в одномерный индекс, в котором работает фронт
         }
 
         if(CoordPair.equals(piratCord,usersToGamesMap.get(playerId).getShipCord(playerId))){
             final CoordPair[] shipNeighbors = usersToGamesMap.get(playerId).getShipAvailableDirection(playerId);
             for(CoordPair cell:shipNeighbors){
-                builder.append(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX())); //пересчет (х,у) координат, в которых работает сервер
-                builder.append(','); // в одномерный индекс, в котором работает фронт
+                neighborsList.add(13*cell.getY()+cell.getX());
+         //       builder.append(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX())); //пересчет (х,у) координат, в которых работает сервер
+         //       builder.append(','); // в одномерный индекс, в котором работает фронт
             }
         }
-        builder.setLength(builder.length()-1);
+        //builder.setLength(builder.length()-1);
 
         final NeighborsMessage.Request messageWithNeighbors = new NeighborsMessage.Request();
-        messageWithNeighbors.setNeighbors(builder.toString());
+        messageWithNeighbors.setNeighbors(new Gson().toJson(neighborsList));
         try{
             final Message responseMessage = new Message(NeighborsMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(messageWithNeighbors));

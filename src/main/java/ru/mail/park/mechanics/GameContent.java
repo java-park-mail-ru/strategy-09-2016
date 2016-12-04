@@ -111,6 +111,9 @@ public class GameContent { //класс, управляющий одной от�
     public String getMap(){
         List<Integer> tempList = board.getBoardMap();
         String json = new Gson().toJson(tempList);
+       // AbstractCell testCell = board.getCell(new CoordPair(2,2));
+       // String testJson = new Gson().toJson(testCell);
+       // System.out.println(testJson);
         return json;
     }
 
