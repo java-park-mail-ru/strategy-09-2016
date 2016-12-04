@@ -233,6 +233,7 @@ public class GameBoard {
                         Integer playerId = piratId / 3;
                         CoordPair shipCord = players[playerId].getShipCord();
                         boardMap[shipCord.getX()][shipCord.getY()].setPiratId(piratId);
+                        players[playerId].pirats[piratId-3*playerId].setLocation(shipCord);
                         movementResult.add(new MovementResult(playerId,piratId-3*playerId,shipCord));
                     } //но эту штуку надо будет видеть еще и снаружи, то есть, скорее всего, мы будет возвращать
                     //массив пиратов, у которых сменилась координата
