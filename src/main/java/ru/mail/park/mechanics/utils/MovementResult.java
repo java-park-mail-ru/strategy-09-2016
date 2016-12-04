@@ -18,7 +18,7 @@ public class MovementResult {
         this.status = 0;
         this.playerIngameId = playerId;
         this.piratId = piratId;
-        this.targetCellIndex = 13*targetCell.getX() + targetCell.getY();
+        this.targetCellIndex = 13*targetCell.getY() + targetCell.getX();
     }
 
     public MovementResult(Integer status){
