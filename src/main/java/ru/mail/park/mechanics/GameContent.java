@@ -1,9 +1,12 @@
 package ru.mail.park.mechanics;
 
+import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.game.GameBoard;
 import ru.mail.park.mechanics.game.Movement;
+
+import java.util.List;
 
 public class GameContent { //класс, управляющий одной отдельно взятой игрой
     private Long firstPlayerId;
@@ -105,16 +108,10 @@ public class GameContent { //класс, управляющий одной от�
         return move.getStatus();
     } // задел на будущее, когда появятся стрелки
 
-    public String getMap(){;
-        final StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < 13; ++i) { //та же проблема. мы не успели разобраться, как json-ить массив целых чисел
-             for (int j = 0; j < 13; ++j) {
-                builder.append(Integer.toString(board.getBoardMapId(i, j)));
-                builder.append(',');
-            }
-        }
-        builder.setLength(builder.length()-1); //чтобы обрезать линюю запятую
-        return builder.toString();
+    public String getMap(){
+        List<Integer> tempList = board.getBoardMap();
+        String json = new Gson().toJson(tempList);
+        return json;
     }
 
     public Integer getCountOfTurns() {

@@ -1,6 +1,8 @@
 package ru.mail.park.mechanics.game;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 public class GameBoard {
@@ -92,6 +94,16 @@ public class GameBoard {
 
     public Integer getBoardMapId(Integer x, Integer y) {
         return boardMap[x][y].getId();
+    }
+
+    public List<Integer> getBoardMap(){
+        List<Integer> tempList = new ArrayList<>();
+        for(AbstractCell cellLine[]:boardMap){
+            for(AbstractCell cell:cellLine){
+                tempList.add(cell.getId());
+            }
+        }
+        return  tempList;
     }
 
     public CoordPair[] getCellNeighbors(CoordPair cellCord, Integer playerId){
