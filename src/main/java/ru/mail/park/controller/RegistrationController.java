@@ -34,8 +34,9 @@ public class RegistrationController{
                 || StringUtils.isEmpty(email)) {
             throw new ExceptionWithErrorCode("R01","null_field");
         }
-        final UserProfile existingUser = accountService.getUser(login);
-        if (existingUser != null) {
+        final UserProfile existingUserWithLogin = accountService.getUserByLogin(login);
+        final UserProfile existingUserWithEmail = accountService.getUserByEmail(email);
+        if (existingUserWithEmail != null||existingUserWithLogin!=null) {
             throw new ExceptionWithErrorCode("R02","user_already_exist");
         }
         if(httpSession.getAttribute("userLogin")!=null) {
