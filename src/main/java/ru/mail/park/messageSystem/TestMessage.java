@@ -8,6 +8,6 @@ public class TestMessage extends  Message{
         super(from, to);
     }
     public void exec(Abonent abonent) {
-        System.out.println("Я пришло!");
+        System.out.println("Меня получили!");
     }
 }

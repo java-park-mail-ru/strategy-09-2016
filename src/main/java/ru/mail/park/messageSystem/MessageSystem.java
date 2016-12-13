@@ -20,6 +20,10 @@ public class MessageSystem {
         messages.get(message.getTo()).add(message);
     }
 
+    public void addAbonent(Address abonentAddress){
+        messages.put(abonentAddress, new ConcurrentLinkedQueue<>());
+    }
+
     public void execForAbonent(Abonent abonent) { //приходит такой аббенент, а у него целый ящик спама и начинает он его, значит, разгребать
         Queue<Message> messageQueue = messages.get(abonent.getAddress());
         while(!messageQueue.isEmpty()){

@@ -11,19 +11,22 @@ import java.util.concurrent.Executors;
  * Created by victor on 13.12.16.
  */
 @Service
-public class TestService implements Runnable, Abonent{
+public class MessageSender implements Runnable, Abonent{
 
     private MessageSystem ms;
 
-    private static final long STEP_TIME = 10000;
+    private static final long STEP_TIME = 5000;
 
     private Executor tickExecutor = Executors.newSingleThreadExecutor();
 
     private final Address myAddress = new Address();
 
+    private final Address testServiceAddress; //ссылка на весь сервис мне не нужна, а вот адрес добыть надо
+
     @Autowired
-    public TestService(MessageSystem ms) {
+    public MessageSender(MessageSystem ms, TestService testService) {
         this.ms = ms;
+        this.testServiceAddress = testService.getAddress();
         ms.addAbonent(myAddress);
     }
 
@@ -36,8 +39,8 @@ public class TestService implements Runnable, Abonent{
     public void run() {
         while (true) {
             try {
-                System.out.println("Я получил пачку сообщений!");
-                ms.execForAbonent(this);
+                System.out.println("Я отправляю сообщение.");
+                ms.sendMessage(new TestMessage(this.myAddress, testServiceAddress));
                 Thread.sleep(STEP_TIME);
             } catch (InterruptedException e){
                 e.printStackTrace();
@@ -49,5 +52,4 @@ public class TestService implements Runnable, Abonent{
     public Address getAddress(){
         return this.myAddress;
     }
-
 }
