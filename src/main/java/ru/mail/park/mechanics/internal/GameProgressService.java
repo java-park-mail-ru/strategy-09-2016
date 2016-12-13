@@ -61,6 +61,7 @@ public class GameProgressService {
     public void movePirat(Integer piratId, CoordPair targetCell, Long playerId){
         final MessageToClient.Request testMessage = new MessageToClient.Request(); //вещь для отладки
         // если возник какой-то рассинхрон между фронтом и беком
+        System.out.println("получили сообщение от фронта, готовимся двигать пирата");
         if(usersToGamesMap.containsKey(playerId)){
             final List<MovementResult> result = usersToGamesMap.get(playerId).movePirat(piratId, targetCell, playerId);
             if(result==null){
@@ -150,7 +151,7 @@ public class GameProgressService {
 //        newTurnMessage.setPiratId(piratId);
  //       newTurnMessage.setNewCellIndexOfPirat(indexOfTargetCell);
         try {
-            //System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто ходил");
+            System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто ходил");
             final Message responseMessageToActivePLayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(playerId,responseMessageToActivePLayer);
@@ -158,7 +159,7 @@ public class GameProgressService {
             e.printStackTrace();
         }
         try {
-            //System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто будет ходить");
+            System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто будет ходить");
             newTurnMessage.setActive(true);
             final Message responseMessageToPassivePlayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));

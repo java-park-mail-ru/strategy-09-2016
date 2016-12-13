@@ -82,7 +82,7 @@ public class GameContent { //класс, управляющий одной от�
 //        System.out.println("piratId="+ piratId + " targetX="+targetCell.getX()+" targetCellY="+targetCell.getY());
 //        System.out.println(getPiratCord(piratIngameId, playerGameId).getX()+"   " + getPiratCord(piratIngameId, playerGameId).getY());
         move = new Movement(piratIngameId, getPiratCord(piratIngameId, playerGameId), targetCell);
-  //      System.out.println("ходит пират с айдишником " + (piratIngameId));
+        //System.out.println("ходит пират с айдишником " + (piratIngameId));
         final List<MovementResult> result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
         if(result.get(0).getStatus()>-1){
             move = null;
