@@ -50,9 +50,10 @@ public class GameSocketHandler extends TextWebSocketHandler {
             } catch( Exception e){
                 e.printStackTrace();
             }
+        } else {
+            //System.out.println("soket opened?");
+            remotePointService.registerUser(userId, webSocketSession);
         }
-        //System.out.println("soket opened?");
-        remotePointService.registerUser(userId, webSocketSession);
     }
 
     @Override

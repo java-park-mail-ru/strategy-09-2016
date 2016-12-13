@@ -1,18 +1,15 @@
 package ru.mail.park.mechanics.internal;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.CloseStatus;
 import ru.mail.park.mechanics.GameSession;
-import ru.mail.park.mechanics.requests.BoardMapForUsers;
+import ru.mail.park.messageSystem.Address;
+import ru.mail.park.messageSystem.MessageSystem;
+import ru.mail.park.messageSystem.MessagesToGameMechanics.InitGameMessage;
 import ru.mail.park.model.UserProfile;
-import ru.mail.park.websocket.Message;
-import ru.mail.park.websocket.RemotePointService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,26 +17,25 @@ import java.util.Collection;
 public class GameInitService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameInitService.class);
 
-    @NotNull
-    private final RemotePointService remotePointService;
+    private Address myAddress = new Address();
 
-    @NotNull
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private Address gameMechanincsAddress;
 
-    @NotNull
-    private final GameProgressService gameProgressService;
+    private MessageSystem ms;
 
-    public GameInitService(@NotNull RemotePointService remotePointService,
-                           @NotNull GameProgressService gameProgressService) {
-        this.remotePointService = remotePointService;
-        this.gameProgressService = gameProgressService;
+    public GameInitService(@NotNull GameMechanicsInNewThread gameMechanicsInNewThread,
+                           @NotNull MessageSystem messageSystem) {
+        this.ms = messageSystem;
+        this.gameMechanincsAddress = gameMechanicsInNewThread.getAddress();
     }
 
     public void initGameFor(@NotNull GameSession gameSession) {
         final Collection<UserProfile> players = new ArrayList<>();
         players.add(gameSession.getFirst().getUserProfile());
         players.add(gameSession.getSecond().getUserProfile());
-        gameProgressService.createNewGame(gameSession.getFirst().getUserProfile().getId(),
+        System.out.println("пытаемся начать игру");
+        ms.sendMessage(new InitGameMessage(myAddress,gameMechanincsAddress,gameSession.getFirst().getUserProfile(), gameSession.getSecond().getUserProfile()));
+       /* gameProgressService.createNewGame(gameSession.getFirst().getUserProfile().getId(),
                 gameSession.getSecond().getUserProfile().getId());
         for (UserProfile player : players) {
             final BoardMapForUsers.Request initMessage = createGameStartMessage(gameSession, player);
@@ -53,9 +49,10 @@ public class GameInitService {
                         CloseStatus.SERVER_ERROR));
                 LOGGER.error("Unnable to start a game", e);
             }
-        }
+        } */
     }
 
+    /*
     //рассылка стартового состояния доски игрокам
     private BoardMapForUsers.Request createGameStartMessage(@NotNull GameSession gameSession,
                                                             @NotNull UserProfile player){
@@ -70,5 +67,5 @@ public class GameInitService {
         request.setEnemyNick(gameSession.getEnemy(player.getId()).getUserProfile().getLogin());
         return  request;
     }
-
+*/
 }
