@@ -59,24 +59,24 @@ public class GameProgressService {
     }
 
     public void movePirat(Integer piratId, CoordPair targetCell, Long playerId){
-        final MessageToClient.Request testMessage = new MessageToClient.Request();
+        final MessageToClient.Request infoMessage = new MessageToClient.Request();
         if(usersToGamesMap.containsKey(playerId)){
             final List<MovementResult> result = usersToGamesMap.get(playerId).movePirat(piratId, targetCell, playerId);
             if(result==null){
-                testMessage.setMyMessage("Такой ход невозможен. Скорее всего, вы ошиблись в выборе клетки");
+                infoMessage.setMyMessage("Такой ход невозможен. Скорее всего, вы ошиблись в выборе клетки");
             } else {
                 sendUserNewBoard(result, playerId);
                 return;
             }
         } else {
-            testMessage.setMyMessage("Этот игрок вообще не участвует в играх");
+            infoMessage.setMyMessage("Этот игрок вообще не участвует в играх");
         }
         try {
             final Message responseMessage = new Message(MessageToClient.Request.class.getName(),
-                    objectMapper.writeValueAsString(testMessage));
+                    objectMapper.writeValueAsString(infoMessage));
             remotePointService.sendMessageToUser(playerId,responseMessage);
         } catch( IOException e){
-            e.printStackTrace();
+            LOGGER.error("Can't send message to user",e);
         }
     }
 
@@ -106,27 +106,27 @@ public class GameProgressService {
                     objectMapper.writeValueAsString(messageWithNeighbors));
             remotePointService.sendMessageToUser(playerId,responseMessage);
         } catch( IOException e){
-            e.printStackTrace();
+            LOGGER.error("Can't send message to user",e);
         }
     }
 
     public void moveShip(CoordPair direction, Long playerId){
-        final MessageToClient.Request testMessage = new MessageToClient.Request();
+        final MessageToClient.Request infoMessage = new MessageToClient.Request();
         if(usersToGamesMap.containsKey(playerId)){
             if(usersToGamesMap.get(playerId).moveShip(direction, playerId)){
-                testMessage.setMyMessage("корабль передвинулся, но мы этого пока не увидим");
+                infoMessage.setMyMessage("корабль передвинулся, но мы этого пока не увидим");
             } else {
-                testMessage.setMyMessage("Капитан, корабль не может туда плыть. Сейчас его координаты: ");
+                infoMessage.setMyMessage("Капитан, корабль не может туда плыть. Сейчас его координаты: ");
             }
         } else {
-            testMessage.setMyMessage("Этот игрок вообще не участвует в играх");
+            infoMessage.setMyMessage("Этот игрок вообще не участвует в играх");
         }
         try {
             final Message responseMessage = new Message(MessageToClient.Request.class.getName(),
-                    objectMapper.writeValueAsString(testMessage));
+                    objectMapper.writeValueAsString(infoMessage));
             remotePointService.sendMessageToUser(playerId,responseMessage);
         } catch( IOException e){
-            e.printStackTrace();
+            LOGGER.error("Can't send message to user",e);
         }
     }
 
@@ -139,7 +139,7 @@ public class GameProgressService {
                     objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(playerId,responseMessageToActivePLayer);
         } catch( IOException e){
-            e.printStackTrace();
+            LOGGER.error("Can't send message to user",e);
         }
         try {
             newTurnMessage.setActive(true);
@@ -149,7 +149,7 @@ public class GameProgressService {
                     usersToGamesMap.get(playerId).getEnemy(playerId),
                     responseMessageToPassivePlayer);
         } catch( IOException e){
-            e.printStackTrace();
+            LOGGER.error("Can't send message to user",e);
         }
     }
 

@@ -2,6 +2,8 @@ package ru.mail.park.mechanics.internal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mail.park.mechanics.requests.ReplyPingMessage;
 import ru.mail.park.websocket.Message;
@@ -12,6 +14,9 @@ import ru.mail.park.websocket.RemotePointService;
  */
 @Service
 public class PingServiceImpl implements  PingService{ //просто отвечалка на пинги от фронта, ничего содержательного
+
+    @NotNull
+    private static final Logger LOGGER = LoggerFactory.getLogger(PingServiceImpl.class);
 
     @NotNull
     private RemotePointService remotePointService;
@@ -31,7 +36,7 @@ public class PingServiceImpl implements  PingService{ //просто отвеч�
                     objectMapper.writeValueAsString(replyPingMessage));
             remotePointService.sendMessageToUser(forUser, pingMessage);
         } catch( Exception e){
-            e.printStackTrace();
+            LOGGER.error("Can't send ping message to user",e);
         }
     }
 
