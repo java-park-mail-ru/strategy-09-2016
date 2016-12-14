@@ -1,6 +1,7 @@
 package ru.mail.park.mechanics.utils;
 
 import ru.mail.park.mechanics.game.CoordPair;
+import ru.mail.park.mechanics.game.GameBoard;
 
 /**
  * Created by victor on 04.12.16.
@@ -18,7 +19,7 @@ public class MovementResult {
         this.status = 0;
         this.playerIngameId = playerId;
         this.piratId = piratId;
-        this.targetCellIndex = 13*targetCell.getY() + targetCell.getX();
+        this.targetCellIndex = GameBoard.BOARDWIGHT * targetCell.getY() + targetCell.getX();
     }
 
     public MovementResult(Integer status){
