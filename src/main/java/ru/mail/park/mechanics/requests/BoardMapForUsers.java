@@ -1,18 +1,20 @@
 package ru.mail.park.mechanics.requests;
 
+import java.util.List;
+
 public class BoardMapForUsers { //сообщение юзеру о начале игры со всей необходимой информацией для начала этой игры
     public static final class Request {
-        private String gameBoard;
+        private List<Integer> gameBoard;
 
         private String enemyNick;
 
         private Boolean isActive;
 
-        public String getGameBoard() {
+        public List<Integer> getGameBoard() {
             return gameBoard;
         } //вроде и светятся неактивными, но все равно используются
 
-        public void setGameBoard(String gameBoard) {
+        public void setGameBoard(List<Integer> gameBoard) {
             this.gameBoard = gameBoard;
         }
 

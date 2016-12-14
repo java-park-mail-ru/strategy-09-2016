@@ -1,7 +1,6 @@
 package ru.mail.park.mechanics.internal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -51,7 +50,7 @@ public class GameProgressService {
     }
 
     @Nullable
-    public String getBoardMap(Long playerId){
+    public List<Integer> getBoardMap(Long playerId){
         if(usersToGamesMap.containsKey(playerId)) {
             return usersToGamesMap.get(playerId).getMap();
         } else {
@@ -101,7 +100,7 @@ public class GameProgressService {
         }
 
         final NeighborsMessage.Request messageWithNeighbors = new NeighborsMessage.Request();
-        messageWithNeighbors.setNeighbors(new Gson().toJson(neighborsList));
+        messageWithNeighbors.setNeighbors(neighborsList);
         try{
             final Message responseMessage = new Message(NeighborsMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(messageWithNeighbors));
@@ -134,7 +133,7 @@ public class GameProgressService {
     private void sendUserNewBoard(List<MovementResult> movementResults, Long playerId){
         final PiratMoveMessage.Request newTurnMessage = new PiratMoveMessage.Request();
         newTurnMessage.setActive(false);
-        newTurnMessage.setMovement(new Gson().toJson(movementResults));
+        newTurnMessage.setMovement(movementResults);
         try {
             final Message responseMessageToActivePLayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));

@@ -1,6 +1,5 @@
 package ru.mail.park.mechanics;
 
-import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -110,10 +109,10 @@ public class GameContent { //класс, управляющий одной от�
         return move.getStatus();
     } // задел на будущее, когда появятся стрелки
 
-    public String getMap(){
+    public List<Integer> getMap(){
         List<Integer> tempList = board.getBoardMap();
-        String json = new Gson().toJson(tempList);
-        return json;
+        //String json = new Gson().toJson(tempList);
+        return tempList;
     }
 
     public Integer getCountOfTurns() {
