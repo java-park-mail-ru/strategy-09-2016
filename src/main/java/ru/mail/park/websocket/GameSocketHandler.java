@@ -51,7 +51,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
                 e.printStackTrace();
             }
         }
-        //System.out.println("soket opened?");
         remotePointService.registerUser(userId, webSocketSession);
     }
 
@@ -59,18 +58,8 @@ public class GameSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws AuthenticationException {
         final Long userId = (Long) session.getAttributes().get("userId");
         if(userId!=null) {
-            //System.out.println("message recived");
             final UserProfile user = accountService.getUserById(userId);
             handleMessage(user, message);
-            /*final MessageToClient.Request testMessage = new MessageToClient.Request();
-            testMessage.setMyMessage("Hello!!!");
-            try {
-                final Message responseMessage = new Message(MessageToClient.Request.class.getName(),
-                        objectMapper.writeValueAsString(testMessage));
-                session.sendMessage(new TextMessage(objectMapper.writeValueAsString(responseMessage)));
-            } catch( Exception e){
-                e.printStackTrace();
-            }*/
         }
     }
 

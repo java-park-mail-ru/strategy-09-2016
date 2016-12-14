@@ -40,7 +40,6 @@ public abstract class AbstractCell {
     public Integer[] killEnemy(Integer newPiratIds) {
         Integer[] deadPirats = new Integer[0];
         for(Integer piratId : piratIds) {
-            //System.out.println();
             if((piratId / 3) != (newPiratIds / 3) ){
                 piratIds = ArrayUtil.removeFromArray(piratIds, piratId); //в этой клетке их больше нет
                 deadPirats = ArrayUtil.addToArray(deadPirats, piratId, Integer.class);

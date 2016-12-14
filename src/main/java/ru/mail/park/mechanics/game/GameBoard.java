@@ -1,5 +1,8 @@
 package ru.mail.park.mechanics.game;
 
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.mail.park.mechanics.utils.MovementResult;
 
 import java.util.ArrayList;
@@ -8,8 +11,11 @@ import java.util.List;
 import java.util.Vector;
 
 public class GameBoard {
-    private static final Integer BOARDHIGHT = 13;
-    private static final Integer BOARDWIGHT = 13;
+    @NotNull
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameBoard.class);
+
+    public static final Integer BOARDHIGHT = 13;
+    public static final Integer BOARDWIGHT = 13;
     private static final Integer ISLAND_HIGHT = BOARDHIGHT -2 ;
     private static final Integer ISLAND_WIGHT = BOARDWIGHT -2 ;
     private static final Integer NUMBEFOFCELL = 117;
@@ -229,7 +235,7 @@ public class GameBoard {
                     //пират, входя в клетку, убивает всех врагов в ней
                     //теперь их надо отправить на родной корабль
                     for(Integer piratId: deadPirats) {
-                        System.out.println("Двеннадцать человек на сундук мертвеца!");
+                        LOGGER.debug("Двеннадцать человек на сундук мертвеца!");
                         Integer playerId = piratId / 3;
                         CoordPair shipCord = players[playerId].getShipCord();
                         boardMap[shipCord.getX()][shipCord.getY()].setPiratId(piratId);

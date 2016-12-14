@@ -9,11 +9,16 @@ import java.util.concurrent.atomic.AtomicLong;
 public class GameSession {
     private static final AtomicLong ID_GENERATOR = new AtomicLong(0);
 
-    private final @NotNull Long sessionId;
+    @NotNull
+    private final Long sessionId;
 
-    private final @NotNull GameUser first; //есть сомнения, что нам нужен сам GameUser в его нынешнем виде
+    @NotNull
+    private final GameUser first; //есть сомнения, что нам нужен сам GameUser в его нынешнем виде
 
-    private final @NotNull GameUser second; //скорее всего в него стоило бы вытащить только логин и айдишник
+    @NotNull
+    private final GameUser second; //скорее всего в него стоило бы вытащить только логин и айдишник
+
+
 
     public GameSession(@NotNull UserProfile user1, @NotNull UserProfile user2) {
         this.sessionId = ID_GENERATOR.getAndIncrement();

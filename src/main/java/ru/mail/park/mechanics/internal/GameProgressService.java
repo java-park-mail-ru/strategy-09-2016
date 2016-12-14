@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mail.park.mechanics.GameContent;
 import ru.mail.park.mechanics.game.CoordPair;
@@ -27,20 +29,18 @@ import java.util.Map;
 public class GameProgressService {
 
     @NotNull
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameProgressService.class);
+
+    @NotNull
     private final Map<Long, GameContent> usersToGamesMap = new HashMap<>(); //связь юзеров и игр
 
     @NotNull
     private final RemotePointService remotePointService; // сервис, рассылающие сообщения юзерам
 
-    @NotNull
-    private final GameSessionService gameSessionService; //сервис, который помнит сессий и юзеров
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public GameProgressService(@NotNull RemotePointService remotePointService,
-                               @NotNull GameSessionService gameSessionService){
+    public GameProgressService(@NotNull RemotePointService remotePointService){
         this.remotePointService = remotePointService;
-        this.gameSessionService = gameSessionService;
     }
 
     public void createNewGame(@NotNull Long firstPlayerId, @NotNull Long secondPlayerId){
@@ -85,27 +85,20 @@ public class GameProgressService {
 
         final Integer x = cellIndex%13;
         final Integer y = cellIndex/13;
-        //System.out.println("Мы получаем соседей клетки с координатами" + x + ' ' + y);
-        //мы не успели разобраться, как JSON-ить массив целых чисел
+        LOGGER.debug("Мы получаем соседей клетки с координатами" + x + ' ' + y);
         final CoordPair piratCord = new CoordPair(x,y);
         final CoordPair[] neighbors = usersToGamesMap.get(playerId).getNeighbors(piratCord, playerId);
-        //final StringBuilder builder = new StringBuilder();
         final List<Integer> neighborsList = new ArrayList<>();
         for(CoordPair cell:neighbors){
             neighborsList.add(13*cell.getY()+cell.getX());
-        //    builder.append(13*cell.getY()+cell.getX()); //пересчет (х,у) координат, в которых работает сервер
-        //    builder.append(','); // в одномерный индекс, в котором работает фронт
         }
 
         if(CoordPair.equals(piratCord,usersToGamesMap.get(playerId).getShipCord(playerId))){
             final CoordPair[] shipNeighbors = usersToGamesMap.get(playerId).getShipAvailableDirection(playerId);
             for(CoordPair cell:shipNeighbors){
                 neighborsList.add(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX()));
-         //       builder.append(13*(cell.getY()+piratCord.getY())+(cell.getX()+piratCord.getX())); //пересчет (х,у) координат, в которых работает сервер
-         //       builder.append(','); // в одномерный индекс, в котором работает фронт
             }
         }
-        //builder.setLength(builder.length()-1);
 
         final NeighborsMessage.Request messageWithNeighbors = new NeighborsMessage.Request();
         messageWithNeighbors.setNeighbors(new Gson().toJson(neighborsList));
@@ -122,13 +115,9 @@ public class GameProgressService {
         final MessageToClient.Request testMessage = new MessageToClient.Request();
         if(usersToGamesMap.containsKey(playerId)){
             if(usersToGamesMap.get(playerId).moveShip(direction, playerId)){
-                //sendUserNewBoard(playerId);//то рассылаем игрока сообщение о движении корабля
-                //sendUserShipMovementResult(playerId);
                 testMessage.setMyMessage("корабль передвинулся, но мы этого пока не увидим");
-                //return;
             } else {
                 testMessage.setMyMessage("Капитан, корабль не может туда плыть. Сейчас его координаты: ");
-                //System.out.println(usersToGamesMap.get(playerId).getShipCord(playerId));
             }
         } else {
             testMessage.setMyMessage("Этот игрок вообще не участвует в играх");
@@ -146,11 +135,7 @@ public class GameProgressService {
         final PiratMoveMessage.Request newTurnMessage = new PiratMoveMessage.Request();
         newTurnMessage.setActive(false);
         newTurnMessage.setMovement(new Gson().toJson(movementResults));
-//        newTurnMessage.setPlayerId(usersToGamesMap.get(playerId).gameUserIdToGameUserId(playerId));
-//        newTurnMessage.setPiratId(piratId);
- //       newTurnMessage.setNewCellIndexOfPirat(indexOfTargetCell);
         try {
-            //System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто ходил");
             final Message responseMessageToActivePLayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(playerId,responseMessageToActivePLayer);
@@ -158,13 +143,12 @@ public class GameProgressService {
             e.printStackTrace();
         }
         try {
-            //System.out.println("Пират передвинут. Эй, фронт, лови сообщение для того, кто будет ходить");
             newTurnMessage.setActive(true);
             final Message responseMessageToPassivePlayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(
-                    gameSessionService.getSessionForUser(playerId).getEnemy(playerId).getUserProfile().getId(),
-                    responseMessageToPassivePlayer);//надо переделать sessionService, чтобы не было таких цепочек
+                    usersToGamesMap.get(playerId).getEnemy(playerId),
+                    responseMessageToPassivePlayer);
         } catch( IOException e){
             e.printStackTrace();
         }

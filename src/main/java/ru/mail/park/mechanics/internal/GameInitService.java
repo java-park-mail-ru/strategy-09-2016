@@ -35,12 +35,13 @@ public class GameInitService {
         this.gameProgressService = gameProgressService;
     }
 
-    public void initGameFor(@NotNull GameSession gameSession) {
+    public void initGameFor(UserProfile firstPlayer, UserProfile secondPLayer) {
         final Collection<UserProfile> players = new ArrayList<>();
-        players.add(gameSession.getFirst().getUserProfile());
-        players.add(gameSession.getSecond().getUserProfile());
-        gameProgressService.createNewGame(gameSession.getFirst().getUserProfile().getId(),
-                gameSession.getSecond().getUserProfile().getId());
+        players.add(firstPlayer);
+        players.add(secondPLayer);
+        gameProgressService.createNewGame(firstPlayer.getId(),
+                secondPLayer.getId());
+        GameSession gameSession = new GameSession(firstPlayer,secondPLayer);
         for (UserProfile player : players) {
             final BoardMapForUsers.Request initMessage = createGameStartMessage(gameSession, player);
             //noinspection OverlyBroadCatchBlock
@@ -57,17 +58,17 @@ public class GameInitService {
     }
 
     //рассылка стартового состояния доски игрокам
-    private BoardMapForUsers.Request createGameStartMessage(@NotNull GameSession gameSession,
+    private BoardMapForUsers.Request createGameStartMessage(@NotNull GameSession session,
                                                             @NotNull UserProfile player){
         final BoardMapForUsers.Request request = new BoardMapForUsers.Request();
         request.setGameBoard(gameProgressService.getBoardMap(player.getId()));
-        request.setEnemyNick(gameSession.getEnemy(player.getId()).getUserProfile().getLogin());
-        if(gameSession.getFirst().getUserProfile().equals(player)) {
+        request.setEnemyNick(session.getEnemy(player.getId()).getUserProfile().getLogin()); //проблема в том, что надо в общем виде различать игрока, ход которого первый
+        if(session.getFirst().getUserProfile().equals(player)) {
             request.setActive(true);
         } else {
             request.setActive(false);
         }
-        request.setEnemyNick(gameSession.getEnemy(player.getId()).getUserProfile().getLogin());
+        request.setEnemyNick(session.getEnemy(player.getId()).getUserProfile().getLogin());
         return  request;
     }
 

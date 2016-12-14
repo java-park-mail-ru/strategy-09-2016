@@ -3,6 +3,8 @@ package ru.mail.park.mechanics;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.game.GameBoard;
 import ru.mail.park.mechanics.game.Movement;
@@ -11,6 +13,9 @@ import ru.mail.park.mechanics.utils.MovementResult;
 import java.util.List;
 
 public class GameContent { //класс, управляющий одной отдельно взятой игрой
+    @NotNull
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameContent.class);
+
     private Long firstPlayerId;
     private Long secondPlayerId;
     private GameBoard board;
@@ -70,19 +75,13 @@ public class GameContent { //класс, управляющий одной от�
 
     @Nullable
     public List<MovementResult> movePirat(Integer piratId, CoordPair targetCell, Long playerId){
-        //и сдесь же мы должны тормозить игрока, если сейчас не его ход
         if(!activePlayerId.equals(playerId)){
-            //System.out.println("Какой-то подозрительный юзер. Пытается ходить не в свой ход");
-            //System.out.println(playerId + " " + firstPlayerId + " " + secondPlayerId + " " + activePlayerId);
+            LOGGER.debug("Player try to act in not his own round");
             return null;
         }
         final Integer playerGameId = gameUserIdToGameUserId(playerId);
         final Integer piratIngameId = piratId + 3 * playerGameId;
-//        System.out.println("Пытаемся совершить ход");
-//        System.out.println("piratId="+ piratId + " targetX="+targetCell.getX()+" targetCellY="+targetCell.getY());
-//        System.out.println(getPiratCord(piratIngameId, playerGameId).getX()+"   " + getPiratCord(piratIngameId, playerGameId).getY());
         move = new Movement(piratIngameId, getPiratCord(piratIngameId, playerGameId), targetCell);
-  //      System.out.println("ходит пират с айдишником " + (piratIngameId));
         final List<MovementResult> result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
         if(result.get(0).getStatus()>-1){
             move = null;
@@ -114,13 +113,22 @@ public class GameContent { //класс, управляющий одной от�
     public String getMap(){
         List<Integer> tempList = board.getBoardMap();
         String json = new Gson().toJson(tempList);
-       // AbstractCell testCell = board.getCell(new CoordPair(2,2));
-       // String testJson = new Gson().toJson(testCell);
-       // System.out.println(testJson);
         return json;
     }
 
     public Integer getCountOfTurns() {
         return countOfTurns;
     } //количество сделанных ходов за партию
+
+    @Nullable
+    public Long getEnemy(Long playerId) {
+        if(playerId.equals(firstPlayerId)){
+            return secondPlayerId;
+        } else if(playerId.equals(secondPlayerId)){
+            return firstPlayerId;
+        } else {
+            LOGGER.debug("Player who not involved in game try to get enemy id");
+            return null;
+        }
+    }
 }
