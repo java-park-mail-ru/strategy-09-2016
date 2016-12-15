@@ -237,21 +237,17 @@ public class GameBoard {
             final Integer targetY = piratMove.getTargetCell().getY();
             final Integer piratId = piratMove.getPiratId();
             if(!boardMap[starterX][starterY].beforeMoveOut(piratId, results, piratMove.getTargetCell())){
-                System.out.println("Пират не может покинуть эту клетку");
                 return results;
             }
 
             if (!boardMap[targetX][targetY].beforeMoveIn(piratId,results)) {
-                System.out.println("Пират не может войти в эту клетку");
                 return results;
             }
 
             if (!boardMap[starterX][starterY].moveOut(piratId,results)) {
-                System.out.println("Пират не смог покинуть клетку");
                 return results;
             }
-            System.out.println("O__O");
-
+            
             pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell());
 
             return boardMap[targetX][targetY].moveIn(piratId, results);
@@ -286,7 +282,6 @@ public class GameBoard {
                     boardMap[targetX][targetY].setPiratId(piratMove.getPiratId());
                     return movementResult;
                 }
-                System.out.println("Whaaaat");
                 movementResult.add(new MovementResult(-1));
                 return movementResult;
             }

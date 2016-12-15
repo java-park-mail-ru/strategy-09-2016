@@ -83,7 +83,6 @@ public class GameContent { //класс, управляющий одной от�
         move = new Movement(piratIngameId, getPiratCord(piratIngameId, playerGameId), targetCell);
         final List<Result> result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
         if(result.get(0).getStatus()>-1){
-            System.out.println(result.get(0).getStatus());
             move = null;
             ++countOfTurns;
             changeActivePlayer();

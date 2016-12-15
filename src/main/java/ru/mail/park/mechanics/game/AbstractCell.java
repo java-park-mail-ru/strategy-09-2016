@@ -69,7 +69,6 @@ public abstract class AbstractCell {
     }
 
     public Boolean beforeMoveOut(Integer piratId, List<Result> results, CoordPair targetCell){
-        //results.add(new MovementResult(-1));
         if(isUnderShip){
             return gameBoard.isShipNeighbors(piratId / 3, targetCell);
         } else if(isNeighbors(targetCell)){
@@ -82,17 +81,13 @@ public abstract class AbstractCell {
 
 
     public List<Result> moveIn(Integer newPiratId, List<Result> results){
-        //gameBoard.pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell()); //тут тоже что-то может пойти не так
-        System.out.println("Двигаем пирата игрока " + newPiratId / 3 +"с номером " + newPiratId % 3 );
         results.add(new MovementResult(newPiratId / 3, newPiratId % 3,this.cord));
-        //А еще надо убить всех пиратов из фражеской команды
         for(Integer piratId : piratIds) {
             if((piratId / 3) != (newPiratId / 3) ){
                 results.addAll(gameBoard.movePirat(new Movement(piratId,
                         this.cord, gameBoard.getShipCord(piratId / 3)), piratId));
             }
         }
-        System.out.println(results.get(0).getStatus());
         piratIds = ArrayUtil.addToArray(piratIds,newPiratId,Integer.class);
         return results;
     }
@@ -104,7 +99,6 @@ public abstract class AbstractCell {
                 return true;
             }
         }
-        System.out.println("WTF??");
         results.add(new MovementResult(-1));
         return false;
     }
