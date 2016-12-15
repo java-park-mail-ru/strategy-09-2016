@@ -12,7 +12,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by victor on 15.12.16.
  */
-public class cellGameTest {
+public class CellTest {
     @Test
     public void isCellRightCreated(){
         final BoardCell testCell = new BoardCell(0);
