@@ -247,7 +247,7 @@ public class GameBoard {
             if (!boardMap[starterX][starterY].moveOut(piratId,results)) {
                 return results;
             }
-            
+
             pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell());
 
             return boardMap[targetX][targetY].moveIn(piratId, results);

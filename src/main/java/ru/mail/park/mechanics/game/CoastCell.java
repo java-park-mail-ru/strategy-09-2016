@@ -11,6 +11,7 @@ public class CoastCell extends AbstractCell {
         super.isUnderShip = false;
         super.neighbors = new CoordPair[NUMNEIGHBORS];
         super.canBeFinal = true;
+        super.cord = thisCellCord;
         setNeighbors(thisCellCord);
     }
 

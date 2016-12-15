@@ -80,6 +80,10 @@ public abstract class AbstractCell {
     }
 
 
+    public CoordPair getCord() {
+        return cord;
+    }
+
     public List<Result> moveIn(Integer newPiratId, List<Result> results){
         results.add(new MovementResult(newPiratId / 3, newPiratId % 3,this.cord));
         for(Integer piratId : piratIds) {

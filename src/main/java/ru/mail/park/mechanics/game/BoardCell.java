@@ -12,6 +12,14 @@ public class BoardCell extends AbstractCell {
         super.canBeFinal = true;
     }
 
+    public BoardCell(Integer id){
+        super.id = id;
+        super.cord = null;
+        super.neighbors = new CoordPair[NUMNEIGHBORS];
+        super.isUnderShip = false;
+        super.canBeFinal = true;
+    }
+
     @Override
     public void setNeighbors(CoordPair cordinateOfCell) {
         super.cord = cordinateOfCell;
