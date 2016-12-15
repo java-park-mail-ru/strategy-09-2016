@@ -11,7 +11,7 @@ import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.game.GameBoard;
 import ru.mail.park.mechanics.requests.NeighborsMessage;
 import ru.mail.park.mechanics.requests.PiratMoveMessage;
-import ru.mail.park.mechanics.utils.MovementResult;
+import ru.mail.park.mechanics.utils.results.Result;
 import ru.mail.park.websocket.Message;
 import ru.mail.park.websocket.MessageToClient;
 import ru.mail.park.websocket.RemotePointService;
@@ -61,11 +61,11 @@ public class GameProgressService {
     public void movePirat(Integer piratId, CoordPair targetCell, Long playerId){
         final MessageToClient.Request infoMessage = new MessageToClient.Request();
         if(usersToGamesMap.containsKey(playerId)){
-            final List<MovementResult> result = usersToGamesMap.get(playerId).movePirat(piratId, targetCell, playerId);
-            if(result==null){
+            final List<Result> results = usersToGamesMap.get(playerId).movePirat(piratId, targetCell, playerId);
+            if(results==null){
                 infoMessage.setMyMessage("Такой ход невозможен. Скорее всего, вы ошиблись в выборе клетки");
             } else {
-                sendUserNewBoard(result, playerId);
+                sendUserNewBoard(results, playerId);
                 return;
             }
         } else {
@@ -130,7 +130,7 @@ public class GameProgressService {
         }
     }
 
-    private void sendUserNewBoard(List<MovementResult> movementResults, Long playerId){
+    private void sendUserNewBoard(List<Result> movementResults, Long playerId){
         final PiratMoveMessage.Request newTurnMessage = new PiratMoveMessage.Request();
         newTurnMessage.setActive(false);
         newTurnMessage.setMovement(movementResults);

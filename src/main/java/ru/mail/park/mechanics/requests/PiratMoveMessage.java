@@ -1,12 +1,12 @@
 package ru.mail.park.mechanics.requests;
 
-import ru.mail.park.mechanics.utils.MovementResult;
+import ru.mail.park.mechanics.utils.results.Result;
 
 import java.util.List;
 
 public class PiratMoveMessage { //сообщение для пользователя о том, что какой-то пират был передвинут
     public static final class Request {
-        private List<MovementResult> movements;
+        private List<Result> movements;
 
         private Boolean isActive;
 
@@ -18,11 +18,11 @@ public class PiratMoveMessage { //сообщение для пользовате
             isActive = active;
         }
 
-        public List<MovementResult> getMovement() {
+        public List<Result> getMovement() {
             return movements;
         }
 
-        public void setMovement(List<MovementResult> movement) {
+        public void setMovement(List<Result> movement) {
             this.movements = movement;
         }
     }

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.game.GameBoard;
 import ru.mail.park.mechanics.game.Movement;
-import ru.mail.park.mechanics.utils.MovementResult;
+import ru.mail.park.mechanics.utils.results.Result;
 
 import java.util.List;
 
@@ -73,7 +73,7 @@ public class GameContent { //класс, управляющий одной от�
     }
 
     @Nullable
-    public List<MovementResult> movePirat(Integer piratId, CoordPair targetCell, Long playerId){
+    public List<Result> movePirat(Integer piratId, CoordPair targetCell, Long playerId){
         if(!activePlayerId.equals(playerId)){
             LOGGER.debug("Player try to act in not his own round");
             return null;
@@ -81,8 +81,9 @@ public class GameContent { //класс, управляющий одной от�
         final Integer playerGameId = gameUserIdToGameUserId(playerId);
         final Integer piratIngameId = piratId + 3 * playerGameId;
         move = new Movement(piratIngameId, getPiratCord(piratIngameId, playerGameId), targetCell);
-        final List<MovementResult> result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
+        final List<Result> result = board.movePirat(move, playerGameId); //отдавать один индекс вместо двух
         if(result.get(0).getStatus()>-1){
+            System.out.println(result.get(0).getStatus());
             move = null;
             ++countOfTurns;
             changeActivePlayer();

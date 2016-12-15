@@ -45,4 +45,6 @@ public class Ship extends AbstractCell{
     public void setLocation(CoordPair direction) {
         location = new CoordPair(location.getX()+direction.getX(), location.getY()+direction.getY());
     }
+
+
 }

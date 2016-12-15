@@ -5,7 +5,7 @@ package ru.mail.park.mechanics.game;
  */
 public class ChestCell extends BoardCell{ //клетка с сундуком с монетками
 
-    public ChestCell(Integer id){
-        super(id);
+    public ChestCell(Integer id, GameBoard gameBoard){
+        super(id, gameBoard);
     }
 }

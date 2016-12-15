@@ -5,7 +5,8 @@ public class CoastCell extends AbstractCell {
     // вроде как и магические числа, но делать их константами, принадлежащими клетке тоже странно
     // это параметры игровой доски
 
-    public CoastCell(Integer id, CoordPair thisCellCord) {
+    public CoastCell(Integer id, CoordPair thisCellCord, GameBoard gameBoard) {
+        super.gameBoard = gameBoard;
         super.id = id;
         super.isUnderShip = false;
         super.neighbors = new CoordPair[NUMNEIGHBORS];

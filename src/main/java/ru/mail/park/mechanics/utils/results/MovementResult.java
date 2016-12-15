@@ -1,4 +1,4 @@
-package ru.mail.park.mechanics.utils;
+package ru.mail.park.mechanics.utils.results;
 
 import ru.mail.park.mechanics.game.CoordPair;
 import ru.mail.park.mechanics.game.GameBoard;
@@ -6,31 +6,29 @@ import ru.mail.park.mechanics.game.GameBoard;
 /**
  * Created by victor on 04.12.16.
  */
-public class MovementResult {
-    private Integer status;
+public class MovementResult extends  Result {
 
-    private Integer playerIngameId;
+    private final ResultType type = Result.ResultType.PiratMove;
 
     private Integer piratId;
 
     private Integer targetCellIndex;
 
     public MovementResult(Integer playerId, Integer piratId, CoordPair targetCell){
-        this.status = 0;
-        this.playerIngameId = playerId;
+        super(0,playerId);
         this.piratId = piratId;
         this.targetCellIndex = GameBoard.BOARDWIGHT * targetCell.getY() + targetCell.getX();
     }
 
     public MovementResult(Integer status){
-        this.status = status;
+        super(status);
     }
 
     public Integer getStatus() {
-        return status;
+        return super.status;
     }
 
     public void setStatus(Integer status) {
-        this.status = status;
+        super.status = status;
     }
 }

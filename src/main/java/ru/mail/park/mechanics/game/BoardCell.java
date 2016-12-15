@@ -3,7 +3,8 @@ package ru.mail.park.mechanics.game;
 public class BoardCell extends AbstractCell {
     private static final Integer NUMNEIGHBORS = 8;
 
-    public BoardCell(Integer id){
+    public BoardCell(Integer id, GameBoard gameBoard){
+        super.gameBoard = gameBoard;
         super.id = id;
         super.cord = null;
         super.neighbors = new CoordPair[NUMNEIGHBORS];

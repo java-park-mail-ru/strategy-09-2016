@@ -11,6 +11,14 @@ public class CoordPair {
         return firstPair.x.equals(secondPair.x)&&firstPair.y.equals(secondPair.y);
     }
 
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof CoordPair))
+            return false;
+        final CoordPair tempPair = (CoordPair) obj;
+        return tempPair.x.equals(x)&&tempPair.y.equals(y);
+    }
+
     public CoordPair(Integer x, Integer y){
         this.x = x;
         this.y = y;
