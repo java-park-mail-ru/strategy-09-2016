@@ -35,8 +35,10 @@ public class PingServiceImpl implements  PingService{ //просто отвеч�
             final Message pingMessage = new Message(ReplyPingMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(replyPingMessage));
             remotePointService.sendMessageToUser(forUser, pingMessage);
-        } catch( Exception e){
-            LOGGER.error("Can't send ping message to user",e);
+            return;
+        } catch (Exception e) {
+            LOGGER.error("Can't send ping message to user", e);
+            e.printStackTrace();
         }
     }
 

@@ -1,6 +1,7 @@
 package ru.mail.park.mechanics.internal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -65,6 +66,7 @@ public class GameProgressService {
             if(results==null){
                 infoMessage.setMyMessage("Такой ход невозможен. Скорее всего, вы ошиблись в выборе клетки");
             } else {
+                System.out.println("Пытаемся разослать игрокам результат хода");
                 sendUserNewBoard(results, playerId);
                 return;
             }
@@ -133,8 +135,10 @@ public class GameProgressService {
     private void sendUserNewBoard(List<Result> movementResults, Long playerId){
         final PiratMoveMessage.Request newTurnMessage = new PiratMoveMessage.Request();
         newTurnMessage.setActive(false);
-        newTurnMessage.setMovement(movementResults);
+        newTurnMessage.setMovement(new Gson().toJson(movementResults));
+        //newTurnMessage.setMovement(movementResults);
         try {
+            System.out.println("Пытаемся послать сообщение первому игроку");
             final Message responseMessageToActivePLayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));
             remotePointService.sendMessageToUser(playerId,responseMessageToActivePLayer);
@@ -142,6 +146,7 @@ public class GameProgressService {
             LOGGER.error("Can't send message to user",e);
         }
         try {
+            System.out.println("Пытаемся послать сообщение второму игроку");
             newTurnMessage.setActive(true);
             final Message responseMessageToPassivePlayer = new Message(PiratMoveMessage.Request.class.getName(),
                     objectMapper.writeValueAsString(newTurnMessage));

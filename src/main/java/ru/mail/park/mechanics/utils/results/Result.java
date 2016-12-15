@@ -8,11 +8,11 @@ public abstract class Result {
 
     protected Integer status;
 
-    protected Integer playerInGameId;
+    protected Integer playerIngameId;
 
-    public Result(Integer status, Integer playerInGameId) {
+    public Result(Integer status, Integer playerIngameId) {
         this.status = status;
-        this.playerInGameId = playerInGameId;
+        this.playerIngameId = playerIngameId;
     }
 
     public Result(Integer status) {

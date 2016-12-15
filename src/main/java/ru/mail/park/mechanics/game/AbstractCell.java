@@ -83,7 +83,7 @@ public abstract class AbstractCell {
 
     public List<Result> moveIn(Integer newPiratId, List<Result> results){
         //gameBoard.pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell()); //тут тоже что-то может пойти не так
-        System.out.println("Почти сходили");
+        System.out.println("Двигаем пирата игрока " + newPiratId / 3 +"с номером " + newPiratId % 3 );
         results.add(new MovementResult(newPiratId / 3, newPiratId % 3,this.cord));
         //А еще надо убить всех пиратов из фражеской команды
         for(Integer piratId : piratIds) {
@@ -93,6 +93,7 @@ public abstract class AbstractCell {
             }
         }
         System.out.println(results.get(0).getStatus());
+        piratIds = ArrayUtil.addToArray(piratIds,newPiratId,Integer.class);
         return results;
     }
 
