@@ -4,6 +4,7 @@ import org.eclipse.jetty.util.ArrayUtil;
 import ru.mail.park.mechanics.utils.results.MovementResult;
 import ru.mail.park.mechanics.utils.results.Result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractCell {
@@ -41,12 +42,12 @@ public abstract class AbstractCell {
         return 0;
     }
 
-    public Integer[] killEnemy(Integer newPiratIds) {
-        Integer[] deadPirats = new Integer[0];
+    public List<Integer> killEnemy(Integer newPiratIds) {
+        List<Integer> deadPirats = new ArrayList<>();
         for(Integer piratId : piratIds) {
             if((piratId / 3) != (newPiratIds / 3) ){
                 piratIds = ArrayUtil.removeFromArray(piratIds, piratId); //в этой клетке их больше нет
-                deadPirats = ArrayUtil.addToArray(deadPirats, piratId, Integer.class);
+                deadPirats.add(piratId);
             }
         }
         return deadPirats;
@@ -69,6 +70,13 @@ public abstract class AbstractCell {
     }
 
     public Boolean beforeMoveOut(Integer piratId, List<Result> results, CoordPair targetCell){
+        if(isNeighbors(targetCell)){
+            return true;
+        } else if(isUnderShip){
+            return gameBoard.isShipNeighbors(piratId / 3, targetCell);
+        } else {
+            return false;
+        }/*
         if(isUnderShip){
             return gameBoard.isShipNeighbors(piratId / 3, targetCell);
         } else if(isNeighbors(targetCell)){
@@ -76,7 +84,7 @@ public abstract class AbstractCell {
             } else {
                 results.add(new MovementResult(-2));
                 return false;
-            }
+            }*/
     }
 
 
@@ -84,16 +92,11 @@ public abstract class AbstractCell {
         return cord;
     }
 
-    public List<Result> moveIn(Integer newPiratId, List<Result> results){
+    public Boolean moveIn(Integer newPiratId, List<Result> results, List<Integer> deadPirats){
         results.add(new MovementResult(newPiratId / 3, newPiratId % 3,this.cord));
-        for(Integer piratId : piratIds) {
-            if((piratId / 3) != (newPiratId / 3) ){
-                results.addAll(gameBoard.movePirat(new Movement(piratId,
-                        this.cord, gameBoard.getShipCord(piratId / 3)), piratId));
-            }
-        }
+        deadPirats.addAll(killEnemy(newPiratId));
         piratIds = ArrayUtil.addToArray(piratIds,newPiratId,Integer.class);
-        return results;
+        return true;
     }
 
     public Boolean moveOut(Integer piratId, List<Result> results){

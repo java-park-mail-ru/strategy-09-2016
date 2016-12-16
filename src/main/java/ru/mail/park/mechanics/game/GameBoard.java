@@ -237,20 +237,37 @@ public class GameBoard {
             final Integer targetY = piratMove.getTargetCell().getY();
             final Integer piratId = piratMove.getPiratId();
             if(!boardMap[starterX][starterY].beforeMoveOut(piratId, results, piratMove.getTargetCell())){
+                System.out.println("beforeMoveOut");
                 return results;
             }
 
             if (!boardMap[targetX][targetY].beforeMoveIn(piratId,results)) {
+                System.out.println("beforeMoveIn");
                 return results;
             }
 
             if (!boardMap[starterX][starterY].moveOut(piratId,results)) {
+                System.out.println("moveOut");
                 return results;
             }
 
             pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell());
 
-            return boardMap[targetX][targetY].moveIn(piratId, results);
+            List<Integer> deadPirats = new ArrayList<>();
+            if(!boardMap[targetX][targetY].moveIn(piratId, results, deadPirats)){
+                System.out.println("moveIn");
+                return  results;
+            }
+
+            for(Integer deadPiratId: deadPirats) {
+                final Integer piratOwner = deadPiratId / 3;
+                final CoordPair shipCord = players[piratOwner].getShipCord();
+                boardMap[shipCord.getX()][shipCord.getY()].setPiratId(deadPiratId);
+                players[piratOwner].pirats[deadPiratId-3*piratOwner].setLocation(shipCord);
+                results.add(new MovementResult(piratOwner,deadPiratId-3*piratOwner,shipCord));
+            } //мы не можем провести мертвого пирата через стандартный обработчик движения
+
+            return results;
         }
 
         private List<MovementResult> movePirat(Movement piratMove){
@@ -268,17 +285,17 @@ public class GameBoard {
                     movementResult.add(new MovementResult(playerId,piratMove.getPiratId() - 3 * playerId,piratMove.getTargetCell()));
                     //сам пират точно передвинулся, а вот передвинулся ли кто-то еще?
                     //например, в клетке может оказаться крокодил
-                    final Integer[] deadPirats = boardMap[targetX][targetY].killEnemy(piratMove.getPiratId());
+                    //final Integer[] deadPirats = boardMap[targetX][targetY].killEnemy(piratMove.getPiratId());
                     //пират, входя в клетку, убивает всех врагов в ней
                     //теперь их надо отправить на родной корабль
-                    for(Integer piratId: deadPirats) {
+                    /*for(Integer piratId: deadPirats) {
                         LOGGER.debug("Enemy pirat killed");
                         final Integer playerId = piratId / 3;
                         final CoordPair shipCord = players[playerId].getShipCord();
                         boardMap[shipCord.getX()][shipCord.getY()].setPiratId(piratId);
                         players[playerId].pirats[piratId-3*playerId].setLocation(shipCord);
                         movementResult.add(new MovementResult(playerId,piratId-3*playerId,shipCord));
-                    }
+                    }*/
                     boardMap[targetX][targetY].setPiratId(piratMove.getPiratId());
                     return movementResult;
                 }

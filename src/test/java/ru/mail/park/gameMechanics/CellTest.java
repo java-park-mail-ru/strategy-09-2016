@@ -62,7 +62,7 @@ public class CellTest {
         } else {
             fail("There are nothing problem to move out");
         }
-        boardMap[targerCell.getX()][targerCell.getY()].moveIn(testPiratId, results);
+        boardMap[targerCell.getX()][targerCell.getY()].moveIn(testPiratId, results, null);
         assert(results.size() == 1);
         assert(results.get(0).getStatus()>=0);
         for(int i = 0; i < mediumBoardSize; ++i) {
@@ -105,7 +105,7 @@ public class CellTest {
         } else {
             fail("There are nothing problem to move out");
         }
-        boardMap[0][0].moveIn(testPiratId, results);
+        boardMap[0][0].moveIn(testPiratId, results, null);
         assert(results.size() == 1);
         assert(results.get(0).getStatus()>=0);
         for(int i = 0; i < smallBoardSize; ++i) {
