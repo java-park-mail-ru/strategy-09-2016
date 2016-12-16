@@ -226,11 +226,6 @@ public class GameBoard {
 
         private List<Result> move(Movement piratMove){
             final List<Result> results = new ArrayList<>();
-/*            if(!isCellPlacedNearPirat(piratMove.getPiratId(),piratMove.getTargetCell())) { //начальная и конечная клетки заданны корректно
-                System.out.println("Не правильно выбрана пара клеток");
-                results.add(new MovementResult(-2));
-                return results;
-            } */
             final Integer starterX = piratMove.getStartCell().getX();
             final Integer starterY = piratMove.getStartCell().getY();
             final Integer targetX = piratMove.getTargetCell().getX();
@@ -268,42 +263,6 @@ public class GameBoard {
             } //мы не можем провести мертвого пирата через стандартный обработчик движения
 
             return results;
-        }
-
-        private List<MovementResult> movePirat(Movement piratMove){
-            List<MovementResult> movementResult = new ArrayList<>();
-            if(isCellPlacedNearPirat(piratMove.getPiratId(),piratMove.getTargetCell())){ //начальная и конечная клетки заданны корректно
-                final Integer starterX = piratMove.getStartCell().getX();
-                final Integer starterY = piratMove.getStartCell().getY();
-                final Integer targetX = piratMove.getTargetCell().getX();
-                final Integer targetY = piratMove.getTargetCell().getY();
-                //и тут, по идее, появится еще миллион правил и проверок?
-                //миллион - это сколько? Форт с пиратом, да неизвестные клетки с монетой, а что еще?
-                if(boardMap[starterX][starterY].piratLeave(piratMove.getPiratId())){
-                    //пират успешно покинул клетку
-                    pirats[piratMove.getPiratId() - 3 * playerId].setLocation(piratMove.getTargetCell()); //тут тоже что-то может пойти не так
-                    movementResult.add(new MovementResult(playerId,piratMove.getPiratId() - 3 * playerId,piratMove.getTargetCell()));
-                    //сам пират точно передвинулся, а вот передвинулся ли кто-то еще?
-                    //например, в клетке может оказаться крокодил
-                    //final Integer[] deadPirats = boardMap[targetX][targetY].killEnemy(piratMove.getPiratId());
-                    //пират, входя в клетку, убивает всех врагов в ней
-                    //теперь их надо отправить на родной корабль
-                    /*for(Integer piratId: deadPirats) {
-                        LOGGER.debug("Enemy pirat killed");
-                        final Integer playerId = piratId / 3;
-                        final CoordPair shipCord = players[playerId].getShipCord();
-                        boardMap[shipCord.getX()][shipCord.getY()].setPiratId(piratId);
-                        players[playerId].pirats[piratId-3*playerId].setLocation(shipCord);
-                        movementResult.add(new MovementResult(playerId,piratId-3*playerId,shipCord));
-                    }*/
-                    boardMap[targetX][targetY].setPiratId(piratMove.getPiratId());
-                    return movementResult;
-                }
-                movementResult.add(new MovementResult(-1));
-                return movementResult;
-            }
-            movementResult.add(new MovementResult(-2));
-            return movementResult;
         }
 
         private Boolean isCellPlacedNearPirat(Integer piratId, CoordPair targetCell){
