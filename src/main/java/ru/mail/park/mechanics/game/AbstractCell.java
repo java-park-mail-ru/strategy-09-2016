@@ -75,6 +75,7 @@ public abstract class AbstractCell {
         } else if(isUnderShip){
             return gameBoard.isShipNeighbors(piratId / 3, targetCell);
         } else {
+            results.add(new MovementResult(-2));
             return false;
         }/*
         if(isUnderShip){
